@@ -5,6 +5,41 @@ import random
 st.set_page_config(page_title="CDZ: O Despertar do Cosmo - Rumo a Athena", page_icon="🌌", layout="centered")
 
 # ==========================================
+# LISTA DAS HOUSES / CASAS DO SANTUÁRIO
+# ==========================================
+CASAS_SANTUARIO = [
+    "1ª Casa: Templo de Áries ♈",
+    "2ª Casa: Templo de Touro ♉",
+    "3ª Casa: Templo de Gêmeos ♊",
+    "4ª Casa: Templo de Câncer ♋",
+    "5ª Casa: Templo de Leão ♌",
+    "6ª Casa: Templo de Virgem ♍",
+    "7ª Casa: Templo de Libra ♎",
+    "8ª Casa: Templo de Escorpião ♏",
+    "9ª Casa: Templo de Sagitário ♐",
+    "10ª Casa: Templo de Capricórnio ♑",
+    "11ª Casa: Templo de Aquário ♒",
+    "12ª Casa: Templo de Peixes ♓",
+    "🏛️ Salão do Mestre / Templo de Athena 🏛️"
+]
+
+def obter_casa_atual(indice_q):
+    # Divide as 50 questões pelas 12 casas e templo final
+    if indice_q < 4: return CASAS_SANTUARIO[0]
+    elif indice_q < 8: return CASAS_SANTUARIO[1]
+    elif indice_q < 12: return CASAS_SANTUARIO[2]
+    elif indice_q < 16: return CASAS_SANTUARIO[3]
+    elif indice_q < 20: return CASAS_SANTUARIO[4]
+    elif indice_q < 24: return CASAS_SANTUARIO[5]
+    elif indice_q < 28: return CASAS_SANTUARIO[6]
+    elif indice_q < 32: return CASAS_SANTUARIO[7]
+    elif indice_q < 36: return CASAS_SANTUARIO[8]
+    elif indice_q < 40: return CASAS_SANTUARIO[9]
+    elif indice_q < 44: return CASAS_SANTUARIO[10]
+    elif indice_q < 48: return CASAS_SANTUARIO[11]
+    else: return CASAS_SANTUARIO[12]
+
+# ==========================================
 # INICIALIZAÇÃO DO ESTADO GLOBAL
 # ==========================================
 if "jogo_iniciado" not in st.session_state:
@@ -27,7 +62,7 @@ if "prof_logado" not in st.session_state:
     st.session_state.prof_logado = False
 
 # ==========================================
-# BANCO DE 50 QUESTÕES COM GABARITO EQUILIBRADO (A, B, C, D, E)
+# BANCO DE 50 QUESTÕES COM GABARITO BALANCEADO (A, B, C, D, E)
 # ==========================================
 if "banco_50" not in st.session_state:
     guias = [
@@ -35,9 +70,8 @@ if "banco_50" not in st.session_state:
         "Mu de Áries", "Shaka de Virgem", "Aioria de Leão", "Dohko de Libra", "Camus de Aquário"
     ]
     
-    # Lista de 50 textos com respostas balanceadas entre A, B, C, D e E
     dados_brutos = [
-        # Bloco A (10 Questões com resposta A)
+        # Bloco A (10 Questões)
         ("O astrofísico e padre belga Georges Lemaître foi o primeiro a propor que o universo começou a partir de um 'átomo primordial'. Décadas depois, astrônomos confirmaram a expansão cósmica.",
          "Georges Lemaître",
          "O que postula o modelo cosmológico do Big Bang sobre a origem do Universo?",
@@ -138,7 +172,7 @@ if "banco_50" not in st.session_state:
           "Experimentos de laboratório com feixes de laser no vácuo."], "A",
          "Supernovas distantes pareciam mais fracas do que o esperado, provando que a expansão acelerou com a energia escura."),
 
-        # Bloco B (10 Questões com resposta B)
+        # Bloco B (10 Questões)
         ("Físicos usam a analogia da borracha de um balão sendo inflada para explicar o movimento galáctico.",
          "Didática de Física",
          "Como a analogia do balão de festa preenchendo ar ajuda a entender a expansão do universo?",
@@ -239,7 +273,7 @@ if "banco_50" not in st.session_state:
           "Que o tempo neles passa imensamente mais devagar que na Terra."], "B",
          "Sem correções relativísticas diárias, o sistema GPS acumularia erros de quilômetros por dia."),
 
-        # Bloco C (10 Questões com resposta C)
+        # Bloco C (10 Questões)
         ("Nos primeiros três minutos de existência do universo, a temperatura permitiu a fusão nuclear.",
          "Fred Hoyle e Ralph Alpher",
          "Qual elemento químico leve foi predominantemente formado na nucleossíntese primordial?",
@@ -325,7 +359,7 @@ if "banco_50" not in st.session_state:
          "Qual é o limite máximo de velocidade para matéria e informação no universo?",
          ["A velocidade do som na atmosfera terrestre.",
           "A velocidade do vento solar no espaço interplanetário.",
-          "A velocidade da luz no vácuo ($c \approx 300.000$ km/s).",
+          "A velocidade da luz no vácuo ($c \\approx 300.000$ km/s).",
           "Uma velocidade arbitrária de 1.000.000 km/s.",
           "Não existe nenhum limite de velocidade na física moderna."], "C",
          "Nada com massa de repouso pode atingir ou ultrapassar a velocidade da luz no vácuo."),
@@ -340,7 +374,7 @@ if "banco_50" not in st.session_state:
           "White Dwarf Interstellar Matter Photon (Fóton de Matéria Interestelar)."], "C",
          "WIMPs são partículas hipotéticas massivas que interagem apenas via gravidade e força fraca."),
 
-        # Bloco D (10 Questões com resposta D)
+        # Bloco D (10 Questões)
         ("Grandes concentrações de massa curvam a trajetória da luz de objetos distantes atrás delas.",
          "Fritz Zwicky e Albert Einstein",
          "O que é o efeito de Lente Gravitacional?",
@@ -441,7 +475,7 @@ if "banco_50" not in st.session_state:
           "Um estudo robótico sobre a atmosfera densa do planeta Vênus."], "D",
          "O Planck forneceu os dados mais precisos sobre a idade e composição do cosmos."),
 
-        # Bloco E (10 Questões com resposta E)
+        # Bloco E (10 Questões)
         ("A energia do vácuo possui propriedades distintas da matéria ordinária durante a expansão.",
          "Física do Vácuo Quântico",
          "Por que a Energia Escura não se dilui à medida que o universo se expande?",
@@ -543,7 +577,6 @@ if "banco_50" not in st.session_state:
          "A cosmologia integra a relatividade, mecânica quântica e astronomia para explicar a história do universo.")
     ]
 
-    # Prepara a lista de questões com gabarito fixado
     lista_50 = []
     for i, q in enumerate(dados_brutos):
         guia = guias[i % len(guias)]
@@ -552,11 +585,21 @@ if "banco_50" not in st.session_state:
             "texto_base": q[0],
             "cientista": q[1],
             "enunciado": q[2],
-            "opcoes_originais": q[3],  # Lista com as 5 frases de opções
-            "correta_texto": q[3][ord(q[4]) - ord('A')],  # Texto da opção correta
+            "opcoes_originais": q[3],
+            "correta_texto": q[3][ord(q[4]) - ord('A')],
             "por_que": q[5]
         })
     st.session_state.banco_50 = lista_50
+
+# Função utilitária para reiniciar a partida
+def reiniciar_jogo():
+    st.session_state.jogo_iniciado = False
+    st.session_state.indice_pergunta = 0
+    st.session_state.equipe_sub_idx = 0
+    st.session_state.pontos_alfa = 0
+    st.session_state.pontos_beta = 0
+    st.session_state.pontos_gama = 0
+    st.session_state.ultimo_feedback = None
 
 # Estilo visual
 st.markdown("""
@@ -591,7 +634,7 @@ with st.sidebar.expander("🔑 Acesso do Professor"):
             else:
                 st.error("Login ou senha incorretos.")
     else:
-        st.success("Sessão do Professor Ativa: **Felipe Ferreira**")
+        st.success("Sessão Ativa: **Felipe Ferreira**")
         if st.button("Sair da Conta"):
             st.session_state.prof_logado = False
             st.rerun()
@@ -608,6 +651,7 @@ if st.session_state.prof_logado:
     if st.session_state.historico_professor:
         for idx, item in enumerate(st.session_state.historico_professor, 1):
             relatorio_txt += f"Registro #{idx} | Equipe: {item['equipe']}\n"
+            relatorio_txt += f"Local: {item['casa_santuario']}\n"
             relatorio_txt += f"Guia do Templo: {item['guia']} | Cientista Relacionado: {item['cientista']}\n"
             relatorio_txt += f"Enunciado: {item['enunciado']}\n"
             relatorio_txt += f"Resposta Escolhida: {item['resposta']}\n"
@@ -647,6 +691,12 @@ st.sidebar.markdown("---")
 st.sidebar.metric(label="🛡️ Equipe Gama", value=f"{st.session_state.pontos_gama} pts")
 st.sidebar.progress(min(1.0, st.session_state.pontos_gama / 100))
 
+# BOTÃO DE REINICIAR PERMANENTE NA SIDEBAR
+st.sidebar.markdown("---")
+if st.sidebar.button("🔄 Reiniciar Partida"):
+    reiniciar_jogo()
+    st.rerun()
+
 # ==========================================
 # INÍCIO DO JOGO
 # ==========================================
@@ -656,12 +706,12 @@ if not st.session_state.jogo_iniciado:
     st.subheader("🔥 Cerimônia de Abertura: O Despertar do Cosmo")
     st.markdown("""
     > Jovens aspirantes reúnem-se no sopé do Santuário. Para se tornarem verdadeiros **Cavaleiros de Athena**, 
-    > vocês precisam dominar a **sabedoria cosmológica** — compreendendo o Big Bang, a Relatividade Geral e a Matéria Escura.
+    > vocês avançarão pelas **12 Casas do Santuário** dominando a **sabedoria cosmológica** (Big Bang, Relatividade Geral e Matéria Escura).
     > 
     > **Regras da Competição:**
     > * **Acerto:** $+10$ pontos de Cosmo.
-    > * **Erro:** $-5$ pontos, **a questão muda para a próxima** e a vez passa para a próxima equipe!
-    > * **Meta de Vitória:** A primeira equipe a atingir **100 pontos** alcança o Santuário e vence o jogo! Se as 50 questões terminarem antes, vence quem tiver maior pontuação.
+    > * **Erro:** $-5$ pontos, **a questão muda imediatamente** e a vez passa para a próxima equipe!
+    > * **Meta de Vitória:** A primeira equipe a atingir **100 pontos** alcança o Santuário e vence o jogo! Se as 50 questões terminarem antes, vence quem acumulou maior pontuação.
     """)
     
     if st.button("🌟 Iniciar Treinamento do Santuário"):
@@ -682,7 +732,7 @@ if vencedor_instantaneo or st.session_state.indice_pergunta >= len(st.session_st
     st.subheader("🏛️ Chegada Gloriosa ao Templo de Athena!")
     
     if vencedor_instantaneo:
-        st.success(f"🥇 **A {vencedor_instantaneo} atingiu 100 pontos primeiro e conquistou a Armadura de Ouro de Athena!**")
+        st.success(f"🥇 **A {vencedor_instantaneo} atingiu 100 pontos primeiro e conquistou a Armadura de Ouro de Athena no Templo Supremo!**")
     else:
         pontuacoes = {
             "Equipe Alfa": st.session_state.pontos_alfa,
@@ -704,39 +754,36 @@ if vencedor_instantaneo or st.session_state.indice_pergunta >= len(st.session_st
     st.markdown(f"* **🛡️ Equipe Gama:** {st.session_state.pontos_gama} pontos")
     
     st.markdown("---")
-    if st.button("🔄 Reiniciar Novo Treinamento do Santuário"):
-        st.session_state.jogo_iniciado = False
-        st.session_state.indice_pergunta = 0
-        st.session_state.equipe_sub_idx = 0
-        st.session_state.pontos_alfa = 0
-        st.session_state.pontos_beta = 0
-        st.session_state.pontos_gama = 0
-        st.session_state.ultimo_feedback = None
+    if st.button("🔄 Iniciar Novo Treinamento do Santuário"):
+        reiniciar_jogo()
         st.rerun()
     st.stop()
 
 # ==========================================
-# FLUXO DAS QUESTÕES COM EMBARALHAMENTO DE ALTERNATIVAS
+# FLUXO DAS QUESTÕES COM NAVEGAÇÃO PELAS CASAS
 # ==========================================
 total_questoes = len(st.session_state.banco_50)
 idx_p = st.session_state.indice_pergunta
 e_idx = st.session_state.equipe_sub_idx
 equipe_da_vez = lista_equipes[e_idx]
 
+casa_atual_str = obter_casa_atual(idx_p)
 q_atual = st.session_state.banco_50[idx_p]
 
-# Embaralha as alternativas dinamicamente e guarda no estado da rodada
+# Embaralha as alternativas dinamicamente para cada questão
 chave_opcoes = f"opcoes_shuffled_{idx_p}"
 if chave_opcoes not in st.session_state:
     opcoes_copia = list(q_atual['opcoes_originais'])
     random.shuffle(opcoes_copia)
     
-    # Adiciona os rótulos A), B), C), D), E) para as opções embaralhadas
     opcoes_rotuladas = []
     letras = ["A", "B", "C", "D", "E"]
     for i, texto in enumerate(opcoes_copia):
         opcoes_rotuladas.append(f"{letras[i]}) {texto}")
     st.session_state[chave_opcoes] = opcoes_rotuladas
+
+# CABEÇALHO DO LOCAL NO SANTUÁRIO
+st.warning(f"📍 **Localização Atual no Santuário:** {casa_atual_str}")
 
 st.subheader(f"⚔️ Vez da: **{equipe_da_vez}**")
 st.markdown(f"**Guia da Casa:** *{q_atual['guia']}* ✨")
@@ -747,23 +794,21 @@ st.info(f"📜 **Fala de {q_atual['guia']} sobre a História da Ciência:**\n\n\
 
 st.markdown(f"### **Enigma Cosmológico:**\n{q_atual['enunciado']}")
 
-# Exibe o grupo de rádio com as opções embaralhadas
+# Exibe as alternativas embaralhadas
 escolha_usuario = st.radio("Selecione a alternativa correta:", st.session_state[chave_opcoes], key=f"radio_{idx_p}_{e_idx}")
 
 if st.button("Enviar Resposta e Elevar o Cosmo"):
-    # Extrai o texto da alternativa selecionada removendo o prefixo "A) ", "B) ", etc.
     texto_selecionado = escolha_usuario.split(") ", 1)[1].strip()
     acertou = (texto_selecionado == q_atual['correta_texto'])
     
     status = "CORRETA" if acertou else "INCORRETA"
     
-    # Atualização de pontuação e transição de questão
+    # Atualização de pontuação e transição
     if acertou:
         if equipe_da_vez == "Equipe Alfa": st.session_state.pontos_alfa += 10
         elif equipe_da_vez == "Equipe Beta": st.session_state.pontos_beta += 10
         else: st.session_state.pontos_gama += 10
         
-        # Acertou: avança para a próxima questão e passa a vez para a próxima equipe
         st.session_state.indice_pergunta += 1
         st.session_state.equipe_sub_idx = (e_idx + 1) % 3
     else:
@@ -771,13 +816,14 @@ if st.button("Enviar Resposta e Elevar o Cosmo"):
         elif equipe_da_vez == "Equipe Beta": st.session_state.pontos_beta = max(0, st.session_state.pontos_beta - 5)
         else: st.session_state.pontos_gama = max(0, st.session_state.pontos_gama - 5)
         
-        # Errou: MUDANÇA PEDIDA -> muda a questão (avança +1) e passa a vez para a próxima equipe
+        # Errou: avança para a próxima questão e passa a vez
         st.session_state.indice_pergunta += 1
         st.session_state.equipe_sub_idx = (e_idx + 1) % 3
 
     # Registra no relatório do professor
     st.session_state.historico_professor.append({
         "equipe": equipe_da_vez,
+        "casa_santuario": casa_atual_str,
         "guia": q_atual['guia'],
         "cientista": q_atual['cientista'],
         "enunciado": q_atual['enunciado'],
@@ -800,7 +846,7 @@ if st.session_state.ultimo_feedback:
     st.markdown("---")
     fb = st.session_state.ultimo_feedback
     if fb['status'] == "CORRETA":
-        st.success(f"🎉 Excelente! A **{fb['equipe']}** acertou, ganhou +10 pontos e elevou seu cosmo!")
+        st.success(f"🎉 Excelente! A **{fb['equipe']}** acertou, ganhou +10 pontos e avançou no Santuário!")
     else:
         st.error(f"❌ Resposta Incorreta da **{fb['equipe']}** (-5 pontos). A opção correta era: *\"{fb['correta_texto']}\"*. A questão mudou e a vez passou para a próxima equipe!")
         
