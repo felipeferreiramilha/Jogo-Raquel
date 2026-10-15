@@ -1,24 +1,7 @@
 import streamlit as st
-import random
 
 # Configuração da página
 st.set_page_config(page_title="CDZ: O Despertar do Cosmo - Rumo a Athena", page_icon="🌌", layout="centered")
-
-# ==========================================
-# MAPEAMENTO DAS IMAGENS DOS CAVALEIROS (URLS DIRETAS E CONFIÁVEIS)
-# ==========================================
-IMAGENS_CAVALEIROS = {
-    "Seiya de Pégaso": "https://img.freepik.com/free-vector/blue-fire-pegasus-vector-illustration_1017-38012.jpg",
-    "Shiryu de Dragão": "https://img.freepik.com/free-vector/green-dragon-fantasy-concept_23-2148483161.jpg",
-    "Hyoga de Cisne": "https://img.freepik.com/free-vector/ice-swan-crystal-illustration_1017-32001.jpg",
-    "Shun de Andrômeda": "https://img.freepik.com/free-vector/pink-chains-glowing-illustration_1017-29001.jpg",
-    "Ikki de Fênix": "https://img.freepik.com/free-vector/phoenix-fire-bird-illustration_1017-31005.jpg",
-    "Mu de Áries": "https://img.freepik.com/free-vector/golden-ram-constellation_1017-25001.jpg",
-    "Shaka de Virgem": "https://img.freepik.com/free-vector/golden-buddha-aura-illustration_1017-26002.jpg",
-    "Aioria de Leão": "https://img.freepik.com/free-vector/golden-lion-lightning-illustration_1017-27003.jpg",
-    "Dohko de Libra": "https://img.freepik.com/free-vector/golden-scales-justice-illustration_1017-28004.jpg",
-    "Camus de Aquário": "https://img.freepik.com/free-vector/aurora-freezing-ice-illustration_1017-30006.jpg"
-}
 
 # ==========================================
 # INICIALIZAÇÃO DO ESTADO GLOBAL
@@ -35,33 +18,33 @@ if "pontos_beta" not in st.session_state:
     st.session_state.pontos_beta = 0
 if "pontos_gama" not in st.session_state:
     st.session_state.pontos_gama = 0
-if "est_alfa" not in st.session_state:
-    st.session_state.est_alfa = 100
-if "est_beta" not in st.session_state:
-    st.session_state.est_beta = 100
-if "est_gama" not in st.session_state:
-    st.session_state.est_gama = 100
 if "ultimo_feedback" not in st.session_state:
     st.session_state.ultimo_feedback = None
 if "historico_professor" not in st.session_state:
     st.session_state.historico_professor = []
 if "prof_logado" not in st.session_state:
     st.session_state.prof_logado = False
+if "jogo_encerrado" not in st.session_state:
+    st.session_state.jogo_encerrado = False
 
 # ==========================================
 # BANCO COM 50 QUESTÕES DE MÚLTIPLA ESCOLHA
 # ==========================================
 if "banco_50" not in st.session_state:
-    guias = ["Seiya de Pégaso", "Shiryu de Dragão", "Hyoga de Cisne", "Shun de Andrômeda", "Ikki de Fênix", "Mu de Áries", "Shaka de Virgem", "Aioria de Leão", "Dohko de Libra", "Camus de Aquário"]
+    guias = [
+        "Seiya de Pégaso", "Shiryu de Dragão", "Hyoga de Cisne", "Shun de Andrômeda", "Ikki de Fênix",
+        "Mu de Áries", "Shaka de Virgem", "Aioria de Leão", "Dohko de Libra", "Camus de Aquário"
+    ]
     
     dados_brutos = [
+        # Big Bang e Expansão
         ("O astrofísico e padre belga Georges Lemaître foi o primeiro a propor que o universo começou a partir de um 'átomo primordial'. Décadas depois, astrônomos confirmaram que o espaço não é estático, mas está se expandindo continuamente a partir desse estado denso e quente inicial.",
          "Georges Lemaître",
          "O que postula o modelo cosmológico do Big Bang sobre a origem do Universo?", 
          ["A) O universo surgiu estático e eterno, sem alterações.", "B) O cosmos originou-se de uma singularidade extremamente densa e quente, expandindo-se desde então.", "C) As galáxias formaram-se de colisões de buracos negros estáticos.", "D) O universo expande-se porque estrelas criam matéria do nada.", "E) A origem cósmica é cíclica a cada 100 anos."], "B", 
          "O Big Bang descreve a expansão métrica do espaço a partir de um estado inicial de alta densidade e temperatura."),
         
-        ("Para nos ajudar a visualizar o tecido do espaço se esticando, os físicos costumam usar a analogia de uma bexiga de aniversário. Quando desenhamos pontos na borracha e a enchemos de ar, perceberemos que não são as marcas que caminham sozinhos, mas sim a borracha que se estica entre eles.",
+        ("Para nos ajudar a visualizar o tecido do espaço se esticando, os físicos costumam usar a analogia de uma bexiga de aniversário. Quando desenhamos pontos na borracha e a enchemos de ar, percebemos que não são as marcas que caminham sozinhas, mas sim a borracha que se estica entre elas.",
          "Didática de Física Cosmológica",
          "Como a analogia do balão de festa preenchendo ar ajuda a entender a expansão do universo?", 
          ["A) Mostra que o balão cria ar novo do interior.", "B) Ilustra como os pontos na superfície se afastam porque o próprio espaço da borracha se expande.", "C) Comprova que o centro do balão é a única parte que se move.", "D) Indica paredes rígidas contendo o calor.", "E) Demonstra que a luz viaja mais rápido que o som."], "B", 
@@ -145,7 +128,7 @@ if "banco_50" not in st.session_state:
          ["A) Fusão em supernovas modernas.", "B) Criação dos primeiros núcleos atômicos leves durante os primeiros minutos do Big Bang.", "C) Formação de planetas rochosos.", "D) Destruição de átomos.", "E) Síntese de matéria escura."], "B", 
          "Processo em que a sopa primordial fundiu-se nos primeiros elementos químicos."),
 
-        # Relatividade Geral (16 a 30)
+        # Relatividade Geral
         ("Em 1915, Albert Einstein revolucionou a física ao mostrar que o espaço e o tempo não são um palco fixo. Ele provou que objetos massivos como estrelas e planetas deformam a geometria ao seu redor.",
          "Albert Einstein",
          "Segundo a Relatividade Geral de Einstein, como a gravidade é explicada?", 
@@ -192,7 +175,7 @@ if "banco_50" not in st.session_state:
          "Engenharia e Física Relativística",
          "O que a Relatividade prevê sobre relógios em satélites GPS?", 
          ["A) Marcam o mesmo tempo.", "B) Sofrem ajustes relativísticos de velocidade e gravidade para funcionar com precisão.", "C) Param com o frio.", "D) Aceleram e quebram.", "E) O tempo passa mais devagar."], "B", 
-         "Sem correções da Relatividade Geral e Especial, os mapas do GPS falhariam."),
+         "Sem correções da Relatividade Geral e Especial, os mapas do GPS falhaiam."),
         
         ("Quando a luz vinda de uma galáxia muito distante passa perto de um aglomerado galáctico massivo no meio do caminho, a massa do aglomerado funciona como uma lupa natural gigantesca no espaço.",
          "Fritz Zwicky e Albert Einstein",
@@ -236,7 +219,7 @@ if "banco_50" not in st.session_state:
          ["A) Velocidade do som", "B) Velocidade da luz no vácuo (c)", "C) Gravidade quântica", "D) 1.000 km/s", "E) Sem limite"], "B", 
          "Nenhum corpo com massa de repouso consegue superar a velocidade da luz no vácuo."),
 
-        # Matéria Escura e Energia Escura (31 a 50)
+        # Matéria Escura e Energia Escura
         ("Na década de 1970, a astrônoma Vera Rubin mediu as velocidades de rotação das estrelas nas bordas externas das galáxias espirais. Ela descobriu que as estrelas giravam rápido demais e deveriam ser arremessadas ao espaço, a menos que existisse muita matéria invisível ao redor.",
          "Vera Rubin e Kent Ford",
          "Qual é a função da Matéria Escura na estruturação cósmica?", 
@@ -285,7 +268,7 @@ if "banco_50" not in st.session_state:
          ["A) Estrelas solitárias.", "B) Vastas estruturas de centenas ou milhares de galáxias mantidas pela gravidade.", "C) Anéis de poeira.", "D) Nuvens de gás frio.", "E) Sistemas planetários."], "B", 
          "Aglomerados galácticos são as maiores estruturas mantidas juntas pela atração gravitacional."),
 
-        ("Computadores de alto desempenho simulam a gravidade atuando ao longo de bilhões de anos, mostrando que as galáxias se distribuem no espaço formando uma imensa teia tridimensional.",
+        ("Computadores de alto desempenho simulam a gravidade atuando ao longo de bilhões de anos, mostrando que as galáxias se distribuem no espaço forming uma imensa teia tridimensional.",
          "Simulações de N-Corpos",
          "Qual o papel dos Filamentos Cósmicos?", 
          ["A) Conectar computadores.", "B) Formar pontes de matéria cercando vazios cósmicos.", "C) Conduzir raios solares.", "D) Trilhos de cometas.", "E) Luz pura."], "B", 
@@ -422,7 +405,7 @@ if st.session_state.prof_logado:
     if st.session_state.historico_professor:
         for idx, item in enumerate(st.session_state.historico_professor, 1):
             relatorio_txt += f"Registro #{idx} | Equipe: {item['equipe']}\n"
-            relatorio_txt += f"Guia: {item['guia']} | Cientista Relacionado: {item['cientista']}\n"
+            relatorio_txt += f"Guia do Templo: {item['guia']} | Cientista Relacionado: {item['cientista']}\n"
             relatorio_txt += f"Enunciado: {item['enunciado']}\n"
             relatorio_txt += f"Resposta Escolhida: {item['resposta']}\n"
             relatorio_txt += f"Resultado: {item['status']}\n"
@@ -450,16 +433,16 @@ if st.session_state.prof_logado:
         st.sidebar.success("Histórico limpo!")
         st.rerun()
 
-# Placar Geral e Estabilidade na Barra Lateral
-st.sidebar.header("📊 Placar & Estabilidade")
-st.sidebar.metric(label="🛡️ Equipe Alfa (Pontos)", value=st.session_state.pontos_alfa)
-st.sidebar.text(f"⚡ Estabilidade Alfa: {st.session_state.est_alfa}%")
+# Placar Geral das 3 Equipes na Barra Lateral
+st.sidebar.header("📊 Placar Geral (Alcançar 100 PTS)")
+st.sidebar.metric(label="🛡️ Equipe Alfa", value=f"{st.session_state.pontos_alfa} pts")
+st.sidebar.progress(min(1.0, st.session_state.pontos_alfa / 100))
 st.sidebar.markdown("---")
-st.sidebar.metric(label="🛡️ Equipe Beta (Pontos)", value=st.session_state.pontos_beta)
-st.sidebar.text(f"⚡ Estabilidade Beta: {st.session_state.est_beta}%")
+st.sidebar.metric(label="🛡️ Equipe Beta", value=f"{st.session_state.pontos_beta} pts")
+st.sidebar.progress(min(1.0, st.session_state.pontos_beta / 100))
 st.sidebar.markdown("---")
-st.sidebar.metric(label="🛡️ Equipe Gama (Pontos)", value=st.session_state.pontos_gama)
-st.sidebar.text(f"⚡ Estabilidade Gama: {st.session_state.est_gama}%")
+st.sidebar.metric(label="🛡️ Equipe Gama", value=f"{st.session_state.pontos_gama} pts")
+st.sidebar.progress(min(1.0, st.session_state.pontos_gama / 100))
 
 # ==========================================
 # INÍCIO DO JOGO
@@ -472,7 +455,10 @@ if not st.session_state.jogo_iniciado:
     > Jovens aspirantes reúnem-se no sopé do Santuário. Para se tornarem verdadeiros **Cavaleiros de Athena**, 
     > vocês precisam dominar a **sabedoria cosmológica** — compreendendo o Big Bang, a Relatividade Geral e a Matéria Escura.
     > 
-    > Em cada templo, um **Cavaleiro lendário** apresentará um texto sobre a história da física e o cientista por trás da descoberta antes da questão!
+    > **Regras da Competição:**
+    > * **Acerto:** $+10$ pontos de Cosmo.
+    > * **Erro:** $-5$ pontos e a vez passa **imediatamente para a próxima equipe**!
+    > * **Meta de Vitória:** A primeira equipe a atingir **100 pontos** alcança o Santuário e vence o jogo! Se as 50 questões terminarem antes, vence a equipe com maior pontuação.
     """)
     
     if st.button("🌟 Iniciar Treinamento do Santuário"):
@@ -481,119 +467,39 @@ if not st.session_state.jogo_iniciado:
     st.stop()
 
 # ==========================================
-# FLUXO DAS QUESTÕES COM IMAGENS E NARRATIVA
+# VERIFICAÇÃO DE FIM DE JOGO
 # ==========================================
-total_questoes = len(st.session_state.banco_50)
-idx_p = st.session_state.indice_pergunta
-e_idx = st.session_state.equipe_sub_idx
-equipe_da_vez = lista_equipes[e_idx]
+vencedor_instantaneo = None
+if st.session_state.pontos_alfa >= 100: vencedor_instantaneo = "Equipe Alfa"
+elif st.session_state.pontos_beta >= 100: vencedor_instantaneo = "Equipe Beta"
+elif st.session_state.pontos_gama >= 100: vencedor_instantaneo = "Equipe Gama"
 
-# Define estabilidade da equipe
-if equipe_da_vez == "Equipe Alfa": est_atual = st.session_state.est_alfa
-elif equipe_da_vez == "Equipe Beta": est_atual = st.session_state.est_beta
-else: est_atual = st.session_state.est_gama
-
-if idx_p < total_questoes:
-    q_atual = st.session_state.banco_50[idx_p]
-    
-    st.subheader(f"⚔️ Vez de: **{equipe_da_vez}**")
-    st.markdown(f"**Guia da Casa:** *{q_atual['guia']}* (Estabilidade da Equipe: **{est_atual}%**) ✨")
-    
-    # EXIBIÇÃO CENTRALIZADA DA IMAGEM DO CAVALEIRO
-    if q_atual['guia'] in IMAGENS_CAVALEIROS:
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            st.image(IMAGENS_CAVALEIROS[q_atual['guia']], width=220, caption=f"Cavaleiro Guia: {q_atual['guia']}")
-
-    st.markdown("---")
-    
-    # NARRATIVA DO CAVALEIRO + CIENTISTA
-    st.info(f"📜 **Fala de {q_atual['guia']} sobre a História da Ciência:**\n\n\"{q_atual['texto_base']}\"\n\n🔬 **Cientista / Referência:** *{q_atual['cientista']}*")
-    
-    st.markdown(f"### **Enigma Cosmológico:**\n{q_atual['enunciado']}")
-    
-    escolha_usuario = st.radio("Selecione a alternativa correta:", q_atual['opcoes'], key=f"radio_{idx_p}_{e_idx}")
-
-    if st.button("Enviar Resposta e Elevar o Cosmo"):
-        letra_escolhida = escolha_usuario.split(")")[0].strip()
-        acertou = (letra_escolhida == q_atual['correta'])
-        
-        status = "CORRETA" if acertou else "INCORRETA"
-        
-        if acertou:
-            if equipe_da_vez == "Equipe Alfa": st.session_state.pontos_alfa += 20
-            elif equipe_da_vez == "Equipe Beta": st.session_state.pontos_beta += 20
-            else: st.session_state.pontos_gama += 20
-        else:
-            if equipe_da_vez == "Equipe Alfa": st.session_state.est_alfa = max(0, st.session_state.est_alfa - 10)
-            elif equipe_da_vez == "Equipe Beta": st.session_state.est_beta = max(0, st.session_state.est_beta - 10)
-            else: st.session_state.est_gama = max(0, st.session_state.est_gama - 10)
-
-        # Envia para o relatório do professor
-        st.session_state.historico_professor.append({
-            "equipe": equipe_da_vez,
-            "guia": q_atual['guia'],
-            "cientista": q_atual['cientista'],
-            "enunciado": q_atual['enunciado'],
-            "resposta": escolha_usuario,
-            "status": status,
-            "por_que": q_atual['por_que']
-        })
-
-        st.session_state.ultimo_feedback = {
-            "status": status,
-            "equipe": equipe_da_vez,
-            "correta_letra": q_atual['correta'],
-            "por_que": q_atual['por_que']
-        }
-
-        if e_idx < 2:
-            st.session_state.equipe_sub_idx += 1
-        else:
-            st.session_state.equipe_sub_idx = 0
-            st.session_state.indice_pergunta += 1
-            
-        st.rerun()
-
-    if st.session_state.ultimo_feedback:
-        st.markdown("---")
-        fb = st.session_state.ultimo_feedback
-        if fb['status'] == "CORRETA":
-            st.success(f"🎉 Excelente! A **{fb['equipe']}** acertou e elevou seu cosmo ao sétimo sentido!")
-        else:
-            st.error(f"❌ Resposta Incorreta da **{fb['equipe']}**. A alternativa correta era a letra **{fb['correta_letra']}**.")
-            
-        st.info(f"💡 **JUSTIFICATIVA PEDAGÓGICA (O PORQUÊ):**\n\n{fb['por_que']}")
-
-else:
+if vencedor_instantaneo or st.session_state.indice_pergunta >= len(st.session_state.banco_50):
     st.balloons()
     st.subheader("🏛️ Chegada Gloriosa ao Templo de Athena!")
-    st.markdown("""
-    > As estações do Santuário foram vencidas! As equipes provaram seu valor, compreenderam o Big Bang, 
-    > a Relatividade Geral e a Matéria Escura, despertando o verdadeiro Cosmo supremo. 
-    > Athena desce do altar principal para condecorar os novos Cavaleiros!
-    """)
     
-    st.markdown("---")
-    st.markdown("### 🏆 **Placar Final dos Aspirantes a Cavaleiro**")
-    st.markdown(f"* **🛡️ Equipe Alfa:** {st.session_state.pontos_alfa} pontos | Estabilidade: {st.session_state.est_alfa}%")
-    st.markdown(f"* **🛡️ Equipe Beta:** {st.session_state.pontos_beta} pontos | Estabilidade: {st.session_state.est_beta}%")
-    st.markdown(f"* **🛡️ Equipe Gama:** {st.session_state.pontos_gama} pontos | Estabilidade: {st.session_state.est_gama}%")
-    
-    pontuacoes = {
-        "Equipe Alfa": st.session_state.pontos_alfa,
-        "Equipe Beta": st.session_state.pontos_beta,
-        "Equipe Gama": st.session_state.pontos_gama
-    }
-    vencedor = max(pontuacoes, key=pontuacoes.get)
-    maior_pts = pontuacoes[vencedor]
-    
-    vencedores = [eq for eq, pts in pontuacoes.items() if pts == maior_pts]
-    if len(vencedores) > 1:
-        st.success(f"🤝 **Empate Lendário entre: {', '.join(vencedores)}! Todos tornaram-se Cavaleiros de Athena juntos!**")
+    if vencedor_instantaneo:
+        st.success(f"🥇 **A {vencedor_instantaneo} atingiu 100 pontos primeiro e conquistou a Armadura de Ouro de Athena!**")
     else:
-        st.success(f"🥇 **A {vencedor} sagrou-se campeã com {maior_pts} pontos e recebeu o título supremo de Cavaleiros de Athena!**")
-
+        pontuacoes = {
+            "Equipe Alfa": st.session_state.pontos_alfa,
+            "Equipe Beta": st.session_state.pontos_beta,
+            "Equipe Gama": st.session_state.pontos_gama
+        }
+        maior_pts = max(pontuacoes.values())
+        vencedores = [eq for eq, pts in pontuacoes.items() if pts == maior_pts]
+        
+        if len(vencedores) > 1:
+            st.success(f"🤝 **Empate Lendário com {maior_pts} pontos entre: {', '.join(vencedores)}! Todos tornaram-se Cavaleiros de Athena juntos!**")
+        else:
+            st.success(f"🥇 **A {vencedores[0]} encerrou o treinamento com {maior_pts} pontos e sagrou-se campeã!**")
+            
+    st.markdown("---")
+    st.markdown("### 🏆 **Placar Final dos Aspirantes**")
+    st.markdown(f"* **🛡️ Equipe Alfa:** {st.session_state.pontos_alfa} pontos")
+    st.markdown(f"* **🛡️ Equipe Beta:** {st.session_state.pontos_beta} pontos")
+    st.markdown(f"* **🛡️ Equipe Gama:** {st.session_state.pontos_gama} pontos")
+    
     st.markdown("---")
     if st.button("🔄 Reiniciar Novo Treinamento do Santuário"):
         st.session_state.jogo_iniciado = False
@@ -602,8 +508,81 @@ else:
         st.session_state.pontos_alfa = 0
         st.session_state.pontos_beta = 0
         st.session_state.pontos_gama = 0
-        st.session_state.est_alfa = 100
-        st.session_state.est_beta = 100
-        st.session_state.est_gama = 100
         st.session_state.ultimo_feedback = None
         st.rerun()
+    st.stop()
+
+# ==========================================
+# FLUXO DAS QUESTÕES NARRATIVAS (SEM IMAGENS)
+# ==========================================
+total_questoes = len(st.session_state.banco_50)
+idx_p = st.session_state.indice_pergunta
+e_idx = st.session_state.equipe_sub_idx
+equipe_da_vez = lista_equipes[e_idx]
+
+q_atual = st.session_state.banco_50[idx_p]
+
+st.subheader(f"⚔️ Vez da: **{equipe_da_vez}**")
+st.markdown(f"**Guia da Casa:** *{q_atual['guia']}* ✨")
+st.markdown("---")
+
+# NARRATIVA DO CAVALEIRO + CIENTISTA
+st.info(f"📜 **Fala de {q_atual['guia']} sobre a História da Ciência:**\n\n\"{q_atual['texto_base']}\"\n\n🔬 **Cientista / Referência:** *{q_atual['cientista']}*")
+
+st.markdown(f"### **Enigma Cosmológico:**\n{q_atual['enunciado']}")
+
+escolha_usuario = st.radio("Selecione a alternativa correta:", q_atual['opcoes'], key=f"radio_{idx_p}_{e_idx}")
+
+if st.button("Enviar Resposta e Elevar o Cosmo"):
+    letra_escolhida = escolha_usuario.split(")")[0].strip()
+    acertou = (letra_escolhida == q_atual['correta'])
+    
+    status = "CORRETA" if acertou else "INCORRETA"
+    
+    # Atualização de pontuação (+10 acerto / -5 erro)
+    if acertou:
+        if equipe_da_vez == "Equipe Alfa": st.session_state.pontos_alfa += 10
+        elif equipe_da_vez == "Equipe Beta": st.session_state.pontos_beta += 10
+        else: st.session_state.pontos_gama += 10
+        
+        # Se acertou, a mesma questão avança e a vez passa para a próxima equipe na próxima questão
+        st.session_state.indice_pergunta += 1
+        st.session_state.equipe_sub_idx = (e_idx + 1) % 3
+    else:
+        if equipe_da_vez == "Equipe Alfa": st.session_state.pontos_alfa = max(0, st.session_state.pontos_alfa - 5)
+        elif equipe_da_vez == "Equipe Beta": st.session_state.pontos_beta = max(0, st.session_state.pontos_beta - 5)
+        else: st.session_state.pontos_gama = max(0, st.session_state.pontos_gama - 5)
+        
+        # Se errou, passa a vez imediatamente para a próxima equipe tentar ou avançar na sequência
+        st.session_state.equipe_sub_idx = (e_idx + 1) % 3
+
+    # Registra no relatório do professor
+    st.session_state.historico_professor.append({
+        "equipe": equipe_da_vez,
+        "guia": q_atual['guia'],
+        "cientista": q_atual['cientista'],
+        "enunciado": q_atual['enunciado'],
+        "resposta": escolha_usuario,
+        "status": status,
+        "por_que": q_atual['por_que']
+    })
+
+    st.session_state.ultimo_feedback = {
+        "status": status,
+        "equipe": equipe_da_vez,
+        "correta_letra": q_atual['correta'],
+        "por_que": q_atual['por_que']
+    }
+        
+    st.rerun()
+
+# Feedback da última jogada
+if st.session_state.ultimo_feedback:
+    st.markdown("---")
+    fb = st.session_state.ultimo_feedback
+    if fb['status'] == "CORRETA":
+        st.success(f"🎉 Excelente! A **{fb['equipe']}** acertou, ganhou +10 pontos e elevou seu cosmo!")
+    else:
+        st.error(f"❌ Resposta Incorreta da **{fb['equipe']}** (-5 pontos). A resposta correta era a letra **{fb['correta_letra']}**. A vez passou para a próxima equipe!")
+        
+    st.info(f"💡 **JUSTIFICATIVA PEDAGÓGICA (O PORQUÊ):**\n\n{fb['por_que']}")
