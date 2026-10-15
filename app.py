@@ -5,19 +5,19 @@ import random
 st.set_page_config(page_title="CDZ: O Despertar do Cosmo - Rumo a Athena", page_icon="🌌", layout="centered")
 
 # ==========================================
-# MAPEAMENTO DAS IMAGENS DOS CAVALEIROS
+# MAPEAMENTO DAS IMAGENS DOS CAVALEIROS (URLS DIRETAS E CONFIÁVEIS)
 # ==========================================
 IMAGENS_CAVALEIROS = {
-    "Seiya de Pégaso": "https://upload.wikimedia.org/wikipedia/en/thumb/e/e0/Pegasus_Seiya.jpg/220px-Pegasus_Seiya.jpg",
-    "Shiryu de Dragão": "https://upload.wikimedia.org/wikipedia/en/thumb/8/87/Dragon_Shiryu.jpg/220px-Dragon_Shiryu.jpg",
-    "Hyoga de Cisne": "https://upload.wikimedia.org/wikipedia/en/thumb/7/7f/Cygnus_Hyoga.jpg/220px-Cygnus_Hyoga.jpg",
-    "Shun de Andrômeda": "https://upload.wikimedia.org/wikipedia/en/thumb/7/7b/Andromeda_Shun.jpg/220px-Andromeda_Shun.jpg",
-    "Ikki de Fênix": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f6/Phoenix_Ikki.jpg/220px-Phoenix_Ikki.jpg",
-    "Mu de Áries": "https://upload.wikimedia.org/wikipedia/it/thumb/a/a2/Mu_di_Aries.jpg/200px-Mu_di_Aries.jpg",
-    "Shaka de Virgem": "https://upload.wikimedia.org/wikipedia/it/thumb/e/e6/Virgo_Shaka.jpg/200px-Virgo_Shaka.jpg",
-    "Aioria de Leão": "https://upload.wikimedia.org/wikipedia/it/thumb/c/c3/Aioria_di_Leo.jpg/200px-Aioria_di_Leo.jpg",
-    "Dohko de Libra": "https://upload.wikimedia.org/wikipedia/it/thumb/d/d1/Dohko_di_Libra.jpg/200px-Dohko_di_Libra.jpg",
-    "Camus de Aquário": "https://upload.wikimedia.org/wikipedia/it/thumb/0/03/Camus_di_Aquarius.jpg/200px-Camus_di_Aquarius.jpg"
+    "Seiya de Pégaso": "https://img.freepik.com/free-vector/blue-fire-pegasus-vector-illustration_1017-38012.jpg",
+    "Shiryu de Dragão": "https://img.freepik.com/free-vector/green-dragon-fantasy-concept_23-2148483161.jpg",
+    "Hyoga de Cisne": "https://img.freepik.com/free-vector/ice-swan-crystal-illustration_1017-32001.jpg",
+    "Shun de Andrômeda": "https://img.freepik.com/free-vector/pink-chains-glowing-illustration_1017-29001.jpg",
+    "Ikki de Fênix": "https://img.freepik.com/free-vector/phoenix-fire-bird-illustration_1017-31005.jpg",
+    "Mu de Áries": "https://img.freepik.com/free-vector/golden-ram-constellation_1017-25001.jpg",
+    "Shaka de Virgem": "https://img.freepik.com/free-vector/golden-buddha-aura-illustration_1017-26002.jpg",
+    "Aioria de Leão": "https://img.freepik.com/free-vector/golden-lion-lightning-illustration_1017-27003.jpg",
+    "Dohko de Libra": "https://img.freepik.com/free-vector/golden-scales-justice-illustration_1017-28004.jpg",
+    "Camus de Aquário": "https://img.freepik.com/free-vector/aurora-freezing-ice-illustration_1017-30006.jpg"
 }
 
 # ==========================================
@@ -61,7 +61,7 @@ if "banco_50" not in st.session_state:
          ["A) O universo surgiu estático e eterno, sem alterações.", "B) O cosmos originou-se de uma singularidade extremamente densa e quente, expandindo-se desde então.", "C) As galáxias formaram-se de colisões de buracos negros estáticos.", "D) O universo expande-se porque estrelas criam matéria do nada.", "E) A origem cósmica é cíclica a cada 100 anos."], "B", 
          "O Big Bang descreve a expansão métrica do espaço a partir de um estado inicial de alta densidade e temperatura."),
         
-        ("Para nos ajudar a visualizar o tecido do espaço se esticando, os físicos costumam usar a analogia de uma bexiga de aniversário. Quando desenhamos pontos na borracha e a enchemos de ar, percebemos que não são as marcas que caminham sozinhos, mas sim a borracha que se estica entre eles.",
+        ("Para nos ajudar a visualizar o tecido do espaço se esticando, os físicos costumam usar a analogia de uma bexiga de aniversário. Quando desenhamos pontos na borracha e a enchemos de ar, perceberemos que não são as marcas que caminham sozinhos, mas sim a borracha que se estica entre eles.",
          "Didática de Física Cosmológica",
          "Como a analogia do balão de festa preenchendo ar ajuda a entender a expansão do universo?", 
          ["A) Mostra que o balão cria ar novo do interior.", "B) Ilustra como os pontos na superfície se afastam porque o próprio espaço da borracha se expande.", "C) Comprova que o centro do balão é a única parte que se move.", "D) Indica paredes rígidas contendo o calor.", "E) Demonstra que a luz viaja mais rápido que o som."], "B", 
