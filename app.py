@@ -1,6 +1,11 @@
 import pygame
 import random
-import sys
+import syslibsdl2-dev
+libsdl2-image-dev
+libsdl2-mixer-dev
+libsdl2-ttf-dev
+libportmidi-dev
+libfreetype6-dev
 
 # Inicialização do Pygame
 pygame.init()
