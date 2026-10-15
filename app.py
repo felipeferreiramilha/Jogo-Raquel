@@ -3,21 +3,39 @@ import streamlit as st
 # Configuração da página
 st.set_page_config(page_title="CDZ: Operação Horizonte de Equipes", page_icon="🌌", layout="centered")
 
-# Inicialização do Estado da Sessão para Equipes
+# ==========================================
+# INICIALIZAÇÃO DO ESTADO GLOBAL E BANCO DE DADOS LOCAL
+# ==========================================
 if "fase" not in st.session_state:
     st.session_state.fase = 1
-if "modo_resgate" not in st.session_state:
-    st.session_state.modo_resgate = False
-if "pontos_equipe_a" not in st.session_state:
-    st.session_state.pontos_equipe_a = 0
-if "pontos_equipe_b" not in st.session_state:
-    st.session_state.pontos_equipe_b = 0
-if "turno_equipe" not in st.session_state:
-    st.session_state.turno_equipe = "Equipe Alfa"
-if "estabilidade_cosmos" not in st.session_state:
-    st.session_state.estabilidade_cosmos = 100
+if "pontos_alfa" not in st.session_state:
+    st.session_state.pontos_alfa = 0
+if "pontos_beta" not in st.session_state:
+    st.session_state.pontos_beta = 0
+if "pontos_gama" not in st.session_state:
+    st.session_state.pontos_gama = 0
+if "lista_equipes" not in st.session_state:
+    st.session_state.lista_equipes = ["Equipe Alfa", "Equipe Beta", "Equipe Gama"]
+if "indice_equipe" not in st.session_state:
+    st.session_state.indice_equipe = 0
+if "estabilidade" not in st.session_state:
+    st.session_state.estabilidade = 100
+if "historico_respostas" not in st.session_state:
+    st.session_state.historico_respostas = []  # Armazena respostas dissertativas enviadas
+if "banco_questoes" not in st.session_state:
+    # Banco de questões customizáveis pelo Admin
+    st.session_state.banco_questoes = {
+        "dissertativa_1": {
+            "enunciado": "Explique com suas palavras como o modelo do Big Bang descreve a evolução inicial do universo.",
+            "palavras_chave": ["big bang", "singularidade", "expansão", "densidade", "quente", "espaço"]
+        },
+        "dissertativa_2": {
+            "enunciado": "Qual é a função da Matéria Escura na estruturação das galáxias após a expansão cósmica?",
+            "palavras_chave": ["matéria escura", "gravidade", "cola", "invisível", "massa", "atração", "galaxias"]
+        }
+    }
 
-# Estilo visual
+# Estilo visual customizado
 st.markdown("""
     <style>
     .main {
@@ -39,34 +57,75 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("🌌 CDZ: Operação Horizonte de Eventos - Modo Equipes")
-st.markdown(f"### ⚔️ Vez da **{st.session_state.turno_equipe}** jogar!")
+equipe_atual = st.session_state.lista_equipes[st.session_state.indice_equipe]
+
+st.title("🌌 CDZ: Operação Horizonte de Eventos")
+st.markdown(f"### ⚔️ Vez da **{equipe_atual}** jogar!")
 st.markdown("---")
 
-# Barra Lateral de Placar e Status
-st.sidebar.header("📊 Placar das Equipes & Cosmo")
-st.sidebar.metric(label="🛡️ Equipe Alfa (Pontos)", value=st.session_state.pontos_equipe_a)
-st.sidebar.metric(label="⚡ Equipe Beta (Pontos)", value=st.session_state.pontos_equipe_b)
-st.sidebar.metric(label="🌌 Estabilidade do Universo", value=f"{st.session_state.estabilidade_cosmos}%")
+# ==========================================
+# BARRA LATERAL: PLACAR E PAINEL ADMINISTRADOR
+# ==========================================
+st.sidebar.header("📊 Placar das 3 Equipes")
+st.sidebar.metric(label="🛡️ Equipe Alfa", value=st.session_state.pontos_alfa)
+st.sidebar.metric(label="🛡️ Equipe Beta", value=st.session_state.pontos_beta)
+st.sidebar.metric(label="🛡️ Equipe Gama", value=st.session_state.pontos_gama)
+st.sidebar.metric(label="⚡ Estabilidade do Cosmo", value=f"{st.session_state.estabilidade}%")
 st.sidebar.markdown("---")
-st.sidebar.info("👥 **Heróis:** Raquel Ferreira & Alunos\n😈 **Vilão:** Makarius (O Vilão Cósmico)")
 
-def alternar_turno():
-    if st.session_state.turno_equipe == "Equipe Alfa":
-        st.session_state.turno_equipe = "Equipe Beta"
+# PAINEL ADMINISTRADOR
+with st.sidebar.expander("⚙️ Painel do Administrador"):
+    st.markdown("### Histórico de Respostas Salvas")
+    if st.session_state.historico_respostas:
+        for idx, item in enumerate(st.session_state.historico_respostas):
+            st.text(f"[{item['equipe']}] Fase {item['fase']}:\n\"{item['resposta']}\"")
+        if st.button("🗑️ Apagar Todo o Histórico"):
+            st.session_state.historico_respostas = []
+            st.rerun()
     else:
-        st.session_state.turno_equipe = "Equipe Alfa"
+        st.info("Nenhuma resposta dissertativa registrada ainda.")
+    
+    st.markdown("---")
+    st.markdown("### Adicionar Nova Questão Dissertativa")
+    nova_chave = st.text_input("Identificador (ex: dissertativa_3)")
+    novo_enunciado = st.text_area("Enunciado da Questão")
+    novas_palavras = st.text_input("Palavras-chave separadas por vírgula (ex: estrela, calor, luz)")
+    
+    if st.button("Adicionar Questão ao Banco"):
+        if nova_chave and novo_enunciado and novas_palavras:
+            lista_p = [p.strip().lower() for p in novas_palavras.split(",")]
+            st.session_state.banco_questoes[nova_chave] = {
+                "enunciado": novo_enunciado,
+                "palavras_chave": lista_p
+            }
+            st.success(f"Questão '{nova_chave}' adicionada com sucesso!")
+            st.rerun()
+        else:
+            st.warning("Preencha todos os campos para cadastrar a questão.")
 
-# =========================================================
-# FASE 1: Múltipla Escolha (A a E) - Origem do Cosmo
-# =========================================================
-if st.session_state.fase == 1 and not st.session_state.modo_resgate:
+def passar_turno():
+    # Alterna entre Alfa (0) -> Beta (1) -> Gama (2) -> Alfa (0)
+    st.session_state.indice_equipe = (st.session_state.indice_equipe + 1) % 3
+
+def adicionar_pontos(qtd):
+    eq = st.session_state.lista_equipes[st.session_state.indice_equipe]
+    if eq == "Equipe Alfa":
+        st.session_state.pontos_alfa += qtd
+    elif eq == "Equipe Beta":
+        st.session_state.pontos_beta += qtd
+    elif eq == "Equipe Gama":
+        st.session_state.pontos_gama += qtd
+
+# ==========================================
+# FASE 1: MÚLTIPLA ESCOLHA (A a E)
+# ==========================================
+if st.session_state.fase == 1:
     st.subheader("Fase 1: O Despertar da Singularidade (Múltipla Escolha)")
     st.markdown("""
-    > *Raquel Ferreira* orienta as equipes a vasculharem as ruínas do relógio estelar. 
-    > *Makarius* bloqueia a passagem, afirmando que a origem do universo é um mistério denso demais para mentes comuns.
+    > *Raquel Ferreira* orienta as equipes a investigarem o relógio estelar. 
+    > *Makarius* bloqueia a passagem, afirmando que a origem do universo é um mistério denso demais.
     
-    **Missão:** Em equipe, debatam e escolham a alternativa correta sobre a expansão inicial do universo.
+    **Missão:** A equipe atual deve debater e selecionar a alternativa correta (de A até E).
     """)
     
     escolha = st.radio(
@@ -83,154 +142,139 @@ if st.session_state.fase == 1 and not st.session_state.modo_resgate:
 
     if st.button("Submeter Resposta da Equipe"):
         if escolha.startswith("B"):
-            if st.session_state.turno_equipe == "Equipe Alfa":
-                st.session_state.pontos_equipe_a += 20
-            else:
-                st.session_state.pontos_equipe_b += 20
-            st.success("🎉 Resposta correta! Vocês conectaram o conceito atual à ideia de expansão.")
+            adicionar_pontos(25)
+            st.success(f"🎉 Resposta Correta! A **{equipe_atual}** pontuou e avança para a próxima etapa.")
             st.session_state.fase = 2
-            alternar_turno()
+            passar_turno()
             st.rerun()
         else:
-            st.error("❌ Resposta incorreta! O universo sofreu uma oscilação de instabilidade. A equipe caiu na **Zona de Resgate Prévio**!")
-            st.session_state.estabilidade_cosmos -= 15
-            st.session_state.modo_resgate = True
+            st.error(f"❌ Resposta Incorreta! A **{equipe_atual}** errou. O turno passa automaticamente para a próxima equipe!")
+            st.session_state.estabilidade -= 15
+            passar_turno()
             st.rerun()
 
-# --- MODO RESGATE FASE 1 ---
-elif st.session_state.fase == 1 and st.session_state.modo_resgate:
-    st.warning("🛟 **PERGUNTA DE RESGATE EM EQUIPE!**")
-    st.markdown("""
-    > Para salvar a pontuação e estabilizar o cosmo, a equipe precisa resgatar um conceito básico que vocês já viram no cotidiano: 
-    > *Pensem em como um balão de festa ganha volume e se estica quando sopramos por dentro.*
-    """)
+# ==========================================
+# FASE 2: DISSERTATIVA COM AVALIAÇÃO POR PALAVRAS-CHAVE
+# ==========================================
+elif st.session_state.fase == 2:
+    st.subheader("Fase 2: O Enigma Cosmológico (Questão Dissertativa)")
     
-    resgate_escolha = st.radio(
-        "Como o exemplo do balão de festa ajuda a compreender a expansão do universo?",
-        (
-            "A) Mostra que o balão cria ar novo do nada assim que é amarrado.",
-            "B) Ilustra como os pontos na superfície do balão se afastam uns dos outros à medida que o espaço entre eles se expande.",
-            "C) Comprova que o centro do balão é a única parte que se move, enquanto as bordas param.",
-            "D) Indica que o universo tem paredes de borracha rígida que impedem o calor de sair."
-        ),
-        key="resgate_1"
-    )
-
-    if st.button("Tentar Resgate"):
-        if resgate_escolha.startswith("B"):
-            st.success("✨ Resgate bem-sucedido! Vocês usaram uma vivência anterior para ancorar o novo conhecimento.")
-            st.session_state.modo_resgate = False
-            st.session_state.fase = 2
-            alternar_turno()
-            st.rerun()
-        else:
-            st.error("Ainda não foi dessa vez. A estabilidade caiu mais um pouco, mas vamos avançar para aprender com o erro!")
-            st.session_state.estabilidade_cosmos -= 10
-            st.session_state.modo_resgate = False
-            st.session_state.fase = 2
-            alternar_turno()
-            st.rerun()
-
-# =========================================================
-# FASE 2: Dissertativa com Análise Inteligente por Palavras-Chave
-# =========================================================
-elif st.session_state.fase == 2 and not st.session_state.modo_resgate:
-    st.subheader("Fase 2: O Enigma da Matéria Escura (Dissertativa)")
-    st.markdown("""
-    > *Makarius* desafia as equipes na Câmara dos Aglomerados: 
-    > *"As galáxias giram rápido demais! Pelas leis visíveis, elas deveriam se despedaçar. O que segura tudo unificado se vocês não conseguem enxergar essa massa?"*
+    # Pega a questão do banco dinâmico
+    q_data = st.session_state.banco_questoes.get("dissertativa_1")
     
-    **Missão da Equipe:** Discutam entre vocês e redijam um breve texto explicativo sobre o papel da **Matéria Escura** e como ela atua no cosmos.
+    st.markdown(f"""
+    > *Makarius* desafia a **{equipe_atual}** com uma questão complexa:
+    > **"{q_data['enunciado']}"**
+    
+    *Nota do Sistema:* Escreva livremente. O avaliador inteligente verificará se os conceitos fundamentais estão presentes na sua explicação.
     """)
 
-    texto_dissertacao = st.text_area("✍️ Escreva a explicação da equipe:", key="dissertacao_f2")
+    texto_dissertacao = st.text_area("✍️ Digite a resposta dissertativa da equipe:", key="dissertacao_f2")
 
-    if st.button("Enviar Explicação para Avaliação Cósmica"):
-        # Sistema inteligente analisando termos fundamentais (subsunçores/conceitos-chave)
+    if st.button("Enviar Resposta Dissertativa"):
         texto_lower = texto_dissertacao.lower()
         
-        # Palavras esperadas que indicam que a equipe compreendeu a essência
-        termos_obrigatorios = ["gravidade", "invisível", "massa", "aglomerado", "conectar", "força", "estrelas", "unidas", "atração"]
-        acertos = sum(1 for termo in termos_obrigatorios if termo in texto_lower)
+        # Salva no histórico administrativo
+        st.session_state.historico_respostas.append({
+            "equipe": equipe_atual,
+            "fase": 2,
+            "resposta": texto_dissertacao
+        })
         
-        if len(texto_dissertacao.strip()) > 15 and acertos >= 2:
-            if st.session_state.turno_equipe == "Equipe Alfa":
-                st.session_state.pontos_equipe_a += 35
-            else:
-                st.session_state.pontos_equipe_b += 35
-            st.success(f"🌟 Análise Excelente! O sistema detectou conceitos cruciais na resposta da equipe (Termos correlacionados identificados).")
+        # Verifica se pelo menos 2 palavras-chave do banco estão presentes no texto do aluno
+        acertos = sum(1 for termo in q_data["palavras_chave"] if termo in texto_lower)
+        
+        if len(texto_dissertacao.strip()) > 10 and acertos >= 2:
+            adicionar_pontos(40)
+            st.success(f"🌟 Resposta Validada com Sucesso! A **{equipe_atual}** demonstrou total compreensão conceitual (Termos correlacionados identificados).")
             st.session_state.fase = 3
-            alternar_turno()
+            passar_turno()
             st.rerun()
         else:
-            st.error("❌ A explicação ficou incompleta ou faltaram termos fundamentais sobre atração gravitacional e massa invisível. A equipe caiu na **Zona de Resgate**!")
-            st.session_state.estabilidade_cosmos -= 20
-            st.session_state.modo_resgate = True
+            st.error(f"❌ A resposta ficou incompleta ou faltaram termos essenciais (como *{', '.join(q_data['palavras_chave'])}*). A **{equipe_atual}** errou, e o turno passa para a próxima equipe!")
+            st.session_state.estabilidade -= 20
+            passar_turno()
             st.rerun()
 
-# --- MODO RESGATE FASE 2 ---
-elif st.session_state.fase == 2 and st.session_state.modo_resgate:
-    st.warning("🛟 **PERGUNTA DE RESGATE: A COLA INVISÍVEL**")
-    st.markdown("""
-    > Pensem em quando vocês amarram um objeto pesado com uma corda invisível ou em como um ímã puxa metais sem encostar neles. 
-    > Escolham a opção que melhor traduz essa ideia para o universo:
-    """)
-    
-    resgate_escolha_2 = st.radio(
-        "Selecione a analogia correta para a Matéria Escura:",
-        (
-            "A) É um escudo térmico que impede o sol de esfriar.",
-            "B) É uma massa que não emite luz, mas exerce forte atração gravitacional, funcionando como uma 'cola' invisível para as galáxias.",
-            "C) É uma energia que empurra todas as estrelas para fora do universo de forma acelerada.",
-            "D) São cometas congelados que passam iluminando o céu noturno."
-        ),
-        key="resgate_2"
-    )
-
-    if st.button("Concluir Resgate da Fase 2"):
-        if resgate_escolha_2.startswith("B"):
-            st.success("✨ Excelente resgate! Conectaram bem a ideia de força de atração à estrutura galáctica.")
-            st.session_state.modo_resgate = False
-            st.session_state.fase = 3
-            alternar_turno()
-            st.rerun()
-        else:
-            st.error("O resgate não foi totalmente preciso, mas a jornada continua rumo ao confronto final!")
-            st.session_state.estabilidade_cosmos -= 15
-            st.session_state.modo_resgate = False
-            st.session_state.fase = 3
-            alternar_turno()
-            st.rerun()
-
-# =========================================================
-# FASE 3: Conclusão e Revelação de Makarius
-# =========================================================
+# ==========================================
+# FASE 3: SEGUNDA DISSERTATIVA (MATÉRIA ESCURA)
+# ==========================================
 elif st.session_state.fase == 3:
+    st.subheader("Fase 3: A Câmara da Matéria Escura (Questão Dissertativa)")
+    
+    q_data_2 = st.session_state.banco_questoes.get("dissertativa_2", st.session_state.banco_questoes["dissertativa_1"])
+    
+    st.markdown(f"""
+    > Chegando na câmara principal, *Makarius* testa o conhecimento final da **{equipe_atual}**:
+    > **"{q_data_2['enunciado']}"**
+    """)
+
+    texto_dissertacao_2 = st.text_area("✍️ Escreva a explanação final da equipe:", key="dissertacao_f3")
+
+    if st.button("Concluir e Validar com o Administrador"):
+        texto_lower_2 = texto_dissertacao_2.lower()
+        
+        # Salva no histórico administrativo
+        st.session_state.historico_respostas.append({
+            "equipe": equipe_atual,
+            "fase": 3,
+            "resposta": texto_dissertacao_2
+        })
+        
+        acertos_2 = sum(1 for termo in q_data_2["palavras_chave"] if termo in texto_lower_2)
+        
+        if len(texto_dissertacao_2.strip()) > 10 and acertos_2 >= 2:
+            adicionar_pontos(50)
+            st.success(f"✨ Perfeito! A **{equipe_atual}** gabaritou a fase final com conceitos precisos!")
+            st.session_state.fase = 4
+            st.rerun()
+        else:
+            st.error(f"❌ Conceitos fundamentais ausentes na dissertação. A **{equipe_atual}** passou a vez para a próxima equipe tentar o fechamento!")
+            st.session_state.estabilidade -= 20
+            passar_turno()
+            st.rerun()
+
+# ==========================================
+# FASE 4: CONCLUSÃO E RESULTADOS
+# ==========================================
+elif st.session_state.fase == 4:
     st.balloons()
     st.subheader("Fase Final: A Revelação do Santuário 🏛️")
     st.markdown("""
-    > Chegando ao núcleo do templo, *Makarius* sorri e revela a verdadeira intenção: 
-    > *"Eu nunca quis destruir o cosmo! As anomalias e enigmas foram um teste planejado junto com Raquel Ferreira. Precisávamos que vocês conectassem o que já sabiam da vida com as leis da física para despertar o verdadeiro poder do conhecimento!"*
+    > *Makarius* sorri e revela a verdadeira intenção: 
+    > *"Eu nunca quis destruir o cosmo! As anomalias e enigmas foram um teste planejado junto com Raquel Ferreira. Vocês provaram que dominam a ciência por trás das estrelas!"*
     """)
     
     st.markdown("---")
-    st.markdown("### 🏆 **Resultado Final da Batalha do Conhecimento**")
-    st.markdown(f"* **Pontos da Equipe Alfa:** {st.session_state.pontos_equipe_a}")
-    st.markdown(f"* **Pontos da Equipe Beta:** {st.session_state.pontos_equipe_b}")
-    st.markdown(f"* **Estabilidade Final do Cosmo:** {st.session_state.estabilidade_cosmos}%")
+    st.markdown("### 🏆 **Placar Final da Batalha do Conhecimento**")
+    st.markdown(f"* **🛡️ Equipe Alfa:** {st.session_state.pontos_alfa} pontos")
+    st.markdown(f"* **🛡️ Equipe Beta:** {st.session_state.pontos_beta} pontos")
+    st.markdown(f"* **🛡️ Equipe Gama:** {st.session_state.pontos_gama} pontos")
+    st.markdown(f"* **🌌 Estabilidade Final do Cosmo:** {st.session_state.estabilidade}%")
     
-    if st.session_state.pontos_equipe_a > st.session_state.pontos_equipe_b:
-        st.success("🥇 **Equipe Alfa Venceu a Jornada Cósmica!**")
-    elif st.session_state.pontos_equipe_b > st.session_state.pontos_equipe_a:
-        st.success("🥇 **Equipe Beta Venceu a Jornada Cósmica!**")
+    # Determina o vencedor
+    pontuacoes = {
+        "Equipe Alfa": st.session_state.pontos_alfa,
+        "Equipe Beta": st.session_state.pontos_beta,
+        "Equipe Gama": st.session_state.pontos_gama
+    }
+    vencedor = max(pontuacoes, key=pontuacoes.get)
+    maior_pontuacao = pontuacoes[vencedor]
+    
+    # Verifica empate
+    vencedores = [eq for eq, pts in pontuacoes.items() if pts == maior_pontuacao]
+    
+    if len(vencedores) > 1:
+        st.success(f"🤝 **Empate Magnífico entre: {', '.join(vencedores)}! O universo foi salvo em conjunto!**")
     else:
-        st.info("🤝 **Empate Magnífico! Ambas as equipes salvaram o universo juntas!**")
+        st.success(f"🥇 **{vencedor} Venceu a Jornada Cósmica com {maior_pontuacao} pontos!**")
 
-    if st.button("🔄 Jogar Novamente"):
+    if st.button("🔄 Reiniciar Jogo Completo"):
         st.session_state.fase = 1
-        st.session_state.modo_resgate = False
-        st.session_state.pontos_equipe_a = 0
-        st.session_state.pontos_equipe_b = 0
-        st.session_state.estabilidade_cosmos = 100
-        st.session_state.turno_equipe = "Equipe Alfa"
+        st.session_state.pontos_alfa = 0
+        st.session_state.pontos_beta = 0
+        st.session_state.pontos_gama = 0
+        st.session_state.indice_equipe = 0
+        st.session_state.estabilidade = 100
         st.rerun()
+
