@@ -5,6 +5,22 @@ import random
 st.set_page_config(page_title="CDZ: O Despertar do Cosmo - Rumo a Athena", page_icon="🌌", layout="centered")
 
 # ==========================================
+# MAPEAMENTO DAS IMAGENS DOS CAVALEIROS
+# ==========================================
+IMAGENS_CAVALEIROS = {
+    "Seiya de Pégaso": "https://upload.wikimedia.org/wikipedia/en/thumb/e/e0/Pegasus_Seiya.jpg/220px-Pegasus_Seiya.jpg",
+    "Shiryu de Dragão": "https://upload.wikimedia.org/wikipedia/en/thumb/8/87/Dragon_Shiryu.jpg/220px-Dragon_Shiryu.jpg",
+    "Hyoga de Cisne": "https://upload.wikimedia.org/wikipedia/en/thumb/7/7f/Cygnus_Hyoga.jpg/220px-Cygnus_Hyoga.jpg",
+    "Shun de Andrômeda": "https://upload.wikimedia.org/wikipedia/en/thumb/7/7b/Andromeda_Shun.jpg/220px-Andromeda_Shun.jpg",
+    "Ikki de Fênix": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f6/Phoenix_Ikki.jpg/220px-Phoenix_Ikki.jpg",
+    "Mu de Áries": "https://upload.wikimedia.org/wikipedia/it/thumb/a/a2/Mu_di_Aries.jpg/200px-Mu_di_Aries.jpg",
+    "Shaka de Virgem": "https://upload.wikimedia.org/wikipedia/it/thumb/e/e6/Virgo_Shaka.jpg/200px-Virgo_Shaka.jpg",
+    "Aioria de Leão": "https://upload.wikimedia.org/wikipedia/it/thumb/c/c3/Aioria_di_Leo.jpg/200px-Aioria_di_Leo.jpg",
+    "Dohko de Libra": "https://upload.wikimedia.org/wikipedia/it/thumb/d/d1/Dohko_di_Libra.jpg/200px-Dohko_di_Libra.jpg",
+    "Camus de Aquário": "https://upload.wikimedia.org/wikipedia/it/thumb/0/03/Camus_di_Aquarius.jpg/200px-Camus_di_Aquarius.jpg"
+}
+
+# ==========================================
 # INICIALIZAÇÃO DO ESTADO GLOBAL
 # ==========================================
 if "jogo_iniciado" not in st.session_state:
@@ -33,13 +49,12 @@ if "prof_logado" not in st.session_state:
     st.session_state.prof_logado = False
 
 # ==========================================
-# BANCO COM 50 QUESTÕES + TEXTOS BASE E CIENTISTAS
+# BANCO COM 50 QUESTÕES DE MÚLTIPLA ESCOLHA
 # ==========================================
 if "banco_50" not in st.session_state:
     guias = ["Seiya de Pégaso", "Shiryu de Dragão", "Hyoga de Cisne", "Shun de Andrômeda", "Ikki de Fênix", "Mu de Áries", "Shaka de Virgem", "Aioria de Leão", "Dohko de Libra", "Camus de Aquário"]
     
     dados_brutos = [
-        # Big Bang e Expansão
         ("O astrofísico e padre belga Georges Lemaître foi o primeiro a propor que o universo começou a partir de um 'átomo primordial'. Décadas depois, astrônomos confirmaram que o espaço não é estático, mas está se expandindo continuamente a partir desse estado denso e quente inicial.",
          "Georges Lemaître",
          "O que postula o modelo cosmológico do Big Bang sobre a origem do Universo?", 
@@ -400,7 +415,6 @@ if st.session_state.prof_logado:
     st.sidebar.markdown("---")
     st.sidebar.markdown("### 📄 Exportar Relatório de Alunos")
     
-    # Gera relatório para download em Word / Text
     relatorio_txt = "====================================================\n"
     relatorio_txt += "RELATÓRIO DE RESPOSTAS DAS EQUIPES - PROFESSOR FELIPE FERREIRA\n"
     relatorio_txt += "====================================================\n\n"
@@ -467,7 +481,7 @@ if not st.session_state.jogo_iniciado:
     st.stop()
 
 # ==========================================
-# FLUXO DAS QUESTÕES COM NARRATIVA
+# FLUXO DAS QUESTÕES COM IMAGENS E NARRATIVA
 # ==========================================
 total_questoes = len(st.session_state.banco_50)
 idx_p = st.session_state.indice_pergunta
@@ -484,6 +498,13 @@ if idx_p < total_questoes:
     
     st.subheader(f"⚔️ Vez de: **{equipe_da_vez}**")
     st.markdown(f"**Guia da Casa:** *{q_atual['guia']}* (Estabilidade da Equipe: **{est_atual}%**) ✨")
+    
+    # EXIBIÇÃO CENTRALIZADA DA IMAGEM DO CAVALEIRO
+    if q_atual['guia'] in IMAGENS_CAVALEIROS:
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            st.image(IMAGENS_CAVALEIROS[q_atual['guia']], width=220, caption=f"Cavaleiro Guia: {q_atual['guia']}")
+
     st.markdown("---")
     
     # NARRATIVA DO CAVALEIRO + CIENTISTA
@@ -586,5 +607,3 @@ else:
         st.session_state.est_gama = 100
         st.session_state.ultimo_feedback = None
         st.rerun()
-
-
