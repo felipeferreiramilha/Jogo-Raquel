@@ -1,21 +1,23 @@
 import streamlit as st
 
 # Configuração da página
-st.set_page_config(page_title="CDZ: Operação Horizonte de Eventos", page_icon="🌌", layout="centered")
+st.set_page_config(page_title="CDZ: Operação Horizonte de Equipes", page_icon="🌌", layout="centered")
 
-# Inicialização do Estado da Sessão (para o jogo não reiniciar sozinho a cada clique)
-if "etapa" not in st.session_state:
-    st.session_state.etapa = 1
-if "materia_escura" not in st.session_state:
-    st.session_state.materia_escura = 0
-if "estabilidade" not in st.session_state:
-    st.session_state.estabilidade = 100
-if "tentativas_erradas" not in st.session_state:
-    st.session_state.tentativas_erradas = 0
-if "mensagem_feedback" not in st.session_state:
-    st.session_state.mensagem_feedback = ""
+# Inicialização do Estado da Sessão para Equipes
+if "fase" not in st.session_state:
+    st.session_state.fase = 1
+if "modo_resgate" not in st.session_state:
+    st.session_state.modo_resgate = False
+if "pontos_equipe_a" not in st.session_state:
+    st.session_state.pontos_equipe_a = 0
+if "pontos_equipe_b" not in st.session_state:
+    st.session_state.pontos_equipe_b = 0
+if "turno_equipe" not in st.session_state:
+    st.session_state.turno_equipe = "Equipe Alfa"
+if "estabilidade_cosmos" not in st.session_state:
+    st.session_state.estabilidade_cosmos = 100
 
-# Estilo visual customizado
+# Estilo visual
 st.markdown("""
     <style>
     .main {
@@ -37,135 +39,198 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("🌌 CDZ: Operação Horizonte de Eventos")
-st.markdown("### *Uma Jornada Cosmológica pelo Santuário*")
+st.title("🌌 CDZ: Operação Horizonte de Eventos - Modo Equipes")
+st.markdown(f"### ⚔️ Vez da **{st.session_state.turno_equipe}** jogar!")
 st.markdown("---")
 
-# Barra Lateral (Status do Cosmo)
-st.sidebar.header("📊 Status do Tabuleiro")
-st.sidebar.metric(label="🌌 Matéria Escura Coletada", value=f"{st.session_state.materia_escura} Unidades")
-st.sidebar.metric(label="⚡ Estabilidade do Cosmo", value=f"{st.session_state.estabilidade}%")
+# Barra Lateral de Placar e Status
+st.sidebar.header("📊 Placar das Equipes & Cosmo")
+st.sidebar.metric(label="🛡️ Equipe Alfa (Pontos)", value=st.session_state.pontos_equipe_a)
+st.sidebar.metric(label="⚡ Equipe Beta (Pontos)", value=st.session_state.pontos_equipe_b)
+st.sidebar.metric(label="🌌 Estabilidade do Universo", value=f"{st.session_state.estabilidade_cosmos}%")
 st.sidebar.markdown("---")
 st.sidebar.info("👥 **Heróis:** Raquel Ferreira & Alunos\n😈 **Vilão:** Makarius (O Vilão Cósmico)")
 
-# ---------------------------------------------------------
-# ETAPA 1: O Despertar da Anomalia (Origem do Big Bang)
-# ---------------------------------------------------------
-if st.session_state.etapa == 1:
-    st.subheader("Fase 1: O Eco do Big Bang")
+def alternar_turno():
+    if st.session_state.turno_equipe == "Equipe Alfa":
+        st.session_state.turno_equipe = "Equipe Beta"
+    else:
+        st.session_state.turno_equipe = "Equipe Alfa"
+
+# =========================================================
+# FASE 1: Múltipla Escolha (A a E) - Origem do Cosmo
+# =========================================================
+if st.session_state.fase == 1 and not st.session_state.modo_resgate:
+    st.subheader("Fase 1: O Despertar da Singularidade (Múltipla Escolha)")
     st.markdown("""
-    > **Contexto:** *Raquel Ferreira* detecta uma distorção grave no relógio cósmico do Santuário. 
-    > As leituras apontam que o **Big Bang** — a expansão inicial do espaço — está acelerando de forma descontrolada por causa de uma interferência. 
-    > O misterioso **Makarius** aparece nas sombras, rindo e afirmando que vai espalhar o caos térmico por todo o universo!
+    > *Raquel Ferreira* orienta as equipes a vasculharem as ruínas do relógio estelar. 
+    > *Makarius* bloqueia a passagem, afirmando que a origem do universo é um mistério denso demais para mentes comuns.
     
-    **Missão dos Alunos:** Para estabilizar a primeira casa do santuário, vocês precisam investigar a natureza da expansão cósmica inicial.
+    **Missão:** Em equipe, debatam e escolham a alternativa correta sobre a expansão inicial do universo.
     """)
     
-    st.markdown("---")
-    st.markdown("❓ **Pergunta de Investigação:** O que o modelo do *Big Bang* descreve sobre a origem e evolução do Universo?")
-    
-    opcao = st.radio(
-        "Selecione a pista correta recolhida no local:",
-        [
-            "A) O universo surgiu de um ponto extremamente denso e quente (singularidade) e continua se expandindo até hoje.",
-            "B) O universo sempre existiu do mesmo tamanho, estático e imutável, sem nenhuma expansão.",
-            "C) O universo foi criado instantaneamente em um formato plano e infinito, sem passado denso."
-        ],
-        key="q1"
+    escolha = st.radio(
+        "Selecione a pista correta:",
+        (
+            "A) O universo sempre existiu estático, eterno e do mesmo tamanho em todas as eras.",
+            "B) O cosmos nasceu de um ponto infinitamente denso e quente (singularidade) que iniciou uma expansão contínua do espaço-tempo.",
+            "C) As galáxias se formaram subitamente a partir de colisões de buracos negros estáticos.",
+            "D) O universo expande-se porque as estrelas criam matéria do nada nos vazios espaciais.",
+            "E) A origem do universo é cíclica, colapsando e reiniciando a cada 100 anos terrestres."
+        ),
+        key="f1_q"
     )
 
-    if st.button("Investigar e Avançar"):
-        if opcao.startswith("A"):
-            st.session_state.materia_escura += 20
-            st.session_state.estabilidade = min(100, st.session_state.estabilidade + 10)
-            st.session_state.etapa = 2
-            st.session_state.tentativas_erradas = 0
-            st.success("Correto! A singularidade inicial começou a se expandir, formando o espaço e o tempo.")
+    if st.button("Submeter Resposta da Equipe"):
+        if escolha.startswith("B"):
+            if st.session_state.turno_equipe == "Equipe Alfa":
+                st.session_state.pontos_equipe_a += 20
+            else:
+                st.session_state.pontos_equipe_b += 20
+            st.success("🎉 Resposta correta! Vocês conectaram o conceito atual à ideia de expansão.")
+            st.session_state.fase = 2
+            alternar_turno()
             st.rerun()
         else:
-            st.session_state.tentativas_erradas += 1
-            st.session_state.estabilidade -= 15
-            st.error("Resposta incorreta! A pista levou a uma distorção temporal. O Cosmo perdeu estabilidade. Tente outra linha de investigação!")
+            st.error("❌ Resposta incorreta! O universo sofreu uma oscilação de instabilidade. A equipe caiu na **Zona de Resgate Prévio**!")
+            st.session_state.estabilidade_cosmos -= 15
+            st.session_state.modo_resgate = True
+            st.rerun()
 
-# ---------------------------------------------------------
-# ETAPA 2: O Mistério da Matéria Escura
-# ---------------------------------------------------------
-elif st.session_state.etapa == 2:
-    st.subheader("Fase 2: A Cola Invisível das Galáxias")
+# --- MODO RESGATE FASE 1 ---
+elif st.session_state.fase == 1 and st.session_state.modo_resgate:
+    st.warning("🛟 **PERGUNTA DE RESGATE EM EQUIPE!**")
     st.markdown("""
-    > **Contexto:** Com a expansão compreendida, o grupo avança para a Câmara dos Aglomerados Estelares. 
-    > No entanto, as galáxias estão começando a se dispersar no espaço sideral. *Makarius* bloqueia o caminho, zombando: 
-    > *"Sem massa suficiente para segurar as estrelas, o universo vai se esfacelar!"*
-    
-    **Missão dos Alunos:** Vocês precisam descobrir qual componente invisível do cosmos fornece a gravidade necessária para manter as estruturas unidas.
+    > Para salvar a pontuação e estabilizar o cosmo, a equipe precisa resgatar um conceito básico que vocês já viram no cotidiano: 
+    > *Pensem em como um balão de festa ganha volume e se estica quando sopramos por dentro.*
     """)
     
-    st.markdown("---")
-    st.markdown("❓ **Pergunta de Investigação:** Qual é a função da **Matéria Escura** na estrutura em grande escala do universo?")
-    
-    opcao = st.radio(
-        "Selecione a propriedade correta:",
-        [
-            "A) Ela emite luz própria e forte radiação ultravioleta que aquece os planetas distantes.",
-            "B) Ela interage predominantemente via gravidade, atuando como um arcabouço invisível que impede que as galáxias se dispersem.",
-            "C) Ela absorve buracos negros e impede completamente qualquer tipo de expansão cósmica."
-        ],
-        key="q2"
+    resgate_escolha = st.radio(
+        "Como o exemplo do balão de festa ajuda a compreender a expansão do universo?",
+        (
+            "A) Mostra que o balão cria ar novo do nada assim que é amarrado.",
+            "B) Ilustra como os pontos na superfície do balão se afastam uns dos outros à medida que o espaço entre eles se expande.",
+            "C) Comprova que o centro do balão é a única parte que se move, enquanto as bordas param.",
+            "D) Indica que o universo tem paredes de borracha rígida que impedem o calor de sair."
+        ),
+        key="resgate_1"
     )
 
-    if st.button("Analisar Pista de Matéria Escura"):
-        if opcao.startswith("B"):
-            st.session_state.materia_escura += 30
-            st.session_state.estabilidade = min(100, st.session_state.estabilidade + 15)
-            st.session_state.etapa = 3
-            st.session_state.tentativas_erradas = 0
-            st.success("Excelente! A Matéria Escura atua como a 'cola gravitacional' do cosmos.")
+    if st.button("Tentar Resgate"):
+        if resgate_escolha.startswith("B"):
+            st.success("✨ Resgate bem-sucedido! Vocês usaram uma vivência anterior para ancorar o novo conhecimento.")
+            st.session_state.modo_resgate = False
+            st.session_state.fase = 2
+            alternar_turno()
             st.rerun()
         else:
-            st.session_state.tentativas_erradas += 1
-            st.session_state.estabilidade -= 20
-            st.error("Erro na análise! A rota escolhida levou a uma zona de radiação intensa. Cuidado com a estabilidade!")
+            st.error("Ainda não foi dessa vez. A estabilidade caiu mais um pouco, mas vamos avançar para aprender com o erro!")
+            st.session_state.estabilidade_cosmos -= 10
+            st.session_state.modo_resgate = False
+            st.session_state.fase = 2
+            alternar_turno()
+            st.rerun()
 
-# ---------------------------------------------------------
-# ETAPA 3: A Revelação de Makarius e Conclusão
-# ---------------------------------------------------------
-elif st.session_state.etapa == 3:
-    st.subheader("Fase Final: A Revelação no Horizonte de Eventos")
+# =========================================================
+# FASE 2: Dissertativa com Análise Inteligente por Palavras-Chave
+# =========================================================
+elif st.session_state.fase == 2 and not st.session_state.modo_resgate:
+    st.subheader("Fase 2: O Enigma da Matéria Escura (Dissertativa)")
     st.markdown("""
-    > **Contexto:** Chegando ao núcleo do Santuário, Raquel Ferreira e os alunos cercam *Makarius*. 
-    > Preparados para o golpe final, Makarius abaixa a guarda, sorri e revela a verdade: 
-    > *"Eu nunca quis destruir o universo... As anomalias eram um teste! O tecido do cosmos estava enfraquecendo porque os humanos esqueceram como o universo funciona. Eu criei a crise para forçá-los a despertar o verdadeiro cosmo através do conhecimento científico!"*
+    > *Makarius* desafia as equipes na Câmara dos Aglomerados: 
+    > *"As galáxias giram rápido demais! Pelas leis visíveis, elas deveriam se despedaçar. O que segura tudo unificado se vocês não conseguem enxergar essa massa?"*
     
-    **Missão Final:** Para consolidar o aprendizado e selar a estabilidade do universo, descreva em poucas palavras o que os alunos aprenderam sobre a expansão e a estrutura do universo nesta jornada.
+    **Missão da Equipe:** Discutam entre vocês e redijam um breve texto explicativo sobre o papel da **Matéria Escura** e como ela atua no cosmos.
+    """)
+
+    texto_dissertacao = st.text_area("✍️ Escreva a explicação da equipe:", key="dissertacao_f2")
+
+    if st.button("Enviar Explicação para Avaliação Cósmica"):
+        # Sistema inteligente analisando termos fundamentais (subsunçores/conceitos-chave)
+        texto_lower = texto_dissertacao.lower()
+        
+        # Palavras esperadas que indicam que a equipe compreendeu a essência
+        termos_obrigatorios = ["gravidade", "invisível", "massa", "aglomerado", "conectar", "força", "estrelas", "unidas", "atração"]
+        acertos = sum(1 for termo in termos_obrigatorios if termo in texto_lower)
+        
+        if len(texto_dissertacao.strip()) > 15 and acertos >= 2:
+            if st.session_state.turno_equipe == "Equipe Alfa":
+                st.session_state.pontos_equipe_a += 35
+            else:
+                st.session_state.pontos_equipe_b += 35
+            st.success(f"🌟 Análise Excelente! O sistema detectou conceitos cruciais na resposta da equipe (Termos correlacionados identificados).")
+            st.session_state.fase = 3
+            alternar_turno()
+            st.rerun()
+        else:
+            st.error("❌ A explicação ficou incompleta ou faltaram termos fundamentais sobre atração gravitacional e massa invisível. A equipe caiu na **Zona de Resgate**!")
+            st.session_state.estabilidade_cosmos -= 20
+            st.session_state.modo_resgate = True
+            st.rerun()
+
+# --- MODO RESGATE FASE 2 ---
+elif st.session_state.fase == 2 and st.session_state.modo_resgate:
+    st.warning("🛟 **PERGUNTA DE RESGATE: A COLA INVISÍVEL**")
+    st.markdown("""
+    > Pensem em quando vocês amarram um objeto pesado com uma corda invisível ou em como um ímã puxa metais sem encostar neles. 
+    > Escolham a opção que melhor traduz essa ideia para o universo:
     """)
     
-    st.markdown("---")
-    conclusao_aluno = st.text_area("✍️ Descreva a compreensão final dos alunos sobre o Big Bang e a Matéria Escura:")
+    resgate_escolha_2 = st.radio(
+        "Selecione a analogia correta para a Matéria Escura:",
+        (
+            "A) É um escudo térmico que impede o sol de esfriar.",
+            "B) É uma massa que não emite luz, mas exerce forte atração gravitacional, funcionando como uma 'cola' invisível para as galáxias.",
+            "C) É uma energia que empurra todas as estrelas para fora do universo de forma acelerada.",
+            "D) São cometas congelados que passam iluminando o céu noturno."
+        ),
+        key="resgate_2"
+    )
 
-    if st.button("Concluir Missão e Salvar o Santuário"):
-        if len(conclusao_aluno.strip()) > 10:
-            st.session_state.etapa = 4
+    if st.button("Concluir Resgate da Fase 2"):
+        if resgate_escolha_2.startswith("B"):
+            st.success("✨ Excelente resgate! Conectaram bem a ideia de força de atração à estrutura galáctica.")
+            st.session_state.modo_resgate = False
+            st.session_state.fase = 3
+            alternar_turno()
             st.rerun()
         else:
-            st.warning("Por favor, escreva uma breve descrição do que foi compreendido para encerrar o ciclo cósmico.")
+            st.error("O resgate não foi totalmente preciso, mas a jornada continua rumo ao confronto final!")
+            st.session_state.estabilidade_cosmos -= 15
+            st.session_state.modo_resgate = False
+            st.session_state.fase = 3
+            alternar_turno()
+            st.rerun()
 
-# ---------------------------------------------------------
-# TELA DE VITÓRIA / CONCLUSÃO
-# ---------------------------------------------------------
-elif st.session_state.etapa == 4:
+# =========================================================
+# FASE 3: Conclusão e Revelação de Makarius
+# =========================================================
+elif st.session_state.fase == 3:
     st.balloons()
-    st.success("🎉 PARABÉNS! O UNIVERSO FOI SALVO!")
-    st.markdown(f"""
-    ### Relatório Final da Missão:
-    * **Pontuação de Matéria Escura Coletada:** {st.session_state.materia_escura} Unidades
-    * **Estabilidade Final do Cosmo:** {st.session_state.estabilidade}%
-    
-    > **Conclusão:** Guiados por *Raquel Ferreira*, os alunos desvendaram os mistérios do Big Bang, compreenderam o papel fundamental da Matéria Escura e descobriram as verdadeiras intenções de *Makarius*. O Santuário e o cosmos estão seguros em harmonia com as leis da física!
+    st.subheader("Fase Final: A Revelação do Santuário 🏛️")
+    st.markdown("""
+    > Chegando ao núcleo do templo, *Makarius* sorri e revela a verdadeira intenção: 
+    > *"Eu nunca quis destruir o cosmo! As anomalias e enigmas foram um teste planejado junto com Raquel Ferreira. Precisávamos que vocês conectassem o que já sabiam da vida com as leis da física para despertar o verdadeiro poder do conhecimento!"*
     """)
     
+    st.markdown("---")
+    st.markdown("### 🏆 **Resultado Final da Batalha do Conhecimento**")
+    st.markdown(f"* **Pontos da Equipe Alfa:** {st.session_state.pontos_equipe_a}")
+    st.markdown(f"* **Pontos da Equipe Beta:** {st.session_state.pontos_equipe_b}")
+    st.markdown(f"* **Estabilidade Final do Cosmo:** {st.session_state.estabilidade_cosmos}%")
+    
+    if st.session_state.pontos_equipe_a > st.session_state.pontos_equipe_b:
+        st.success("🥇 **Equipe Alfa Venceu a Jornada Cósmica!**")
+    elif st.session_state.pontos_equipe_b > st.session_state.pontos_equipe_a:
+        st.success("🥇 **Equipe Beta Venceu a Jornada Cósmica!**")
+    else:
+        st.info("🤝 **Empate Magnífico! Ambas as equipes salvaram o universo juntas!**")
+
     if st.button("🔄 Jogar Novamente"):
-        st.session_state.etapa = 1
-        st.session_state.materia_escura = 0
-        st.session_state.estabilidade = 100
-        st.session_state.tentativas_erradas = 0
+        st.session_state.fase = 1
+        st.session_state.modo_resgate = False
+        st.session_state.pontos_equipe_a = 0
+        st.session_state.pontos_equipe_b = 0
+        st.session_state.estabilidade_cosmos = 100
+        st.session_state.turno_equipe = "Equipe Alfa"
         st.rerun()
