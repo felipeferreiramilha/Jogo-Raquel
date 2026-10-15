@@ -1,164 +1,171 @@
-import pygame
-import random
-import syslibsdl2-dev
-libsdl2-image-dev
-libsdl2-mixer-dev
-libsdl2-ttf-dev
-libportmidi-dev
-libfreetype6-dev
+import streamlit as st
 
-# Inicialização do Pygame
-pygame.init()
+# Configuração da página
+st.set_page_config(page_title="CDZ: Operação Horizonte de Eventos", page_icon="🌌", layout="centered")
 
-# Dimensões da tela
-LARGURA, ALTURA = 800, 600
-TELA = pygame.display.set_mode((LARGURA, ALTURA))
-pygame.display.set_caption("CDZ: A Batalha do Cosmo - Cosmologia")
+# Inicialização do Estado da Sessão (para o jogo não reiniciar sozinho a cada clique)
+if "etapa" not in st.session_state:
+    st.session_state.etapa = 1
+if "materia_escura" not in st.session_state:
+    st.session_state.materia_escura = 0
+if "estabilidade" not in st.session_state:
+    st.session_state.estabilidade = 100
+if "tentativas_erradas" not in st.session_state:
+    st.session_state.tentativas_erradas = 0
+if "mensagem_feedback" not in st.session_state:
+    st.session_state.mensagem_feedback = ""
 
-# Cores (Padrão Cosmos / Cavaleiros)
-PRETO = (10, 10, 25)
-AZUL_COSMO = (0, 150, 255)
-DOURADO = (255, 215, 0)
-ROXO_ESCURO = (75, 0, 130)
-BRANCO = (255, 255, 255)
-VERMELHO = (220, 20, 60)
+# Estilo visual customizado
+st.markdown("""
+    <style>
+    .main {
+        background-color: #0b0f19;
+        color: #ffffff;
+    }
+    .stButton>button {
+        width: 100%;
+        background-color: #1f4068;
+        color: white;
+        border-radius: 8px;
+        font-weight: bold;
+        border: 1px solid #00b4d8;
+    }
+    .stButton>button:hover {
+        background-color: #00b4d8;
+        color: black;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-# Fonte
-FONTE = pygame.font.SysFont("arial", 20)
-FONTE_GRANDE = pygame.font.SysFont("arial", 32, bold=True)
+st.title("🌌 CDZ: Operação Horizonte de Eventos")
+st.markdown("### *Uma Jornada Cosmológica pelo Santuário*")
+st.markdown("---")
 
-class Cavaleiro(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.image = pygame.Surface((40, 50))
-        self.image.fill(DOURADO) # Representando a armadura dourada
-        self.rect = self.image.get_rect(center=(100, ALTURA // 2))
-        self.velocidade = 6
+# Barra Lateral (Status do Cosmo)
+st.sidebar.header("📊 Status do Tabuleiro")
+st.sidebar.metric(label="🌌 Matéria Escura Coletada", value=f"{st.session_state.materia_escura} Unidades")
+st.sidebar.metric(label="⚡ Estabilidade do Cosmo", value=f"{st.session_state.estabilidade}%")
+st.sidebar.markdown("---")
+st.sidebar.info("👥 **Heróis:** Raquel Ferreira & Alunos\n😈 **Vilão:** Makarius (O Vilão Cósmico)")
 
-    def update(self):
-        teclas = pygame.key.get_pressed()
-        if teclas[pygame.K_UP] and self.rect.top > 50:
-            self.rect.y -= self.velocidade
-        if teclas[pygame.K_DOWN] and self.rect.bottom < ALTURA - 20:
-            self.rect.y += self.velocidade
-        if teclas[pygame.K_LEFT] and self.rect.left > 20:
-            self.rect.x -= self.velocidade
-        if teclas[pygame.K_RIGHT] and self.rect.right < LARGURA - 20:
-            self.rect.x += self.velocidade
-
-class MateriaEscura(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.image = pygame.Surface((20, 20))
-        self.image.fill(ROXO_ESCURO) # Matéria escura invisível/misteriosa
-        self.rect = self.image.get_rect(
-            x=random.randint(LARGURA, LARGURA + 300),
-            y=random.randint(60, ALTURA - 50)
-        )
-        self.velocidade = random.randint(3, 7)
-
-    def update(self):
-        self.rect.x -= self.velocidade
-        if self.rect.right < 0:
-            self.rect.x = random.randint(LARGURA + 50, LARGURA + 300)
-            self.rect.y = random.randint(60, ALTURA - 50)
-
-class AnomaliaBigBang(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.image = pygame.Surface((30, 30))
-        self.image.fill(VERMELHO) # Radiação / Instabilidade
-        self.rect = self.image.get_rect(
-            x=random.randint(LARGURA, LARGURA + 400),
-            y=random.randint(60, ALTURA - 50)
-        )
-        self.velocidade = random.randint(5, 9)
-
-    def update(self):
-        self.rect.x -= self.velocidade
-        if self.rect.right < 0:
-            self.rect.x = random.randint(LARGURA + 100, LARGURA + 500)
-            self.rect.y = random.randint(60, ALTURA - 50)
-
-def jogo():
-    relogio = pygame.time.Clock()
+# ---------------------------------------------------------
+# ETAPA 1: O Despertar da Anomalia (Origem do Big Bang)
+# ---------------------------------------------------------
+if st.session_state.etapa == 1:
+    st.subheader("Fase 1: O Eco do Big Bang")
+    st.markdown("""
+    > **Contexto:** *Raquel Ferreira* detecta uma distorção grave no relógio cósmico do Santuário. 
+    > As leituras apontam que o **Big Bang** — a expansão inicial do espaço — está acelerando de forma descontrolada por causa de uma interferência. 
+    > O misterioso **Makarius** aparece nas sombras, rindo e afirmando que vai espalhar o caos térmico por todo o universo!
     
-    jogador = Cavaleiro()
-    todos_sprites = pygame.sprite.Group(jogador)
+    **Missão dos Alunos:** Para estabilizar a primeira casa do santuário, vocês precisam investigar a natureza da expansão cósmica inicial.
+    """)
     
-    grupo_materia = pygame.sprite.Group()
-    for _ in range(5):
-        m = MateriaEscura()
-        grupo_materia.add(m)
-        todos_sprites.add(m)
+    st.markdown("---")
+    st.markdown("❓ **Pergunta de Investigação:** O que o modelo do *Big Bang* descreve sobre a origem e evolução do Universo?")
+    
+    opcao = st.radio(
+        "Selecione a pista correta recolhida no local:",
+        [
+            "A) O universo surgiu de um ponto extremamente denso e quente (singularidade) e continua se expandindo até hoje.",
+            "B) O universo sempre existiu do mesmo tamanho, estático e imutável, sem nenhuma expansão.",
+            "C) O universo foi criado instantaneamente em um formato plano e infinito, sem passado denso."
+        ],
+        key="q1"
+    )
 
-    grupo_anomalias = pygame.sprite.Group()
-    for _ in range(3):
-        a = AnomaliaBigBang()
-        grupo_anomalias.add(a)
-        todos_sprites.add(a)
+    if st.button("Investigar e Avançar"):
+        if opcao.startswith("A"):
+            st.session_state.materia_escura += 20
+            st.session_state.estabilidade = min(100, st.session_state.estabilidade + 10)
+            st.session_state.etapa = 2
+            st.session_state.tentativas_erradas = 0
+            st.success("Correto! A singularidade inicial começou a se expandir, formando o espaço e o tempo.")
+            st.rerun()
+        else:
+            st.session_state.tentativas_erradas += 1
+            st.session_state.estabilidade -= 15
+            st.error("Resposta incorreta! A pista levou a uma distorção temporal. O Cosmo perdeu estabilidade. Tente outra linha de investigação!")
 
-    pontos_materia = 0
-    estabilidade_cosmos = 100
-    executando = True
+# ---------------------------------------------------------
+# ETAPA 2: O Mistério da Matéria Escura
+# ---------------------------------------------------------
+elif st.session_state.etapa == 2:
+    st.subheader("Fase 2: A Cola Invisível das Galáxias")
+    st.markdown("""
+    > **Contexto:** Com a expansão compreendida, o grupo avança para a Câmara dos Aglomerados Estelares. 
+    > No entanto, as galáxias estão começando a se dispersar no espaço sideral. *Makarius* bloqueia o caminho, zombando: 
+    > *"Sem massa suficiente para segurar as estrelas, o universo vai se esfacelar!"*
+    
+    **Missão dos Alunos:** Vocês precisam descobrir qual componente invisível do cosmos fornece a gravidade necessária para manter as estruturas unidas.
+    """)
+    
+    st.markdown("---")
+    st.markdown("❓ **Pergunta de Investigação:** Qual é a função da **Matéria Escura** na estrutura em grande escala do universo?")
+    
+    opcao = st.radio(
+        "Selecione a propriedade correta:",
+        [
+            "A) Ela emite luz própria e forte radiação ultravioleta que aquece os planetas distantes.",
+            "B) Ela interage predominantemente via gravidade, atuando como um arcabouço invisível que impede que as galáxias se dispersem.",
+            "C) Ela absorve buracos negros e impede completamente qualquer tipo de expansão cósmica."
+        ],
+        key="q2"
+    )
 
-    while executando:
-        TELA.fill(PRETO)
+    if st.button("Analisar Pista de Matéria Escura"):
+        if opcao.startswith("B"):
+            st.session_state.materia_escura += 30
+            st.session_state.estabilidade = min(100, st.session_state.estabilidade + 15)
+            st.session_state.etapa = 3
+            st.session_state.tentativas_erradas = 0
+            st.success("Excelente! A Matéria Escura atua como a 'cola gravitacional' do cosmos.")
+            st.rerun()
+        else:
+            st.session_state.tentativas_erradas += 1
+            st.session_state.estabilidade -= 20
+            st.error("Erro na análise! A rota escolhida levou a uma zona de radiação intensa. Cuidado com a estabilidade!")
 
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+# ---------------------------------------------------------
+# ETAPA 3: A Revelação de Makarius e Conclusão
+# ---------------------------------------------------------
+elif st.session_state.etapa == 3:
+    st.subheader("Fase Final: A Revelação no Horizonte de Eventos")
+    st.markdown("""
+    > **Contexto:** Chegando ao núcleo do Santuário, Raquel Ferreira e os alunos cercam *Makarius*. 
+    > Preparados para o golpe final, Makarius abaixa a guarda, sorri e revela a verdade: 
+    > *"Eu nunca quis destruir o universo... As anomalias eram um teste! O tecido do cosmos estava enfraquecendo porque os humanos esqueceram como o universo funciona. Eu criei a crise para forçá-los a despertar o verdadeiro cosmo através do conhecimento científico!"*
+    
+    **Missão Final:** Para consolidar o aprendizado e selar a estabilidade do universo, descreva em poucas palavras o que os alunos aprenderam sobre a expansão e a estrutura do universo nesta jornada.
+    """)
+    
+    st.markdown("---")
+    conclusao_aluno = st.text_area("✍️ Descreva a compreensão final dos alunos sobre o Big Bang e a Matéria Escura:")
 
-        # Atualizações
-        todos_sprites.update()
+    if st.button("Concluir Missão e Salvar o Santuário"):
+        if len(conclusao_aluno.strip()) > 10:
+            st.session_state.etapa = 4
+            st.rerun()
+        else:
+            st.warning("Por favor, escreva uma breve descrição do que foi compreendido para encerrar o ciclo cósmico.")
 
-        # Colisões com Matéria Escura
-        colisoes_materia = pygame.sprite.spritecollide(jogador, grupo_materia, True)
-        for colisao in colisoes_materia:
-            pontos_materia += 1
-            estabilidade_cosmos = min(100, estabilidade_cosmos + 10)
-            novo_m = MateriaEscura()
-            grupo_materia.add(novo_m)
-            todos_sprites.add(novo_m)
-
-        # Colisões com Anomalias (Big Bang descontrolado)
-        colisoes_anomalia = pygame.sprite.spritecollide(jogador, grupo_anomalias, True)
-        for colisao in colisoes_anomalia:
-            estabilidade_cosmos -= 25
-            nova_a = AnomaliaBigBang()
-            grupo_anomalias.add(nova_a)
-            todos_sprites.add(nova_a)
-
-        # Condição de Fim de Jogo
-        if estabilidade_cosmos <= 0:
-            executando = False
-
-        # Desenhar elementos na tela
-        todos_sprites.draw(TELA)
-
-        # Interface (HUD)
-        texto_pontos = FONTE.render(f"Matéria Escura Coletada: {pontos_materia}", True, BRANCO)
-        texto_cosmos = FONTE.render(f"Estabilidade do Cosmo: {estabilidade_cosmos}%", True, DOURADO)
-        texto_instrucao = FONTE.render("Use as setas para mover o Cavaleiro e absorver a Matéria Escura!", True, AZUL_COSMO)
-        
-        TELA.blit(texto_pontos, (20, 15))
-        TELA.blit(texto_cosmos, (450, 15))
-        TELA.blit(texto_instrucao, (20, ALTURA - 30))
-
-        pygame.display.flip()
-        relogio.tick(60)
-
-    # Tela de Game Over
-    TELA.fill(PRETO)
-    texto_fim = FONTE_GRANDE.render("O COSMO COLAPSOU!", True, VERMELHO)
-    texto_sub = FONTE.render("A instabilidade do Big Bang superou a Matéria Escura.", True, BRANCO)
-    TELA.blit(texto_fim, (LARGURA // 2 - 170, ALTURA // 2 - 40))
-    TELA.blit(texto_sub, (LARGURA // 2 - 210, ALTURA // 2 + 10))
-    pygame.display.flip()
-    pygame.time.wait(4000)
-    pygame.quit()
-    sys.exit()
-
-if __name__ == "__main__":
-    jogo()
+# ---------------------------------------------------------
+# TELA DE VITÓRIA / CONCLUSÃO
+# ---------------------------------------------------------
+elif st.session_state.etapa == 4:
+    st.balloons()
+    st.success("🎉 PARABÉNS! O UNIVERSO FOI SALVO!")
+    st.markdown(f"""
+    ### Relatório Final da Missão:
+    * **Pontuação de Matéria Escura Coletada:** {st.session_state.materia_escura} Unidades
+    * **Estabilidade Final do Cosmo:** {st.session_state.estabilidade}%
+    
+    > **Conclusão:** Guiados por *Raquel Ferreira*, os alunos desvendaram os mistérios do Big Bang, compreenderam o papel fundamental da Matéria Escura e descobriram as verdadeiras intenções de *Makarius*. O Santuário e o cosmos estão seguros em harmonia com as leis da física!
+    """)
+    
+    if st.button("🔄 Jogar Novamente"):
+        st.session_state.etapa = 1
+        st.session_state.materia_escura = 0
+        st.session_state.estabilidade = 100
+        st.session_state.tentativas_erradas = 0
+        st.rerun()
