@@ -7,7 +7,7 @@ st.set_page_config(
     layout="wide",
 )
 
-# Estilização Visual (Tema Sci-Fi Pedagógico)
+# Estilização Visual (Tema Sci-Fi Pedagógico & Star Wars)
 st.markdown(
     """
     <style>
@@ -65,7 +65,7 @@ st.markdown(
         margin-bottom: 15px;
     }
     .vilao-box {
-        background-color: #260a0a;
+        background-color: #1c0505;
         border: 2px solid #ff3333;
         padding: 15px;
         border-radius: 12px;
@@ -318,14 +318,12 @@ if "indice_caso" not in st.session_state:
 if "em_resgate" not in st.session_state:
   st.session_state.em_resgate = False
 if "erros_cometidos" not in st.session_state:
-  st.session_state.erros_cometidos = (
-      []
-  )  # Armazena os erros para a avaliação final de Ausubel
+  st.session_state.erros_cometidos = []
 if "nome_usuario" not in st.session_state:
   st.session_state.nome_usuario = ""
 if "ranking" not in st.session_state:
   st.session_state.ranking = [
-      {"nome": "Agente Felipe", "status": "Concluído (Ausubel)", "pontos": 3},
+      {"nome": "Agente Felipe", "status": "Concluído (Darth Makarius)", "pontos": 3},
       {
           "nome": "Raquel Ferreira (Heroína)",
           "status": "Comandante Cognitiva",
@@ -341,9 +339,9 @@ st.markdown(
     unsafe_allow_html=True,
 )
 st.markdown(
-    "<p style='text-align: center; color: #aaa;'>Utilizando a teoria de David"
-    " Ausubel, ative seus conhecimentos prévios, supere os bloqueios e"
-    " desvende o segredo de Makarius Tahim com Raquel Ferreira!</p>",
+    "<p style='text-align: center; color: #aaa;'>Ative seus subsunçores,"
+    " supere os bloqueios e enfrente Makarius Tahim em seu traje épico de"
+    " Darth Vader!</p>",
     unsafe_allow_html=True,
 )
 st.divider()
@@ -357,7 +355,7 @@ if st.session_state.modo == "menu":
     st.markdown("### 🕵️‍♂️ Área do Aluno (Agente Investigativo)")
     st.write(
         "Inicie a investigação com ancoragem de subsunçores, análise de erros"
-        " e relatório final!"
+        " e o desfecho com Darth Makarius!"
     )
     if st.button("Entrar como Agente"):
       st.session_state.modo = "aluno"
@@ -444,7 +442,7 @@ elif st.session_state.modo == "aluno":
         st.markdown(
             f"""
                 <div class='vilao-box'>
-                    <h3 style='margin:0; color:#ff3333;'>😈 Makarius Tahim</h3>
+                    <h3 style='margin:0; color:#ff3333;'>😈 Makarius Tahim (Darth Tahim)</h3>
                     <p style='margin-top:8px; font-size:13px; font-style:italic;'>{caso_atual['comentario_makarius']}</p>
                 </div>
                 """,
@@ -481,13 +479,11 @@ elif st.session_state.modo == "aluno":
             st.session_state.indice_caso += 1
             st.rerun()
           else:
-            # ERROU: Registra o erro para a avaliação de Ausubel ao final e ativa o bloqueio
             erro_info = (
                 f"**{caso_atual['titulo']}**: Você selecionou uma ancoragem"
-                f" equivocada (*'{escolha_agente[:40]}...'*), o que gerou um"
-                " conflito com o subsunçor científico correto"
-                f" (*'{q_ativa['correta'][:40]}...'*). Isso fez com que você"
-                " perdesse o eixo da expansão/origem cósmica temporariamente."
+                f" equivocada (*'{escolha_agente[:40]}...'*), gerando conflito"
+                " com o subsunçor científico correto"
+                f" (*'{q_ativa['correta'][:40]}...'*)."
             )
             if erro_info not in st.session_state.erros_cometidos:
               st.session_state.erros_cometidos.append(erro_info)
@@ -496,9 +492,9 @@ elif st.session_state.modo == "aluno":
               st.session_state.em_resgate = True
               st.error(
                   "❌ **Conflito Cognitivo (Erro Detectado)!** Makarius Tahim"
-                  " bloqueou seu acesso. Seus subsunçores antigos colidiram"
-                  " com a evidência correta. Leia a dica da Raquel, analise o"
-                  " erro e tente novamente com a nova pista de resgate!"
+                  " (Darth Tahim) bloqueou seu acesso. Seus subsunçores antigos"
+                  " colidiram com a evidência correta. Leia a dica da Raquel e"
+                  " tente novamente!"
               )
               st.rerun()
             else:
@@ -511,23 +507,23 @@ elif st.session_state.modo == "aluno":
       st.session_state.etapa_agente = "avaliacao_ausubel"
       st.rerun()
 
-  # ETAPA 3: AVALIAÇÃO DIAGNÓSTICA DE ERROS (DAVID AUSUBEL) E REVELAÇÃO FINAL
+  # ETAPA 3: AVALIAÇÃO DIAGNÓSTICA DE ERROS & DESFECHO ÉPICO (DARTH MAKARIUS)
   elif st.session_state.etapa_agente == "avaliacao_ausubel":
     st.markdown(
-        "<h2>📊 Avaliação Diagnóstica de Erros & Revelação Cósmica</h2>",
+        "<h2>📊 Avaliação Diagnóstica de Erros & Conhecimento do Universo</h2>",
         unsafe_allow_html=True,
     )
 
     st.markdown(
         """
         <div style='background-color: #0b1a2e; border: 2px solid #00ffff; padding: 20px; border-radius: 12px; margin-bottom: 20px;'>
-            <h3 style='color: #00ffff; margin-top:0;'>📜 Transmissão de Encerramento: O Segredo de Makarius</h3>
-            <p>Parabéns, Agente <b>{nome}</b>! Você concluiu todos os casos investigativos.</p>
-            <p>As luzes do painel mudam e <b>Raquel Ferreira</b> e <b>Makarius Tahim</b> aparecem juntos. Makarius retira o capacete sombrio e revela a grande verdade:</p>
+            <h3 style='color: #00ffff; margin-top:0;'>🌌 O Desfecho: A Aparição de Darth Makarius</h3>
+            <p>Parabéns, Agente <b>{nome}</b>! Você concluiu todos os casos de investigação cósmica.</p>
+            <p>As portas da câmara principal se abrem com um som metálico profundo. Das sombras surge <b>Makarius Tahim (Darth Tahim)</b>, vestindo seu imponente traje preto estilo <i>Darth Vader</i> de <i>Star Wars</i>, com sua respiração mecânica ecoando pelo ambiente. Ao lado dele, <b>Raquel Ferreira</b> sorri orgulhosa.</p>
             <p style='color: #ffcc00; font-style: italic; font-size: 16px;'>
-            "Agente, eu nunca fui seu inimigo", diz Makarius sorrindo. "Na Teoria de David Ausubel, a verdadeira aprendizagem significativa só ocorre quando superamos os conflitos cognitivos e os erros conceituais. Eu criei os bloqueios e os testes difíceis para forçar a reestruturação dos seus subsunçores! Sem o erro e a correção consciente, sua mente jamais evoluiria para compreender o Big Bang."
+            "Impressionante...", diz Darth Makarius com sua voz profunda, retirando o capacete escuro e revelando um olhar de absoluto respeito. "Você enfrentou os conflitos cognitivos, superou seus erros e reestruturou seus subsunçores como um verdadeiro mestre. Na Teoria de David Ausubel, o erro não é o fim, mas o degrau necessário para a aprendizagem significativa."
             </p>
-            <p>Raquel complementa: <i>"Exatamente! Cada tropeço serviu para mapear como sua mente processava a ciência."</i></p>
+            <p>Makarius ergue as mãos e lhe transfere o sagrado <b>Conhecimento do Universo</b>, dizendo: <i>"Eu assumi o manto e o visual do lado negro para forçar a sua mente a evoluir. Meus parabéns, agente. O cosmos agora está em boas mãos."</i></p>
         </div>
         """.format(
             nome=st.session_state.nome_usuario
@@ -570,7 +566,7 @@ elif st.session_state.modo == "aluno":
         ),
     )
 
-    if st.button("📤 Protocolar Relatório Final e Concluir Patente"):
+    if st.button("📤 Protocolar Relatório Final e Receber o Título"):
       if not conclusao_ausubel.strip():
         st.warning(
             "Por favor, escreva seu relatório descritivo para registrar sua"
@@ -579,7 +575,7 @@ elif st.session_state.modo == "aluno":
       else:
         st.session_state.ranking.append({
             "nome": st.session_state.nome_usuario,
-            "status": "Aprendizagem Significativa Consolidada",
+            "status": "Mestre Cósmico (Conhecimento do Universo)",
             "pontos": 3,
         })
         st.session_state.ranking = sorted(
@@ -591,11 +587,11 @@ elif st.session_state.modo == "aluno":
   # ETAPA 4: TELA DE SUCESSO E RANKING
   elif st.session_state.etapa_agente == "fim_sucesso":
     st.success(
-        "🎉 Jornada Concluída com Honraria! Relatório de aprendizagem"
-        " significativa protocolado."
+        "🎉 Jornada Concluída com Honraria Máxima! Relatório de aprendizagem"
+        " significativa protocolado com bênção de Darth Makarius."
     )
     st.markdown(
-        "### 🏆 Patente Concedida: Mestre(a) em Aprendizagem Significativa"
+        "### 🏆 Patente Concedida: Guardião(ã) do Conhecimento do Universo"
     )
 
     st.divider()
