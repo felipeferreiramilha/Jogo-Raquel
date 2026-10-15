@@ -3,7 +3,7 @@ import streamlit as st
 
 # Configuração da Página
 st.set_page_config(
-    page_title="Investigação Cósmica: O Segredo de Death Tahim",
+    page_title="Investigação Cósmica: A Jornada das Aulas de Death Tahim",
     page_icon="🌌",
     layout="wide",
 )
@@ -79,20 +79,27 @@ st.markdown(
         border-radius: 10px;
         margin-bottom: 20px;
     }
+    .derrota-box {
+        background-color: #2b0000;
+        border: 2px solid #ff0000;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+    }
     </style>
 """,
     unsafe_allow_html=True,
 )
 
 # =========================================================================
-# BANCO DE CASOS COM TEXTOS EXPANDIDOS E RESPOSTAS VARIADAS (SEM PADRÃO 'A')
+# BANCO DE AULAS/CASOS COM TEXTOS EXPANDIDOS E BANCO DE QUESTÕES
 # =========================================================================
 
 CASOS_INVESTIGACAO = [
     {
         "id": 1,
         "titulo": (
-            "Caso 1: O Nascimento do Cosmos e a Queda do Dogma Estático"
+            "Aula 1: O Nascimento do Cosmos e a Queda do Dogma Estático"
         ),
         "subsunsor_previo": (
             "🧠 **Ativação de Conhecimento Prévio:** Pense na sua vivência"
@@ -126,7 +133,7 @@ CASOS_INVESTIGACAO = [
             " comunidade científica posteriormente consagrou como o Big Bang."
             " Death Tahim, agindo como o guardião severo das antigas certezas,"
             " tentou suprimir e corromper esses arquivos para manter a"
-            " humanidade algemada à ilusão da estagnação perpétua."
+            " humanidade algemada à illusions da estagnação perpétua."
         ),
         "video_recomendado": (
             "🎥 **Vídeo Recomendado para Pesquisa:** Assista no YouTube a"
@@ -155,27 +162,13 @@ CASOS_INVESTIGACAO = [
                     ),
                     (
                         "Posicionamento do Sol na margem externa e isolada da"
-                        " via Láctea."
+                        " Via Láctea."
                     ),
                 ],
                 "correta": (
                     "Imutabilidade perpétua de um cenário cósmico visto como"
                     " perene e estagnado."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** Pense no conceito tradicional"
-                        " que as civilizações antigas mantinham sobre o céu."
-                        " Como o cosmo era visto antes da física moderna?"
-                    ),
-                    "opcoes": [
-                        ("Estrutura permanente, perene e estagnada."),
-                        ("Laboratório dinâmico em expansão acelerada."),
-                        ("Oceano de fluidos magnéticos flutuantes no vácuo."),
-                        ("Sistema estelar em processo de colapso cíclico."),
-                    ],
-                    "correta": ("Estrutura permanente, perene e estagnada."),
-                },
             },
             {
                 "enunciado": (
@@ -205,26 +198,6 @@ CASOS_INVESTIGACAO = [
                     "Vinculando o fenômeno gravitacional à deformação e"
                     " curvatura geométrica do espaço-tempo."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** Releia o texto. O que a teoria"
-                        " de Einstein estabeleceu sobre a gravidade e o"
-                        " universo?"
-                    ),
-                    "opcoes": [
-                        ("Que a força gravitacional repele galáxias distantes."),
-                        ("Que o espaço é plano, rígido e imune a massas."),
-                        (
-                            "Que a gravidade modela a geometria e a curvatura"
-                            " do espaço-tempo."
-                        ),
-                        ("Que o tempo flui independentemente da massa estelar."),
-                    ],
-                    "correta": (
-                        "Que a gravidade modela a geometria e a curvatura do"
-                        " espaço-tempo."
-                    ),
-                },
             },
             {
                 "enunciado": (
@@ -254,20 +227,6 @@ CASOS_INVESTIGACAO = [
                     "Instabilidade do sistema físico, exigindo expansão"
                     " ininterrupta ou contração."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** Lemaître percebeu que as"
-                        " equações matemáticas rejeitavam qual estado"
-                        " tradicional?"
-                    ),
-                    "opcoes": [
-                        ("A estagnação e o repouso estático global."),
-                        ("A aceleração infinita dos fótons de luz."),
-                        ("A rotação síncrona dos planetas rochosos."),
-                        ("A densidade nula do espaço interestelar."),
-                    ],
-                    "correta": ("A estagnação e o repouso estático global."),
-                },
             },
             {
                 "enunciado": (
@@ -282,19 +241,6 @@ CASOS_INVESTIGACAO = [
                     ("Plasmocentro Primordial."),
                 ],
                 "correta": ("Átomo Primitivo."),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** Busque nos registros históricos"
-                        " do caso o nome dado à singularidade hiperdensa."
-                    ),
-                    "opcoes": [
-                        ("Coração de Quantum."),
-                        ("Ponto Omega Absoluto."),
-                        ("Átomo Primitivo."),
-                        ("Esfera de Neutrônicos."),
-                    ],
-                    "correta": ("Átomo Primitivo."),
-                },
             },
             {
                 "enunciado": (
@@ -318,22 +264,6 @@ CASOS_INVESTIGACAO = [
                     "O espaço tridimensional, o fluxo do tempo e a expansão"
                     " métrica universal."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** A explosão primordial não criou"
-                        " apenas matéria, mas estruturou a própria realidade de"
-                        " quê?"
-                    ),
-                    "opcoes": [
-                        ("Apenas da luz visível e do calor estelar."),
-                        ("Somente das órbitas planetárias e luas."),
-                        ("Do espaço, do tempo e da expansão cósmica."),
-                        ("Unicamente dos campos gravitacionais locais."),
-                    ],
-                    "correta": (
-                        "Do espaço, do tempo e da expansão cósmica."
-                    ),
-                },
             },
             {
                 "enunciado": (
@@ -362,26 +292,6 @@ CASOS_INVESTIGACAO = [
                     "Abafar e corromper os arquivos para manter o intelecto"
                     " humano preso ao dogma estático."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** Lembre-se do antagonista do"
-                        " laboratório. Qual era a intenção de Death Tahim"
-                        " frente ao conhecimento?"
-                    ),
-                    "opcoes": [
-                        (
-                            "Corromper os registros para preservar a ilusão da"
-                            " imutabilidade."
-                        ),
-                        ("Acelerar artificialmente a rotação da Via Láctea."),
-                        ("Destruir todos os telescópios ópticos do planeta."),
-                        ("Impedir o funcionamento de reatores nucleares."),
-                    ],
-                    "correta": (
-                        "Corromper os registros para preservar a ilusão da"
-                        " imutabilidade."
-                    ),
-                },
             },
             {
                 "enunciado": (
@@ -411,26 +321,6 @@ CASOS_INVESTIGACAO = [
                     "Substituição de um cosmo eterno por uma linha temporal"
                     " finita com um marco inicial dinâmico."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel (Questão Crítica):** Pense na"
-                        " grande virada conceitual: qual foi a ruptura de"
-                        " aceitar que o universo teve um começo?"
-                    ),
-                    "opcoes": [
-                        (
-                            "O reconhecimento de que a história do cosmo teve um"
-                            " início ativo e evolutivo."
-                        ),
-                        ("A certeza de que o universo tem tamanho zero hoje."),
-                        ("A prova de que o tempo flui de trás para frente."),
-                        ("A eliminação total da gravidade em escalas globais."),
-                    ],
-                    "correta": (
-                        "O reconhecimento de que a história do cosmo teve um"
-                        " início ativo e evolutivo."
-                    ),
-                },
             },
             {
                 "enunciado": (
@@ -457,19 +347,6 @@ CASOS_INVESTIGACAO = [
                     "Acúmulo de saberes como físico teórico e sacerdote"
                     " católico."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** O texto menciona duas"
-                        " ocupações importantes de Lemaître. Quais são elas?"
-                    ),
-                    "opcoes": [
-                        ("Físico e padre católico."),
-                        ("Filósofo e poeta clássico."),
-                        ("Matemático e navegador."),
-                        ("Químico e geólogo."),
-                    ],
-                    "correta": ("Físico e padre católico."),
-                },
             },
         ],
         "comentario_raquel": (
@@ -479,12 +356,13 @@ CASOS_INVESTIGACAO = [
         ),
         "comentario_makarius": (
             "😈 **Death Tahim sussurra:** 'A eternidade estagnada é o meu"
-            " domínio... Ouse desafiar minhas barreiras conceituais se puder!'"
+            " domínio... Você precisará de pelo menos 4 acertos para sobreviver"
+            " a esta aula!'"
         ),
     },
     {
         "id": 2,
-        "titulo": "Caso 2: A Grande Expansão do Espaço-Tempo e o Redshift",
+        "titulo": "Aula 2: A Grande Expansão do Espaço-Tempo e o Redshift",
         "subsunsor_previo": (
             "🧠 **Ativação de Conhecimento Prévio:** Pense em um trem que apita"
             " ao se afastar: o som fica mais grave porque as ondas sonoras se"
@@ -537,19 +415,6 @@ CASOS_INVESTIGACAO = [
                     ("Análise de reflexão de radar em meteoroides."),
                 ],
                 "correta": ("Investigações espectroscópicas de alta precisão."),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** O texto aponta que Hubble"
-                        " utilizou análises de qual tipo na radiação luminosa?"
-                    ),
-                    "opcoes": [
-                        ("Espectroscópicas."),
-                        ("Termodinâmicas."),
-                        ("Mecânicas fluidas."),
-                        ("Magneto-ópticas."),
-                    ],
-                    "correta": ("Espectroscópicas."),
-                },
             },
             {
                 "enunciado": (
@@ -564,20 +429,6 @@ CASOS_INVESTIGACAO = [
                     ("Refração direta em prisma estelar."),
                 ],
                 "correta": ("Redshift (desvio para o vermelho)."),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** Releia o texto para encontrar o"
-                        " termo em inglês usado para o desvio na direção da"
-                        " cor vermelha."
-                    ),
-                    "opcoes": [
-                        ("Redshift."),
-                        ("Blueshift."),
-                        ("Frequência zero."),
-                        ("Efeito Doppler acústico."),
-                    ],
-                    "correta": ("Redshift."),
-                },
             },
             {
                 "enunciado": (
@@ -607,25 +458,6 @@ CASOS_INVESTIGACAO = [
                     "Supor que as galáxias corriam como projéteis velozes"
                     " dentro de um palco estático."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** O texto alerta sobre o erro de"
-                        " achar que as galáxias apenas...?"
-                    ),
-                    "opcoes": [
-                        (
-                            "Disparavam correndo através de um espaço rígido e"
-                            " imóvel."
-                        ),
-                        ("Giravam em órbitas circulares fixas ao redor do Sol."),
-                        ("Caíam juntas em direção a buracos negros locais."),
-                        ("Emitiam feixes de raios gama destrutivos."),
-                    ],
-                    "correta": (
-                        "Disparavam correndo através de um espaço rígido e"
-                        " imóvel."
-                    ),
-                },
             },
             {
                 "enunciado": (
@@ -645,19 +477,6 @@ CASOS_INVESTIGACAO = [
                     "O estiramento métrico contínuo do próprio tecido do"
                     " espaço-tempo."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** O que é que realmente se"
-                        " estica para afastar os corpos celestes?"
-                    ),
-                    "opcoes": [
-                        ("O tecido geométrico do espaço-tempo."),
-                        ("A atmosfera invisível das galáxias."),
-                        ("As órbitas elípticas dos cometas."),
-                        ("O campo gravitacional dos núcleos."),
-                    ],
-                    "correta": ("O tecido geométrico do espaço-tempo."),
-                },
             },
             {
                 "enunciado": (
@@ -687,19 +506,6 @@ CASOS_INVESTIGACAO = [
                     "A velocidade de afastamento é diretamente proporcional à"
                     " distância que os separa."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** Releia o trecho final do"
-                        " parágrafo: o afastamento é proporcional a quê?"
-                    ),
-                    "opcoes": [
-                        ("À distância física entre os corpos."),
-                        ("À idade média de cada estrela."),
-                        ("Ao peso atômico do hidrogênio."),
-                        ("À temperatura do gás interestelar."),
-                    ],
-                    "correta": ("À distância física entre os corpos."),
-                },
             },
             {
                 "enunciado": (
@@ -725,19 +531,6 @@ CASOS_INVESTIGACAO = [
                     "Argumentar que o universo sofria um processo de colapso"
                     " retrógrado interno."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** O vilão quis inverter a"
-                        " lógica da expansão. O que ele alegou?"
-                    ),
-                    "opcoes": [
-                        ("Que o cosmo estava encolhendo em colapso."),
-                        ("Que o universo havia parado de girar."),
-                        ("Que as estrelas estavam se apagando."),
-                        ("Que o vácuo absorvia toda a matéria."),
-                    ],
-                    "correta": ("Que o cosmo estava encolhendo em colapso."),
-                },
             },
             {
                 "enunciado": (
@@ -764,26 +557,6 @@ CASOS_INVESTIGACAO = [
                     "Evidência de que o palco da matéria é flexível e"
                     " dinâmico, e não rígido."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel (Questão Crítica):** Pense no"
-                        " espaço como um tecido elástico. Qual é a revolução de"
-                        " entender que ele estica?"
-                    ),
-                    "opcoes": [
-                        (
-                            "O próprio recipiente geométrico do cosmos se"
-                            " expande ativamente."
-                        ),
-                        ("Os planetas aumentam de tamanho físico."),
-                        ("O Sol duplica sua massa a cada ano."),
-                        ("As leis físicas deixam de valer nas bordas."),
-                    ],
-                    "correta": (
-                        "O próprio recipiente geométrico do cosmos se expande"
-                        " ativamente."
-                    ),
-                },
             },
             {
                 "enunciado": (
@@ -798,19 +571,6 @@ CASOS_INVESTIGACAO = [
                     ("Durante a transição histórica renascentista."),
                 ],
                 "correta": ("Na década de 1920."),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** Releia a primeira frase do"
-                        " arquivo histórico nº 02."
-                    ),
-                    "opcoes": [
-                        ("Na década de 1920."),
-                        ("Nos anos 1980."),
-                        ("Na década de 1950."),
-                        ("No ano de 2010."),
-                    ],
-                    "correta": ("Na década de 1920."),
-                },
             },
         ],
         "comentario_raquel": (
@@ -820,13 +580,14 @@ CASOS_INVESTIGACAO = [
         ),
         "comentario_makarius": (
             "😈 **Death Tahim sussurra:** 'O tecido do espaço é maleável e"
-            " frágil... Eu posso distorcê-lo se sua cognição fraquejar!'"
+            " frágil... Mantenha a média de 4 acertos ou caia perante minhas"
+            " ilusões!'"
         ),
     },
     {
         "id": 3,
         "titulo": (
-            "Caso 3: O Mistério Oculto da Matéria Escura e da Energia Escura"
+            "Aula 3: O Mistério Oculto da Matéria Escura e da Energia Escura"
         ),
         "subsunsor_previo": (
             "🧠 **Ativação de Conhecimento Prévio:** Pense na gravidade que"
@@ -885,22 +646,6 @@ CASOS_INVESTIGACAO = [
                     "Velocidade estelar periférica muito acima da sustentável"
                     " pela massa visível."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** O texto aponta que as estrelas"
-                        " das bordas giravam de que maneira em relação à luz"
-                        " visível?"
-                    ),
-                    "opcoes": [
-                        ("Muito mais rápido do que a massa visível suportaria."),
-                        ("Muito mais devagar do que o normal previsto."),
-                        ("Em linha reta em direção ao vazio exterior."),
-                        ("De forma estática sem nenhuma órbita."),
-                    ],
-                    "correta": (
-                        "Muito mais rápido do que a massa visível suportaria."
-                    ),
-                },
             },
             {
                 "enunciado": (
@@ -915,20 +660,6 @@ CASOS_INVESTIGACAO = [
                     ("Reflexo luminescente de galáxias vizinhas."),
                 ],
                 "correta": ("Vasto halo de Matéria Escura."),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** Como foi batizada a massa"
-                        " invisível responsável por gerar essa gravidade"
-                        " adicional?"
-                    ),
-                    "opcoes": [
-                        ("Matéria Escura."),
-                        ("Antimatéria estelar densa."),
-                        ("Plasma primordial oculto."),
-                        ("Gás de hidrogênio congelado."),
-                    ],
-                    "correta": ("Matéria Escura."),
-                },
             },
             {
                 "enunciado": (
@@ -951,21 +682,6 @@ CASOS_INVESTIGACAO = [
                     "Atracão gravitacional coesiva que une e estrutura as"
                     " galáxias."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** Lembre-se: a matéria escura"
-                        " atrai ou repele as estruturas galácticas?"
-                    ),
-                    "opcoes": [
-                        ("Ela atrai e ajuda a unir as estruturas cósmicas."),
-                        ("Ela repele as estrelas para longe do centro."),
-                        ("Ela congela o tempo ao seu redor."),
-                        ("Ela consome energia para criar buracos negros."),
-                    ],
-                    "correta": (
-                        "Ela atrai e ajuda a unir as estruturas cósmicas."
-                    ),
-                },
             },
             {
                 "enunciado": (
@@ -985,19 +701,6 @@ CASOS_INVESTIGACAO = [
                     "Aceleração contínua, desmentindo a hipótese de frenagem"
                     " gravitacional."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** O texto menciona que o ritmo da"
-                        " expansão está fazendo o quê?"
-                    ),
-                    "opcoes": [
-                        ("Acelerando cada vez mais."),
-                        ("Desacelerando até parar."),
-                        ("Mantendo-se estático e constante."),
-                        ("Oscilando aleatoriamente."),
-                    ],
-                    "correta": ("Acelerando cada vez mais."),
-                },
             },
             {
                 "enunciado": (
@@ -1012,19 +715,6 @@ CASOS_INVESTIGACAO = [
                     ("Entropia térmica absoluta."),
                 ],
                 "correta": ("Energia Escura."),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** Busque no texto o nome da"
-                        " pressão repulsiva de vácuo que acelera o cosmo."
-                    ),
-                    "opcoes": [
-                        ("Energia Escura."),
-                        ("Força de repulsão quântica."),
-                        ("Vácuo magnético estelar."),
-                        ("Pressão de plasma escuro."),
-                    ],
-                    "correta": ("Energia Escura."),
-                },
             },
             {
                 "enunciado": (
@@ -1047,26 +737,6 @@ CASOS_INVESTIGACAO = [
                     "Uso dos véus do desconhecido para encenar o mestre do"
                     " caos e testar o intelecto humano."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** Qual foi a estratégia do"
-                        " antagonista ao se esconder atrás dessas forças"
-                        " invisíveis?"
-                    ),
-                    "opcoes": [
-                        (
-                            "Simular ser o senhor do caos para forçar testes"
-                            " rigorosos na ciência."
-                        ),
-                        ("Destruir fisicamente todas as galáxias espirais."),
-                        ("Roubar a luz visível de todas as estrelas."),
-                        ("Impedir a formação de novos planetas."),
-                    ],
-                    "correta": (
-                        "Simular ser o senhor do caos para forçar testes"
-                        " rigorosos na ciência."
-                    ),
-                },
             },
             {
                 "enunciado": (
@@ -1094,26 +764,6 @@ CASOS_INVESTIGACAO = [
                     "Matéria Escura aglutina e estrutura via gravidade,"
                     " enquanto Energia Escura acelera o afastamento espacial."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel (Questão Crítica):** Lembre-se"
-                        " do papel duplo: uma segura a estrutura (atração)"
-                        " e a outra acelera a expansão (repulsão)."
-                    ),
-                    "opcoes": [
-                        (
-                            "Uma faz o papel de cola gravitacional e a outra de"
-                            " motor de expansão acelerada."
-                        ),
-                        ("Uma congela as estrelas e a outra aquece o vácuo."),
-                        ("Ambas funcionam como buracos negros idênticos."),
-                        ("Uma cria luz e a outra consome o tempo."),
-                    ],
-                    "correta": (
-                        "Uma faz o papel de cola gravitacional e a outra de"
-                        " motor de expansão acelerada."
-                    ),
-                },
             },
             {
                 "enunciado": (
@@ -1133,20 +783,6 @@ CASOS_INVESTIGACAO = [
                     "Desprendimento orbital e fuga rumo ao espaço"
                     " intergaláctico."
                 ),
-                "resgate": {
-                    "enunciado": (
-                        "⚠️ **Dica da Raquel:** O texto menciona que sem a"
-                        " gravidade extra da matéria escura, a força de"
-                        " atração seria fraca e as estrelas...?"
-                    ),
-                    "opcoes": [
-                        ("Escaparíam para o espaço intergaláctico."),
-                        ("Ficaríam paradas no mesmo lugar."),
-                        ("Desceríam em direção ao centro do Sol."),
-                        ("Congelaríam em gelo estelar."),
-                    ],
-                    "correta": ("Escaparíam para o espaço intergaláctico."),
-                },
             },
         ],
         "comentario_raquel": (
@@ -1156,7 +792,7 @@ CASOS_INVESTIGACAO = [
         ),
         "comentario_makarius": (
             "😈 **Death Tahim sussurra:** 'Minhas sombras invisíveis são o"
-            " teste supremo para a sua cognição. Prove seu valor!'"
+            " teste supremo. Esta é a última aula!'"
         ),
     },
 ]
@@ -1174,18 +810,26 @@ if "indice_questao_caso" not in st.session_state:
   st.session_state.indice_questao_caso = 0
 if "questoes_sorteadas_caso" not in st.session_state:
   st.session_state.questoes_sorteadas_caso = []
-if "em_resgate" not in st.session_state:
-  st.session_state.em_resgate = False
+if "acertos_caso_atual" not in st.session_state:
+  st.session_state.acertos_caso_atual = 0
+if "acertos_totais" not in st.session_state:
+  st.session_state.acertos_totais = 0
 if "erros_cometidos" not in st.session_state:
   st.session_state.erros_cometidos = []
 if "nome_usuario" not in st.session_state:
   st.session_state.nome_usuario = ""
+if "derrotado" not in st.session_state:
+  st.session_state.derrotado = False
 if "ranking" not in st.session_state:
   st.session_state.ranking = [
-      {"nome": "Agente Felipe", "status": "Mestre (Death Tahim)", "pontos": 21},
+      {
+          "nome": "Agente Felipe",
+          "status": "Conhecimento Absoluto e Supremo (21/21)",
+          "pontos": 21,
+      },
       {
           "nome": "Raquel Ferreira (Heroína)",
-          "status": "Comandante Cognitiva",
+          "status": "Comandante Cognitiva (21/21)",
           "pontos": 21,
       },
   ]
@@ -1194,13 +838,13 @@ if "logado_gerente" not in st.session_state:
 
 # Título Principal
 st.markdown(
-    "<h1>🌌 Investigação Cósmica & Aprendizagem Significativa</h1>",
+    "<h1>🌌 Investigação Cósmica: As Aulas de Death Tahim</h1>",
     unsafe_allow_html=True,
 )
 st.markdown(
-    "<p style='text-align: center; color: #aaa;'>Ative seus conhecimentos,"
-    " investigue textos detalhados com 7 questões sorteadas por caso e"
-    " enfrente Death Tahim!</p>",
+    "<p style='text-align: center; color: #aaa;'>Obtenha no mínimo 4 acertos por"
+    " aula para avançar. Se falhar, Raquel lhe dará mais uma vida para enfrentar"
+    " Death Tahim novamente!</p>",
     unsafe_allow_html=True,
 )
 st.divider()
@@ -1213,15 +857,18 @@ if st.session_state.modo == "menu":
   with col_m1:
     st.markdown("### 🕵️‍♂️ Área do Aluno (Agente Investigativo)")
     st.write(
-        "Inicie a investigação com banco de questões dinâmico, análise e o"
-        " desfecho épico com Death Tahim!"
+        "Inicie as aulas investigativas com 7 questões por aula, sistema de"
+        " vidas com a heroína Raquel Ferreira e conquiste o Conhecimento do"
+        " Universo!"
     )
     if st.button("Entrar como Agente"):
       st.session_state.modo = "aluno"
       st.session_state.etapa_agente = "investigacao"
       st.session_state.indice_caso = 0
       st.session_state.indice_questao_caso = 0
-      st.session_state.em_resgate = False
+      st.session_state.acertos_caso_atual = 0
+      st.session_state.acertos_totais = 0
+      st.session_state.derrotado = False
       st.session_state.erros_cometidos = []
       caso_inicial = CASOS_INVESTIGACAO[0]
       st.session_state.questoes_sorteadas_caso = random.sample(
@@ -1234,7 +881,7 @@ if st.session_state.modo == "menu":
     st.markdown("### ⚙️ Área do Gerente (Quartel-General)")
     st.write(
         "Acesso restrito ao organizador com credenciais (Felipe) para"
-        " inspecionar os relatórios."
+        " inspecionar o ranking e os relatórios."
     )
     if st.button("Entrar como Gerente"):
       st.session_state.modo = "gerente"
@@ -1257,7 +904,7 @@ elif st.session_state.modo == "aluno":
   ):
     st.subheader("🎯 Credenciamento do Agente Cognitivo")
     nome_input = st.text_input("Digite seu Nome de Agente ou Apelido:")
-    if st.button("🚀 Iniciar Investigação"):
+    if st.button("🚀 Iniciar Aulas Investigativas"):
       if nome_input.strip() == "":
         st.warning("Por favor, digite um nome válido.")
       else:
@@ -1265,7 +912,45 @@ elif st.session_state.modo == "aluno":
         st.rerun()
     st.stop()
 
-  # ETAPA DE INVESTIGAÇÃO COM BANCO DINÂMICO
+  # -------------------------------------------------------------------------
+  # TELA DE DERROTA E CONCESSÃO DE NOVA VIDA POR RAQUEL
+  # -------------------------------------------------------------------------
+  if st.session_state.derrotado:
+    st.markdown(
+        """
+        <div class='derrota-box'>
+            <h2 style='color:#ff3333; margin-top:0;'>😈 Death Tahim Derrotou Você!</h2>
+            <p style='font-size:16px;'><b>Death Tahim gargalha com sua voz profunda:</b><br>
+            <i>"Você fez apenas <b>{acertos} de 7 acertos</b> nesta aula! Suas estruturas conceituais são muito frágeis e incapazes de sustentar a verdade do cosmos. O conhecimento não pertence aos fracos!"</i></p>
+        </div>
+        <div class='raquel-box'>
+            <h3 style='color:#00ffff; margin-top:0;'>👧 Raquel Ferreira Concede uma Nova Vida!</h3>
+            <p style='font-size:16px;'><b>Raquel segura sua mão e diz com firmeza:</b><br>
+            <i>"Não desista, Agente <b>{nome}</b>! Eu estou lhe concedendo <b>MAIS UMA VIDA</b>. Releia o texto base com atenção, pesquise o vídeo recomendado e enfrente Death Tahim novamente nesta aula. Eu sei que você consegue atingir o mínimo de 4 acertos!"</i></p>
+        </div>
+        """.format(
+            acertos=st.session_state.acertos_caso_atual,
+            nome=st.session_state.nome_usuario,
+        ),
+        unsafe_allow_html=True,
+    )
+
+    if st.button("❤️ Usar Nova Vida e Reiniciar Esta Aula"):
+      st.session_state.derrotado = False
+      st.session_state.indice_questao_caso = 0
+      st.session_state.acertos_caso_atual = 0
+      caso_atual = CASOS_INVESTIGACAO[st.session_state.indice_caso]
+      st.session_state.questoes_sorteadas_caso = random.sample(
+          caso_atual["banco_questoes"],
+          min(7, len(caso_atual["banco_questoes"])),
+      )
+      st.rerun()
+
+    st.stop()
+
+  # -------------------------------------------------------------------------
+  # ETAPA DE AULAS INVESTIGATIVAS
+  # -------------------------------------------------------------------------
   if st.session_state.etapa_agente == "investigacao":
     idx = st.session_state.indice_caso
     total_casos = len(CASOS_INVESTIGACAO)
@@ -1292,8 +977,9 @@ elif st.session_state.modo == "aluno":
             unsafe_allow_html=True,
         )
         st.write(
-            f"🕵️‍♂️ **Agente:** {st.session_state.nome_usuario} | **Progresso do"
-            f" Caso:** {idx + 1} de {total_casos}"
+            f"🕵️‍♂️ **Agente:** {st.session_state.nome_usuario} | **Aula Atual:**"
+            f" {idx + 1} de {total_casos} | **Acertos nesta Aula:**"
+            f" {st.session_state.acertos_caso_atual} (Mínimo para passar: 4)"
         )
         st.progress((q_idx) / total_q)
 
@@ -1303,13 +989,13 @@ elif st.session_state.modo == "aluno":
             unsafe_allow_html=True,
         )
 
-        # 2. Texto Base de Investigação Longo e Detalhado
+        # 2. Texto Base
         st.markdown(
             f"<div class='texto-base-box'>{caso_atual['texto_base']}</div>",
             unsafe_allow_html=True,
         )
 
-        # 3. Indicação de Vídeo Relacionado
+        # 3. Indicação de Vídeo
         st.markdown(
             f"<div"
             f" style='background-color:#071a2e;border:1px solid"
@@ -1340,142 +1026,156 @@ elif st.session_state.modo == "aluno":
           )
 
         with col_q:
-          if not st.session_state.em_resgate:
-            q_ativa = q_atual
-            modo_p = "inicial"
-          else:
-            q_ativa = q_atual["resgate"]
-            modo_p = "resgate"
-
           st.markdown(
-              f"<div class='pergunta-box'><h4>{q_ativa['enunciado']}</h4></div>",
+              f"<div class='pergunta-box'><h4>{q_atual['enunciado']}</h4></div>",
               unsafe_allow_html=True,
           )
 
           escolha_agente = st.radio(
               "Selecione a dedução investigativa correta:",
-              q_ativa["opcoes"],
-              key=f"radio_ausubel_{idx}_{q_idx}_{modo_p}",
+              q_atual["opcoes"],
+              key=f"radio_aula_{idx}_{q_idx}",
           )
 
           st.markdown("<br>", unsafe_allow_html=True)
           if st.button("🔒 Validar Resposta e Avançar"):
-            if escolha_agente == q_ativa["correta"]:
-              st.success(
-                  "✨ Conceito validado com sucesso! Integrado à sua estrutura"
-                  " de raciocínio."
-              )
-              st.session_state.em_resgate = False
-              st.session_state.indice_questao_caso += 1
-              st.rerun()
+            if escolha_agente == q_atual["correta"]:
+              st.session_state.acertos_caso_atual += 1
+              st.session_state.acertos_totais += 1
+              st.success("✨ Resposta Correta! Ponto registrado.")
             else:
+              st.error("❌ Resposta Incorreta!")
               erro_info = (
-                  f"**{caso_atual['titulo']} (Questão {q_idx + 1})**: Você"
-                  f" selecionou uma dedução equivocada"
-                  f" (*'{escolha_agente[:40]}...'*), gerando conflito com o"
-                  f" conceito científico correto (*'{q_ativa['correta'][:40]}...'*)."
+                  f"**{caso_atual['titulo']} (Questão {q_idx + 1})**: Escolheu"
+                  f" *'{escolha_agente[:35]}...'* em vez de"
+                  f" *'{q_atual['correta'][:35]}...'*."
               )
               if erro_info not in st.session_state.erros_cometidos:
                 st.session_state.erros_cometidos.append(erro_info)
 
-              if not st.session_state.em_resgate:
-                st.session_state.em_resgate = True
-                st.error(
-                    "❌ **Conflito Cognitivo (Erro Detectado)!** Death Tahim"
-                    " bloqueou seu acesso. Suas ideias antigas colidiram com a"
-                    " evidência correta. Leia a dica da Raquel e tente"
-                    " novamente com a pista de resgate!"
-                )
-                st.rerun()
-              else:
-                st.error(
-                    "❌ Errado novamente! O bloqueio continua ativo. Releia o"
-                    " texto base e ajuste sua lógica conceitual."
-                )
+            st.session_state.indice_questao_caso += 1
+            st.rerun()
+
       else:
-        st.session_state.indice_caso += 1
-        st.session_state.indice_questao_caso = 0
-        st.session_state.questoes_sorteadas_caso = []
-        if st.session_state.indice_caso < total_casos:
-          proximo_caso = CASOS_INVESTIGACAO[st.session_state.indice_caso]
-          st.session_state.questoes_sorteadas_caso = random.sample(
-              proximo_caso["banco_questoes"],
-              min(7, len(proximo_caso["banco_questoes"])),
+        # Fim das 7 questões da Aula Atual -> Verifica a Média de Acertos
+        if st.session_state.acertos_caso_atual < 4:
+          # DERROTA: Menos de 4 acertos -> Aciona Death Tahim e concede nova vida com Raquel
+          st.session_state.derrotado = True
+          st.rerun()
+        else:
+          # APROVADO NA AULA -> Avança para a próxima aula
+          st.success(
+              f"🎉 Excelente! Você obteve {st.session_state.acertos_caso_atual}"
+              " de 7 acertos e superou esta aula!"
           )
-        st.rerun()
+          st.session_state.indice_caso += 1
+          st.session_state.indice_questao_caso = 0
+          st.session_state.acertos_caso_atual = 0
+          st.session_state.questoes_sorteadas_caso = []
+
+          if st.session_state.indice_caso < total_casos:
+            proximo_caso = CASOS_INVESTIGACAO[st.session_state.indice_caso]
+            st.session_state.questoes_sorteadas_caso = random.sample(
+                proximo_caso["banco_questoes"],
+                min(7, len(proximo_caso["banco_questoes"])),
+            )
+          st.rerun()
 
     else:
-      st.session_state.etapa_agente = "avaliacao_ausubel"
+      st.session_state.etapa_agente = "avaliacao_final"
       st.rerun()
 
-  # ETAPA 3: AVALIAÇÃO DIAGNÓSTICA DE ERROS & DESFECHO ÉPICO (DEATH TAHIM)
-  elif st.session_state.etapa_agente == "avaliacao_ausubel":
+  # -------------------------------------------------------------------------
+  # ETAPA 3: AVALIAÇÃO FINAL & DESFECHO COM DEATH TAHIM (DARTH VADER)
+  # -------------------------------------------------------------------------
+  elif st.session_state.etapa_agente == "avaliacao_final":
     st.markdown(
-        "<h2>📊 Avaliação Diagnóstica & Conhecimento do Universo</h2>",
+        "<h2>📊 Avaliação Final & Concessão do Conhecimento do Universo</h2>",
         unsafe_allow_html=True,
     )
 
+    tot_acertos = st.session_state.acertos_totais
+
+    # Lógica de Concessão de Título por Média de Acertos
+    if tot_acertos == 21:
+      titulo_universo = "🌌 Conhecimento Absoluto e Supremo do Universo"
+      desc_titulo = (
+          "Você gabaritou todas as aulas! Seu domínio sobre o Big Bang,"
+          " Redshift e Energia Escura é absoluto."
+      )
+    elif tot_acertos >= 18:
+      titulo_universo = "🔮 Conhecimento das Forças Invisíveis Cósmicas"
+      desc_titulo = (
+          "Você obteve uma média espetacular (6 a 7 acertos por aula) e domina"
+          " a física das forças invisíveis."
+      )
+    elif tot_acertos >= 15:
+      titulo_universo = "📐 Conhecimento da Geometria do Espaço-Tempo"
+      desc_titulo = (
+          "Sua média de 5 acertos por aula prova que você compreende a"
+          " curvatura e a expansão métrica do espaço."
+      )
+    else:
+      titulo_universo = "🔭 Conhecimento do Universo Observável"
+      desc_titulo = (
+          "Com a média garantida de 4 acertos por aula, você conquistou o"
+          " conhecimento fundamental sobre o cosmo."
+      )
+
     st.markdown(
         """
-        <div style='background-color: #0b1a2e; border: 2px solid #00ffff; padding: 20px; border-radius: 12px; margin-bottom: 20px;'>
+        <div style='background-color: #0b1a2e; border: 2px solid #00ffff; padding: 22px; border-radius: 12px; margin-bottom: 20px;'>
             <h3 style='color: #00ffff; margin-top:0;'>🌌 O Desfecho: A Aparição de Death Tahim</h3>
-            <p>Parabéns, Agente <b>{nome}</b>! Você investigou todos os 3 casos e venceu as questões dinâmicas sorteadas.</p>
-            <p>As portas da câmara principal se abrem com um som metálico profundo. Das sombras surge <b>Death Tahim</b>, vestindo seu imponente traje preto estilo <i>Darth Vader</i> de <i>Star Wars</i>, com sua respiração mecânica ecoando pelo ambiente. Ao lado dele, <b>Raquel Ferreira</b> sorri orgulhosa.</p>
+            <p>Parabéns, Agente <b>{nome}</b>! Você concluiu todas as 3 Aulas Investigativas obtendo um total de <b>{tot_acertos} de 21 acertos possíveis</b>.</p>
+            <p>As portas da câmara principal se abrem com um som metálico profundo. Das sombras surge <b>Death Tahim</b>, trajando seu imponente manto preto estilo <i>Darth Vader</i> de <i>Star Wars</i>, com sua respiração mecânica ecoando pelo ambiente. Ao lado dele, <b>Raquel Ferreira</b> sorri orgulhosa.</p>
             <p style='color: #ffcc00; font-style: italic; font-size: 16px;'>
-            "Impressionante...", diz Death Tahim com sua voz profunda, retirando o capacete escuro e revelando um olhar de absoluto respeito. "Você enfrentou os conflitos cognitivos, superou seus erros por meio da leitura atenta e reestruturou seu entendimento como um verdadeiro mestre. O erro nunca foi o fim, mas o degrau necessário para a evolução intelectual."
+            "Impressionante...", diz Death Tahim com sua voz profunda, retirando o capacete escuro e revelando um olhar de absoluto respeito. "Você superou as dificuldades, venceu as aulas e provou que possui determinação científica."
             </p>
-            <p>Death Tahim ergue as mãos e lhe transfere formalmente o sagrado <b>Conhecimento do Universo</b>, dizendo: <i>"Eu assumi o manto e o visual do lado negro para forçar a sua mente a evoluir através da pesquisa crítica. Meus parabéns, agente. O cosmos agora está em boas mãos."</i></p>
+            <p>Death Tahim ergue as mãos e lhe concede formalmente o título de:</p>
+            <h2 style='color: #00ffff; text-align: center;'>🏆 {titulo_universo}</h2>
+            <p style='text-align: center; font-style: italic;'>"{desc_titulo}"</p>
         </div>
         """.format(
-            nome=st.session_state.nome_usuario
+            nome=st.session_state.nome_usuario,
+            tot_acertos=tot_acertos,
+            titulo_universo=titulo_universo,
+            desc_titulo=desc_titulo,
         ),
         unsafe_allow_html=True,
     )
 
-    st.subheader(
-        "🧠 Relatório Pedagógico: Análise dos Erros e Desvios Conceituais"
-    )
+    st.subheader("🧠 Relatório de Desempenho e ErrosMapeados")
     if len(st.session_state.erros_cometidos) == 0:
       st.success(
-          "🌟 Espantoso! Você não cometeu erros conceituais significativos"
-          " durante a investigação de nenhum caso. Sua lógica estava"
-          " perfeitamente alinhada desde o início!"
+          "🌟 Espantoso! Você não errou nenhuma questão ao longo das 3 aulas!"
       )
     else:
       st.warning(
-          "⚠️ Durante a jornada investigativa, foram mapeados os seguintes"
-          " desvios conceituais que fizeram você se perder momentaneamente:"
+          "⚠️ Durante as aulas, os seguintes pontos exigiram reanálise:"
       )
       for err in st.session_state.erros_cometidos:
         st.markdown(f"- {err}")
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.subheader("✍️ Relatório Final de Compreensão Cognitiva")
+    st.subheader("✍️ Relatório Final de Aprendizagem")
     st.write(
-        "Para consolidar sua experiência, redija abaixo com suas próprias"
-        " palavras o que você entendeu sobre a evolução do universo (Big Bang,"
-        " Expansão e Matéria/Energia Escura) e como a leitura atenta e os erros"
-        " superados ajudaram na sua compreensão:"
+        "Para consolidar sua conquista, redija abaixo com suas próprias palavras"
+        " o que você aprendeu sobre o universo ao longo destas 3 aulas:"
     )
 
-    conclusao_ausubel = st.text_area(
-        "Escreva sua compreensão final (Relatório Descritivo):",
-        placeholder=(
-            "Descreva detalhadamente o que aprendeu e como superou os erros..."
-        ),
+    conclusao = st.text_area(
+        "Escreva sua síntese investigativa final:",
+        placeholder="Descreva o que aprendeu sobre a expansão do universo...",
     )
 
-    if st.button("📤 Protocolar Relatório Final e Receber o Título"):
-      if not conclusao_ausubel.strip():
-        st.warning(
-            "Por favor, escreva seu relatório descritivo para registrar sua"
-            " aprendizagem."
-        )
+    if st.button("📤 Protocolar e Registrar no Ranking"):
+      if not conclusao.strip():
+        st.warning("Por favor, digite seu relatório para concluir.")
       else:
         st.session_state.ranking.append({
             "nome": st.session_state.nome_usuario,
-            "status": "Mestre Cósmico (Conhecimento do Universo)",
-            "pontos": 21,
+            "status": f"{titulo_universo} ({tot_acertos}/21)",
+            "pontos": tot_acertos,
         })
         st.session_state.ranking = sorted(
             st.session_state.ranking, key=lambda x: x["pontos"], reverse=True
@@ -1483,14 +1183,13 @@ elif st.session_state.modo == "aluno":
         st.session_state.etapa_agente = "fim_sucesso"
         st.rerun()
 
+  # -------------------------------------------------------------------------
   # ETAPA 4: TELA DE SUCESSO E RANKING
+  # -------------------------------------------------------------------------
   elif st.session_state.etapa_agente == "fim_sucesso":
     st.success(
-        "🎉 Jornada Concluída com Honraria Máxima! Relatório protocolado com"
-        " bênção de Death Tahim."
-    )
-    st.markdown(
-        "### 🏆 Patente Concedida: Guardião(ã) do Conhecimento do Universo"
+        "🎉 Jornada Concluída com Sucesso! Seu título foi registrado no"
+        " Ranking Cósmico."
     )
 
     st.divider()
@@ -1507,11 +1206,13 @@ elif st.session_state.modo == "aluno":
       )
 
     st.divider()
-    if st.button("🔄 Realizar Nova Investigação (Questões Inéditas)"):
+    if st.button("🔄 Realizar Nova Jornada (Questões Inéditas)"):
       st.session_state.etapa_agente = "investigacao"
       st.session_state.indice_caso = 0
       st.session_state.indice_questao_caso = 0
-      st.session_state.em_resgate = False
+      st.session_state.acertos_caso_atual = 0
+      st.session_state.acertos_totais = 0
+      st.session_state.derrotado = False
       st.session_state.erros_cometidos = []
       st.session_state.nome_usuario = ""
       caso_inicial = CASOS_INVESTIGACAO[0]
@@ -1559,9 +1260,9 @@ elif st.session_state.modo == "gerente":
   else:
     st.success("✅ Sessão de Gerente Ativa (Felipe - Quartel-General)")
 
-    st.subheader("📊 Relatório de Agentes e Análise de Desvios")
+    st.subheader("📊 Relatório de Agentes e Níveis Alcançados")
     if len(st.session_state.ranking) == 0:
-      st.info("Nenhum agente concluiu as investigações ainda.")
+      st.info("Nenhum agente concluiu as aulas ainda.")
     else:
       for pos, c in enumerate(st.session_state.ranking, start=1):
         st.markdown(
@@ -1573,7 +1274,7 @@ elif st.session_state.modo == "gerente":
     with col_g1:
       if st.button("🗑️ Limpar Arquivos do Ranking"):
         st.session_state.ranking = []
-        st.success("Arquivos limpos com sucesso!")
+        st.success("Ranking limpo com sucesso!")
         st.rerun()
     with col_g2:
       if st.button("🔒 Sair do Quartel-General"):
