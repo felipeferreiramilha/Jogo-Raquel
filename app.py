@@ -5,7 +5,7 @@ import random
 st.set_page_config(page_title="CDZ: O Despertar do Cosmo - Rumo a Athena", page_icon="🌌", layout="centered")
 
 # ==========================================
-# LISTA DAS HOUSES / CASAS DO SANTUÁRIO
+# LISTA DAS CASAS DO SANTUÁRIO
 # ==========================================
 CASAS_SANTUARIO = [
     "1ª Casa: Templo de Áries ♈",
@@ -24,7 +24,6 @@ CASAS_SANTUARIO = [
 ]
 
 def obter_casa_atual(indice_q):
-    # Divide as 50 questões pelas 12 casas e templo final
     if indice_q < 4: return CASAS_SANTUARIO[0]
     elif indice_q < 8: return CASAS_SANTUARIO[1]
     elif indice_q < 12: return CASAS_SANTUARIO[2]
@@ -48,12 +47,12 @@ if "indice_pergunta" not in st.session_state:
     st.session_state.indice_pergunta = 0
 if "equipe_sub_idx" not in st.session_state:
     st.session_state.equipe_sub_idx = 0  # 0: Alfa, 1: Beta, 2: Gama
-if "pontos_alfa" not in st.session_state:
-    st.session_state.pontos_alfa = 0
-if "pontos_beta" not in st.session_state:
-    st.session_state.pontos_beta = 0
-if "pontos_gama" not in st.session_state:
-    st.session_state.pontos_gama = 0
+if "casas_alfa" not in st.session_state:
+    st.session_state.casas_alfa = 0
+if "casas_beta" not in st.session_state:
+    st.session_state.casas_beta = 0
+if "casas_gama" not in st.session_state:
+    st.session_state.casas_gama = 0
 if "ultimo_feedback" not in st.session_state:
     st.session_state.ultimo_feedback = None
 if "historico_professor" not in st.session_state:
@@ -120,7 +119,7 @@ if "banco_50" not in st.session_state:
           "Que todas as estrelas possuem exatamente a mesma idade e tamanho.",
           "Que o universo possui um centro fixo e bem definido no espaço.",
           "Que a temperatura é zero absoluto em todo o cosmo."], "A",
-         "Homogêneo indica igualdade de densidade em larga escala e isotrópico indica ausência de direção privilegiada."),
+         "Homogêneo indica igualdade de densidade em larga escala e isotrópico indica ausência de direção privileged."),
 
         ("Durante o eclipse solar de 1919, astrônomos fotografaram estrelas próximas ao Sol em Sobral (Brasil) e Príncipe.",
          "Arthur Eddington e Albert Einstein",
@@ -591,14 +590,14 @@ if "banco_50" not in st.session_state:
         })
     st.session_state.banco_50 = lista_50
 
-# Função utilitária para reiniciar a partida
+# Função para reiniciar
 def reiniciar_jogo():
     st.session_state.jogo_iniciado = False
     st.session_state.indice_pergunta = 0
     st.session_state.equipe_sub_idx = 0
-    st.session_state.pontos_alfa = 0
-    st.session_state.pontos_beta = 0
-    st.session_state.pontos_gama = 0
+    st.session_state.casas_alfa = 0
+    st.session_state.casas_beta = 0
+    st.session_state.casas_gama = 0
     st.session_state.ultimo_feedback = None
 
 # Estilo visual
@@ -639,7 +638,7 @@ with st.sidebar.expander("🔑 Acesso do Professor"):
             st.session_state.prof_logado = False
             st.rerun()
 
-# Conteúdo exclusivo para o Professor Logado
+# Conteúdo do Professor
 if st.session_state.prof_logado:
     st.sidebar.markdown("---")
     st.sidebar.markdown("### 📄 Exportar Relatório de Alunos")
@@ -680,18 +679,19 @@ if st.session_state.prof_logado:
         st.sidebar.success("Histórico limpo!")
         st.rerun()
 
-# Placar Geral das 3 Equipes na Barra Lateral
-st.sidebar.header("📊 Placar Geral (Meta: 100 PTS)")
-st.sidebar.metric(label="🛡️ Equipe Alfa", value=f"{st.session_state.pontos_alfa} pts")
-st.sidebar.progress(min(1.0, st.session_state.pontos_alfa / 100))
-st.sidebar.markdown("---")
-st.sidebar.metric(label="🛡️ Equipe Beta", value=f"{st.session_state.pontos_beta} pts")
-st.sidebar.progress(min(1.0, st.session_state.pontos_beta / 100))
-st.sidebar.markdown("---")
-st.sidebar.metric(label="🛡️ Equipe Gama", value=f"{st.session_state.pontos_gama} pts")
-st.sidebar.progress(min(1.0, st.session_state.pontos_gama / 100))
+# Placar por Casas na Barra Lateral
+st.sidebar.header("📊 Progresso do Santuário")
 
-# BOTÃO DE REINICIAR PERMANENTE NA SIDEBAR
+st.sidebar.metric(label="🛡️ Equipe Alfa", value=f"{st.session_state.casas_alfa} / 10 Casas Conquistadas")
+st.sidebar.progress(min(1.0, st.session_state.casas_alfa / 10))
+st.sidebar.markdown("---")
+st.sidebar.metric(label="🛡️ Equipe Beta", value=f"{st.session_state.casas_beta} / 10 Casas Conquistadas")
+st.sidebar.progress(min(1.0, st.session_state.casas_beta / 10))
+st.sidebar.markdown("---")
+st.sidebar.metric(label="🛡️ Equipe Gama", value=f"{st.session_state.casas_gama} / 10 Casas Conquistadas")
+st.sidebar.progress(min(1.0, st.session_state.casas_gama / 10))
+
+# BOTÃO DE REINICIAR PERMANENTE
 st.sidebar.markdown("---")
 if st.sidebar.button("🔄 Reiniciar Partida"):
     reiniciar_jogo()
@@ -706,12 +706,12 @@ if not st.session_state.jogo_iniciado:
     st.subheader("🔥 Cerimônia de Abertura: O Despertar do Cosmo")
     st.markdown("""
     > Jovens aspirantes reúnem-se no sopé do Santuário. Para se tornarem verdadeiros **Cavaleiros de Athena**, 
-    > vocês avançarão pelas **12 Casas do Santuário** dominando a **sabedoria cosmológica** (Big Bang, Relatividade Geral e Matéria Escura).
+    > vocês avançarão pelas **Casas do Santuário** dominando a **sabedoria cosmológica** (Big Bang, Relatividade Geral e Matéria Escura).
     > 
     > **Regras da Competição:**
-    > * **Acerto:** $+10$ pontos de Cosmo.
-    > * **Erro:** $-5$ pontos, **a questão muda imediatamente** e a vez passa para a próxima equipe!
-    > * **Meta de Vitória:** A primeira equipe a atingir **100 pontos** alcança o Santuário e vence o jogo! Se as 50 questões terminarem antes, vence quem acumulou maior pontuação.
+    > * **Acerto:** +1 Casa conquistada no Santuário!
+    > * **Erro:** **Não perde Casas**, mas a questão muda para a próxima e a vez passa para a próxima equipe!
+    > * **Meta de Vitória:** A primeira equipe a conquistar **10 Casas** alcança o Templo de Athena e vence o jogo!
     """)
     
     if st.button("🌟 Iniciar Treinamento do Santuário"):
@@ -723,35 +723,35 @@ if not st.session_state.jogo_iniciado:
 # VERIFICAÇÃO DE FIM DE JOGO
 # ==========================================
 vencedor_instantaneo = None
-if st.session_state.pontos_alfa >= 100: vencedor_instantaneo = "Equipe Alfa"
-elif st.session_state.pontos_beta >= 100: vencedor_instantaneo = "Equipe Beta"
-elif st.session_state.pontos_gama >= 100: vencedor_instantaneo = "Equipe Gama"
+if st.session_state.casas_alfa >= 10: vencedor_instantaneo = "Equipe Alfa"
+elif st.session_state.casas_beta >= 10: vencedor_instantaneo = "Equipe Beta"
+elif st.session_state.casas_gama >= 10: vencedor_instantaneo = "Equipe Gama"
 
 if vencedor_instantaneo or st.session_state.indice_pergunta >= len(st.session_state.banco_50):
     st.balloons()
     st.subheader("🏛️ Chegada Gloriosa ao Templo de Athena!")
     
     if vencedor_instantaneo:
-        st.success(f"🥇 **A {vencedor_instantaneo} atingiu 100 pontos primeiro e conquistou a Armadura de Ouro de Athena no Templo Supremo!**")
+        st.success(f"🥇 **A {vencedor_instantaneo} conquistou 10 Casas do Santuário primeiro e recebeu a Armadura de Ouro de Athena!**")
     else:
         pontuacoes = {
-            "Equipe Alfa": st.session_state.pontos_alfa,
-            "Equipe Beta": st.session_state.pontos_beta,
-            "Equipe Gama": st.session_state.pontos_gama
+            "Equipe Alfa": st.session_state.casas_alfa,
+            "Equipe Beta": st.session_state.casas_beta,
+            "Equipe Gama": st.session_state.casas_gama
         }
         maior_pts = max(pontuacoes.values())
         vencedores = [eq for eq, pts in pontuacoes.items() if pts == maior_pts]
         
         if len(vencedores) > 1:
-            st.success(f"🤝 **Empate Lendário com {maior_pts} pontos entre: {', '.join(vencedores)}! Todos tornaram-se Cavaleiros de Athena juntos!**")
+            st.success(f"🤝 **Empate Lendário com {maior_pts} Casas Conquistadas entre: {', '.join(vencedores)}! Todos tornaram-se Cavaleiros de Athena juntos!**")
         else:
-            st.success(f"🥇 **A {vencedores[0]} encerrou o treinamento com {maior_pts} pontos e sagrou-se campeã!**")
+            st.success(f"🥇 **A {vencedores[0]} encerrou a travessia com {maior_pts} Casas Conquistadas e sagrou-se campeã!**")
             
     st.markdown("---")
     st.markdown("### 🏆 **Placar Final dos Aspirantes**")
-    st.markdown(f"* **🛡️ Equipe Alfa:** {st.session_state.pontos_alfa} pontos")
-    st.markdown(f"* **🛡️ Equipe Beta:** {st.session_state.pontos_beta} pontos")
-    st.markdown(f"* **🛡️ Equipe Gama:** {st.session_state.pontos_gama} pontos")
+    st.markdown(f"* **🛡️ Equipe Alfa:** {st.session_state.casas_alfa} Casas Conquistadas")
+    st.markdown(f"* **🛡️ Equipe Beta:** {st.session_state.casas_beta} Casas Conquistadas")
+    st.markdown(f"* **🛡️ Equipe Gama:** {st.session_state.casas_gama} Casas Conquistadas")
     
     st.markdown("---")
     if st.button("🔄 Iniciar Novo Treinamento do Santuário"):
@@ -760,7 +760,7 @@ if vencedor_instantaneo or st.session_state.indice_pergunta >= len(st.session_st
     st.stop()
 
 # ==========================================
-# FLUXO DAS QUESTÕES COM NAVEGAÇÃO PELAS CASAS
+# FLUXO DAS QUESTÕES
 # ==========================================
 total_questoes = len(st.session_state.banco_50)
 idx_p = st.session_state.indice_pergunta
@@ -770,7 +770,7 @@ equipe_da_vez = lista_equipes[e_idx]
 casa_atual_str = obter_casa_atual(idx_p)
 q_atual = st.session_state.banco_50[idx_p]
 
-# Embaralha as alternativas dinamicamente para cada questão
+# Embaralha as alternativas dinamicamente
 chave_opcoes = f"opcoes_shuffled_{idx_p}"
 if chave_opcoes not in st.session_state:
     opcoes_copia = list(q_atual['opcoes_originais'])
@@ -803,20 +803,16 @@ if st.button("Enviar Resposta e Elevar o Cosmo"):
     
     status = "CORRETA" if acertou else "INCORRETA"
     
-    # Atualização de pontuação e transição
+    # Atualização por avanço de Casas sem perda
     if acertou:
-        if equipe_da_vez == "Equipe Alfa": st.session_state.pontos_alfa += 10
-        elif equipe_da_vez == "Equipe Beta": st.session_state.pontos_beta += 10
-        else: st.session_state.pontos_gama += 10
+        if equipe_da_vez == "Equipe Alfa": st.session_state.casas_alfa += 1
+        elif equipe_da_vez == "Equipe Beta": st.session_state.casas_beta += 1
+        else: st.session_state.casas_gama += 1
         
         st.session_state.indice_pergunta += 1
         st.session_state.equipe_sub_idx = (e_idx + 1) % 3
     else:
-        if equipe_da_vez == "Equipe Alfa": st.session_state.pontos_alfa = max(0, st.session_state.pontos_alfa - 5)
-        elif equipe_da_vez == "Equipe Beta": st.session_state.pontos_beta = max(0, st.session_state.pontos_beta - 5)
-        else: st.session_state.pontos_gama = max(0, st.session_state.pontos_gama - 5)
-        
-        # Errou: avança para a próxima questão e passa a vez
+        # Errou: Não perde casas, apenas muda a questão e passa a vez
         st.session_state.indice_pergunta += 1
         st.session_state.equipe_sub_idx = (e_idx + 1) % 3
 
@@ -846,8 +842,8 @@ if st.session_state.ultimo_feedback:
     st.markdown("---")
     fb = st.session_state.ultimo_feedback
     if fb['status'] == "CORRETA":
-        st.success(f"🎉 Excelente! A **{fb['equipe']}** acertou, ganhou +10 pontos e avançou no Santuário!")
+        st.success(f"🎉 Excelente! A **{fb['equipe']}** acertou e conquistou +1 Casa no Santuário!")
     else:
-        st.error(f"❌ Resposta Incorreta da **{fb['equipe']}** (-5 pontos). A opção correta era: *\"{fb['correta_texto']}\"*. A questão mudou e a vez passou para a próxima equipe!")
+        st.error(f"❌ Resposta Incorreta da **{fb['equipe']}**. A opção correta era: *\"{fb['correta_texto']}\"*. A questão mudou e a vez passou para a próxima equipe!")
         
     st.info(f"💡 **JUSTIFICATIVA PEDAGÓGICA (O PORQUÊ):**\n\n{fb['por_que']}")
