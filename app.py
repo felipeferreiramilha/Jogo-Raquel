@@ -2,15 +2,15 @@ import streamlit as st
 import random
 
 # Configuração da página
-st.set_page_config(page_title="CDZ: O Despertar do Cosmo - Rumo a Athena", page_icon="🌌", layout="centered")
+st.set_page_config(page_title="CDZ: O Despertar do Cosmo", page_icon="🌌", layout="centered")
 
 # ==========================================
 # INICIALIZAÇÃO DO ESTADO GLOBAL
 # ==========================================
 if "jogo_iniciado" not in st.session_state:
     st.session_state.jogo_iniciado = False
-if "rodada_atual" not in st.session_state:
-    st.session_state.rodada_atual = 1
+if "indice_pergunta" not in st.session_state:
+    st.session_state.indice_pergunta = 0
 if "equipe_sub_idx" not in st.session_state:
     st.session_state.equipe_sub_idx = 0  # 0: Alfa, 1: Beta, 2: Gama
 if "pontos_alfa" not in st.session_state:
@@ -19,429 +19,239 @@ if "pontos_beta" not in st.session_state:
     st.session_state.pontos_beta = 0
 if "pontos_gama" not in st.session_state:
     st.session_state.pontos_gama = 0
-
-# Estabilidade individual por equipe
-if "estabilidade_alfa" not in st.session_state:
-    st.session_state.estabilidade_alfa = 100
-if "estabilidade_beta" not in st.session_state:
-    st.session_state.estabilidade_beta = 100
-if "estabilidade_gama" not in st.session_state:
-    st.session_state.estabilidade_gama = 100
-
-if "historico_respostas" not in st.session_state:
-    st.session_state.historico_respostas = []
+if "est_alfa" not in st.session_state:
+    st.session_state.est_alfa = 100
+if "est_beta" not in st.session_state:
+    st.session_state.est_beta = 100
+if "est_gama" not in st.session_state:
+    st.session_state.est_gama = 100
 if "ultimo_feedback" not in st.session_state:
     st.session_state.ultimo_feedback = None
+if "historico" not in st.session_state:
+    st.session_state.historico = []
 
 # ==========================================
-# BANCO COM 50 QUESTÕES DE MÚLTIPLA ESCOLHA (A a E) + JUSTIFICATIVA
+# BANCO COM 50 QUESTÕES DE MÚLTIPLA ESCOLHA (A a E)
 # ==========================================
-if "banco_50_questoes" not in st.session_state:
-    guias_cdz = ["Seiya de Pégaso", "Shiryu de Dragão", "Hyoga de Cisne", "Shun de Andrômeda", "Ikki de Fênix", "Mu de Áries", "Shaka de Virgem", "Aioria de Leão", "Dohko de Libra", "Camus de Aquário"]
+if "banco_50" not in st.session_state:
+    guias = ["Seiya de Pégaso", "Shiryu de Dragão", "Hyoga de Cisne", "Shun de Andrômeda", "Ikki de Fênix", "Mu de Áries", "Shaka de Virgem", "Aioria de Leão", "Dohko de Libra", "Camus de Aquário"]
     
-    # Geramos uma lista fixa e rica de 50 questões conceituais cobrindo Big Bang, Relatividade e Matéria Escura
-    questoes_base = [
-        # Bloco 1: Big Bang e Expansão (1 a 15)
+    dados_brutos = [
         ("O que postula o modelo cosmológico do Big Bang sobre a origem do Universo?", 
-         ["A) O universo surgiu estático e eterno, sem nenhuma alteração temporal.", 
-          "B) O cosmos originou-se de uma singularidade extremamente densa e quente, expandindo-se desde então.", 
-          "C) As galáxias formaram-se instantaneamente a partir de colisões de buracos negros estáticos.", 
-          "D) O universo expande-se porque as estrelas criam matéria nova do nada.", 
-          "E) A origem cósmica é cíclica, colapsando exatamente a cada 100 anos."], "B", 
-         "O Big Bang descreve a expansão métrica do espaço a partir de um estado inicial de altíssima densidade e temperatura."),
+         ["A) O universo surgiu estático e eterno, sem alterações.", "B) O cosmos originou-se de uma singularidade extremamente densa e quente, expandindo-se desde então.", "C) As galáxias formaram-se de colisões de buracos negros estáticos.", "D) O universo expande-se porque estrelas criam matéria do nada.", "E) A origem cósmica é cíclica a cada 100 anos."], "B", 
+         "O Big Bang descreve a expansão métrica do espaço a partir de um estado inicial de alta densidade e temperatura."),
         
-        ("Como a analogia do balão de festa sendo inflado ajuda a compreender a expansão do universo?", 
-         ["A) Mostra que o balão cria ar novo do nada em seu interior.", 
-          "B) Ilustra como os pontos na superfície do balão se afastam porque o próprio espaço da borracha se expande.", 
-          "C) Comprova que o centro do balão é a única parte que se move.", 
-          "D) Indica que o universo possui paredes rígidas que contêm o calor.", 
-          "E) Demonstra que a luz viaja mais rápido que o som."], "B", 
-         "Assim como no balão, as galáxias não correm pelo espaço; é o próprio tecido do espaço que se estica, afastando-as."),
+        ("Como a analogia do balão de festa preenchendo ar ajuda a entender a expansão do universo?", 
+         ["A) Mostra que o balão cria ar novo do interior.", "B) Ilustra como os pontos na superfície se afastam porque o próprio espaço da borracha se expande.", "C) Comprova que o centro do balão é a única parte que se move.", "D) Indica paredes rígidas contendo o calor.", "E) Demonstra que a luz viaja mais rápido que o som."], "B", 
+         "Assim como no balão, as galáxias se afastam porque o próprio tecido do espaço se estica."),
         
         ("Qual é a principal evidência observacional que comprova a expansão contínua do Universo?", 
-         ["A) O desvio para o vermelho (redshift) das galáxias distantes, formulado na Lei de Hubble.", 
-          "B) A colisão frequente de planetas no sistema solar.", 
-          "C) O resfriamento rápido do Sol observado por telescópios modernos.", 
-          "D) A ausência completa de radiação no espaço interestelar.", 
-          "E) A rotação estática das estrelas fixas na esfera celeste."], "A", 
-         "O redshift demonstra que as ondas de luz esticam devido à expansão do espaço, provando que o universo está se expandindo."),
+         ["A) O desvio para o vermelho (redshift) das galáxias distantes, formulado na Lei de Hubble.", "B) A colisão frequente de planetas no sistema solar.", "C) O resfriamento rápido do Sol.", "D) A ausência completa de radiação no espaço.", "E) A rotação estática das estrelas fixas."], "A", 
+         "O redshift demonstra que as ondas de luz esticam devido à expansão do espaço."),
         
-        ("O que foi a 'Era da Recombinação' nos instantes iniciais do Big Bang?", 
-         ["A) O momento em que os buracos negros engoliram toda a matéria.", 
-          "B) O período em que os prótons e elétrons puderam se combinar para formar átomos neutros, permitindo que a luz viajasse livremente.", 
-          "C) A colisão entre a Via Láctea e Andrômeda.", 
-          "D) A fase em que a gravidade deixou de existir no cosmos.", 
-          "E) O congelamento total do universo."], "B", 
+        ("O que foi a Era da Recombinação nos instantes iniciais do Big Bang?", 
+         ["A) O momento em que buracos negros engoliram a matéria.", "B) O período em que prótons e elétrons combinaram-se para formar átomos neutros, libertando a luz.", "C) A colisão entre a Via Láctea e Andrômeda.", "D) A fase em que a gravidade deixou de existir.", "E) O congelamento total do universo."], "B", 
          "Com a formação de átomos neutros, os fótons libertaram-se, gerando a Radiação Cósmica de Fundo."),
         
         ("O que representa a Radiação Cósmica de Fundo em Micro-ondas (CMB)?", 
-         ["A) O eco térmico remanescente dos primeiros momentos do Big Bang.", 
-          "B) A energia gerada pelas supernovas na Via Láctea.", 
-          "C) O calor emitido pelo núcleo de buracos negros supermassivos.", 
-          "D) Interferência de rádio gerada por estrelas de nêutrons.", 
-          "E) Luz refletida pela poeira interestelar."], "A", 
-         "A CMB é a radiação fóssil do universo primordial, captada em todas as direções do céu."),
+         ["A) O eco térmico remanescente dos primeiros momentos do Big Bang.", "B) A energia gerada por supernovas na Via Láctea.", "C) O calor emitido por buracos negros.", "D) Interferência de rádio alienígena.", "E) Luz refletida por poeira."], "A", 
+         "A CMB é a radiação fóssil do universo primordial captada em todas as direções."),
         
-        ("O que caracteriza uma 'singularidade' no contexto cosmológico?", 
-         ["A) Um planeta com formato perfeitamente esférico.", 
-          "B) Um estado de densidade e temperatura infinitas onde as leis físicas conhecidas deixam de funcionar.", 
-          "C) Uma estrela que brilha mais que um milhão de sóis.", 
-          "D) O ponto exato onde a Terra orbita o Sol.", 
-          "E) Um cometa que cruza o sistema solar uma única vez."], "B", 
-         "Na singularidade, como no centro de buracos negros ou no início do Big Bang, as grandezas físicas atingem valores infinitos."),
+        ("O que caracteriza uma singularidade no contexto cosmológico?", 
+         ["A) Um planeta esférico perfeito.", "B) Um estado de densidade e temperatura infinitas onde as leis físicas conhecidas deixam de funcionar.", "C) Uma estrela hipergigante.", "D) O centro da órbita da Terra.", "E) Um cometa solitário."], "B", 
+         "Na singularidade, grandezas físicas atingem valores infinitos antes da expansão."),
         
-        ("Qual cientista formulou a teoria da expansão do universo corroborada pelo desvio para o vermelho das galáxias?", 
+        ("Qual cientista formulou a teoria da expansão corroborada pelo desvio para o vermelho?", 
          ["A) Isaac Newton", "B) Galileo Galilei", "C) Edwin Hubble", "D) Johannes Kepler", "E) Nikola Tesla"], "C", 
-         "Edwin Hubble descobriu que quanto mais distante uma galáxia está, mais rápido ela se afasta de nós (Lei de Hubble)."),
+         "Edwin Hubble descobriu que quanto mais distante a galáxia, mais rápido ela se afasta."),
         
         ("Antes do Big Bang, o que existia segundo a cosmologia padrão?", 
-         ["A) Um vasto oceano de estrelas congeladas.", 
-          "B) O conceito de espaço e tempo não existia da forma atual, estando toda matéria comprimida em singularidade.", 
-          "C) Um vácuo repleto de galáxias espirais estáticas.", 
-          "D) Um buraco negro colossal que engolia planetas.", 
-          "E) Matéria escura em estado gasoso."], "B", 
-         "O próprio espaço e o tempo surgiram com o evento do Big Bang, não havendo um 'antes' no espaço convencional."),
+         ["A) Um oceano de estrelas.", "B) O espaço e o tempo não existiam da forma atual, estando toda matéria comprimida em singularidade.", "C) Um vácuo repleto de galáxias estáticas.", "D) Um buraco negro colossal.", "E) Matéria escura gasosa."], "B", 
+         "O próprio espaço e o tempo surgiram com o evento do Big Bang."),
         
-        ("O que é o 'Horizonte de Eventos' em astrofísica?", 
-         ["A) A borda visível de um planeta rochoso.", 
-          "B) O limite ao redor de um buraco negro além do qual nada, nem mesmo a luz, pode escapar.", 
-          "C) O limite do sistema solar onde o vento solar cessa.", 
-          "D) A distância máxima que um telescópio pode enxergar.", 
-          "E) O momento em que uma estrela se transforma em supernova."], "B", 
-         "O horizonte de eventos marca o ponto de gravidade extrema de onde a velocidade de escape supera a da luz."),
+        ("O que é o Horizonte de Eventos em astrofísica?", 
+         ["A) A borda de um planeta.", "B) O limite ao redor de um buraco negro além do qual nada, nem mesmo a luz, pode escapar.", "C) O limite do sistema solar.", "D) A distância máxima de um telescópio.", "E) O nascimento de uma supernova."], "B", 
+         "O horizonte de eventos marca o ponto onde a gravidade impede qualquer escape."),
         
-        ("O que foi a Teoria da Inflação Cósmica proposta por Alan Guth?", 
-         ["A) A expansão lenta e gradual das estrelas ao longo de trilhões de anos.", 
-          "B) Um período de expansão exponencial ultrarrápida ocorrido numa fração minúscula de segundo logo após o Big Bang.", 
-          "C) O aumento do brilho das supernovas.", 
-          "D) A inflação da massa dos buracos negros.", 
-          "E) A expansão do sistema solar devido ao vento estelar."], "B", 
-         "A inflação cósmica resolveu problemas clássicos do Big Bang, como a homogeneidade e a planura do universo observável."),
+        ("O que foi a Teoria da Inflação Cósmica?", 
+         ["A) A expansão lenta das estrelas.", "B) Um período de expansão exponencial ultrarrápida ocorrido logo após o Big Bang.", "C) O brilho de supernovas.", "D) A inflação de massa em buracos negros.", "E) A expansão do vento solar."], "B", 
+         "A inflação cósmica resolveu problemas de homogeneidade e planura do universo."),
         
-        ("Qual elemento químico leve foi predominante na nucleossíntese primordial logo após o Big Bang?", 
+        ("Qual elemento químico leve predominou na nucleossíntese primordial?", 
          ["A) Ouro e Platina", "B) Urânio e Plutônio", "C) Hidrogênio e Hélio", "D) Ferro e Níquel", "E) Silício e Carbono"], "C", 
-         "Nos primeiros minutos do universo, formaram-se primordialmente os núcleos de hidrogênio e hélio, além de vestígios de lítio."),
+         "Formaram-se primordialmente núcleos de hidrogênio e hélio nos primeiros minutos."),
         
-        ("Por que a luz das estrelas distantes sofre o desvio para o vermelho (redshift)?", 
-         ["A) Porque as estrelas estão esfriando e emitindo luz vermelha.", 
-          "B) Porque o comprimento de onda da luz é esticado pela expansão do espaço entre a galáxia e nós.", 
-          "C) Porque há fumaça cósmica bloqueando a luz azul.", 
-          "D) Devido à rotação rápida da Terra em torno do Sol.", 
-          "E) Porque as galáxias vermelhas são mais antigas."], "B", 
-         "O estiramento do espaço estica o comprimento de onda dos fótons, deslocando-os para o espectro vermelho."),
+        ("Por que a luz de galáxias distantes sofre redshift?", 
+         ["A) As estrelas estão esfriando.", "B) O comprimento de onda da luz é esticado pela expansão do espaço entre nós e a galáxia.", "C) Há fumaça cósmica bloqueando a luz.", "D) Devido à rotação terrestre.", "E) Porque galáxias vermelhas são antigas."], "B", 
+         "O estiramento do espaço estica o comprimento de onda dos fótons."),
         
-        ("O que mede a chamada 'Constante de Hubble'?", 
-         ["A) A velocidade com que a Terra gira em torno do seu eixo.", 
-          "B) A taxa atual de expansão do universo.", 
-          "C) A distância exata entre a Terra e o centro da Via Láctea.", 
-          "D) A massa total de hidrogênio no cosmos.", 
-          "E) A força da gravidade na superfície do Sol."], "B", 
-         "A constante de Hubble quantifica a velocidade de afastamento das galáxias em função de sua distância."),
+        ("O que mede a Constante de Hubble?", 
+         ["A) A rotação da Terra.", "B) A taxa atual de expansão do universo.", "C) A distância até o centro da galáxia.", "D) A massa total de hidrogênio.", "E) A gravidade solar."], "B", 
+         "Quantifica a velocidade de afastamento das galáxias em função de sua distância."),
         
-        ("O que significa dizer que o universo é 'homogêneo e isotrópico' em grande escala?", 
-         ["A) Que ele é totalmente plano e feito apenas de ferro.", 
-          "B) Que, em grande escala, ele tem a mesma aparência em qualquer lugar (homogêneo) e em todas as direções (isotrópico).", 
-          "C) Que todas as estrelas possuem exatamente a mesma idade e tamanho.", 
-          "D) Que o universo possui um centro fixo e bem definido.", 
-          "E) Que a temperatura é zero absoluto em todo o cosmo."], "B", 
-         "Este é o Princípio Cosmológico fundamental que rege os modelos padrão do universo."),
+        ("O que significa dizer que o universo é homogêneo e isotrópico?", 
+         ["A) Ele é plano e feito de ferro.", "B) Tem a mesma aparência em qualquer lugar (homogêneo) e em todas as direções (isotrópico).", "C) Todas as estrelas têm a mesma idade.", "D) Possui um centro fixo.", "E) Temperatura zero absoluto."], "B", 
+         "Este é o Princípio Cosmológico fundamental."),
         
         ("O que é a Nucleossíntese Primordial?", 
-         ["A) A fusão de elementos pesados dentro de supernovas modernas.", 
-          "B) A criação dos primeiros núcleos atômicos leves durante os primeiros minutos do Big Bang.", 
-          "C) A formação de planetas rochosos em discos protoplanetários.", 
-          "D) A destruição de átomos por radiação gama.", 
-          "E) A síntese de matéria escura em aceleradores de partículas."], "B", 
-         "Processo em que a sopa primordial de prótons e nêutrons fundiu-se nos primeiros elementos químicos do universo."),
+         ["A) Fusão em supernovas modernas.", "B) Criação dos primeiros núcleos atômicos leves durante os primeiros minutos do Big Bang.", "C) Formação de planetas rochosos.", "D) Destruição de átomos.", "E) Síntese de matéria escura."], "B", 
+         "Processo em que a sopa primordial fundiu-se nos primeiros elementos químicos."),
 
-        # Bloco 2: Relatividade Geral e Espaço-Tempo (16 a 30)
-        ("Segundo a Teoria da Relatividade Geral de Einstein, como a gravidade é explicada?", 
-         ["A) Como uma atração magnética direta entre os corpos.", 
-          "B) Como a curvatura do tecido quadridimensional do espaço-tempo provocada por massa e energia.", 
-          "C) Como o atrito gerado pelo vento cósmico.", 
-          "D) Como uma ilusão óptica sem efeitos físicos reais.", 
-          "E) Como partículas quânticas chamadas grávitons que empurram os objetos."], "B", 
-         "Massa e energia dizem ao espaço-tempo como se curvar, e o espaço-tempo diz à massa como se mover."),
+        # Relatividade Geral (16 a 30)
+        ("Segundo a Relatividade Geral de Einstein, como a gravidade é explicada?", 
+         ["A) Atração magnética direta.", "B) Curvatura do espaço-tempo quadridimensional provocada por massa e energia.", "C) Atrito do vento cósmico.", "D) Ilusão óptica.", "E) Partículas chamadas grávitons empurrando objetos."], "B", 
+         "Massa e energia dizem ao espaço-tempo como se curvar."),
         
-        ("O que acontece com a passagem do tempo em campos gravitacionais muito intensos ou a velocidades próximas à da luz?", 
-         ["A) O tempo passa mais rápido para o observador.", 
-          "B) O tempo desacelera (dilatação temporal) em relação a um observador distante.", 
-          "C) O tempo para completamente e nunca mais avança.", 
-          "D) O tempo passa a correr de trás para frente.", 
-          "E) Não há alteração alguma na contagem temporal."], "B", 
-         "A dilatação temporal é uma consequência comprovada da Relatividade Especial e Geral."),
+        ("O que acontece com o tempo em campos gravitacionais intensos ou alta velocidade?", 
+         ["A) O tempo passa mais rápido.", "B) O tempo desacelera (dilatação temporal) em relação a um observador distante.", "C) O tempo para totalmente.", "D) O tempo corre para trás.", "E) Não há alteração."], "B", 
+         "A dilatação temporal é comprovada pela Relatividade."),
         
-        ("O que foi o famoso eclipse solar de 1919 que consagrou a Relatividade Geral?", 
-         ["A) A prova de que a Lua é feita de queijo.", 
-          "B) A observação de que a luz das estrelas ao passar perto do Sol sofria desvio previsto pela curvatura do espaço.", 
-          "C) O escurecimento total do universo por matéria escura.", 
-          "D) A colisão entre o Sol e um buraco negro.", 
-          "E) A medição exata da velocidade da luz no vácuo."], "B", 
-         "O desvio da luz estelar pela gravidade solar confirmou a curvatura do espaço-tempo predita por Einstein."),
+        ("O que foi o eclipse solar de 1919 que consagrou a Relatividade Geral?", 
+         ["A) Prova de que a Lua é de queijo.", "B) A observação de que a luz estelar sofre desvio ao passar perto do Sol devido à curvatura do espaço.", "C) Escurecimento por matéria escura.", "D) Colisão do Sol com buraco negro.", "E) Medição da luz."], "B", 
+         "O desvio da luz estelar confirmou a curvatura predita por Einstein."),
         
-        ("O que são Ondas Gravitacionais preditas por Einstein e detectadas recentemente?", 
-         ["A) Ondas sonoras que viajam através do vácuo intergaláctico.", 
-          "B) Perturbações ou ondulações no tecido do espaço-tempo geradas por eventos cósmicos violentos (como fusão de buracos negros).", 
-          "C) Ondas de rádio emitidas por pulsares.", 
-          "D) Raios cosmicos de alta energia.", 
-          "E) Marés oceânicas causadas pela lua e sol."], "B", 
-         "As ondas gravitacionais viajam pelo cosmos esticando e comprimindo o próprio tecido do espaço."),
+        ("O que são Ondas Gravitacionais?", 
+         ["A) Ondas sonoras no vácuo.", "B) Perturbações no tecido do espaço-tempo geradas por eventos violentos como fusão de buracos negros.", "C) Ondas de rádio de pulsares.", "D) Raios cósmicos.", "E) Marés oceânicas."], "B", 
+         "Viajam esticando e comprimindo o próprio tecido do espaço."),
         
         ("O princípio da equivalência de Einstein estabelece que:", 
-         ["A) Toda matéria tem exatamente a mesma massa.", 
-          "B) Os efeitos de um campo gravitacional são localmente indistinguíveis dos efeitos de uma aceleração constante.", 
-          "C) A energia e a massa nunca se convertem uma na outra.", 
-          "D) A velocidade da luz varia dependendo de quem a observa.", 
-          "E) A gravidade é mais fraca que o eletromagnetismo."], "B", 
-         "Estar em um elevador fechado acelerando no espaço é fisicamente equivalente a estar parado em um campo gravitacional."),
+         ["A) Toda matéria tem mesma massa.", "B) Efeitos gravitacionais são localmente indistinguíveis de aceleração constante.", "C) Massa e energia não se convertem.", "D) A velocidade da luz varia.", "E) A gravidade é fraca."], "B", 
+         "Estar acelerando no espaço equivale a estar em campo gravitacional."),
         
         ("O que é o espaço-tempo quadridimensional?", 
-         ["A) Uma sala com quatro paredes e teto.", 
-          "B) A união matemática das três dimensões espaciais (comprimento, largura, altura) com a dimensão temporal.", 
-          "C) Um holograma gerado por supercomputadores.", 
-          "D) O espaço que existe apenas dentro de buracos negros.", 
-          "E) As dimensões paralelas onde habitam os deuses."], "B", 
-         "O universo físico é descrito como um contínuo quadridimensional onde eventos ocorrem em coordenadas de espaço e tempo."),
+         ["A) Uma sala com quatro paredes.", "B) A união matemática das três dimensões espaciais com a dimensão temporal.", "C) Um holograma.", "D) Espaço dentro de buracos negros.", "E) Dimensões paralelas."], "B", 
+         "O universo físico é um contínuo onde eventos ocorrem em espaço e tempo."),
         
-        ("Por que a luz não consegue escapar de um buraco negro?", 
-         ["A) Porque a luz desliga sua energia ao se aproximar.", 
-          "B) Porque a curvatura do espaço-tempo é tão extrema que todos os caminhos possíveis apontam para o centro.", 
-          "C) Porque o buraco negro possui um campo magnético que repele fótons.", 
-          "D) Porque a luz é mais pesada que o buraco negro.", 
-          "E) Porque o vácuo ao redor absorve a cor da luz."], "B", 
-         "Dentro do horizonte de eventos, a geometria do espaço-tempo é curvada para dentro de tal forma que escapar é geometricamente impossível."),
+        ("Por que a luz não escapa de um buraco negro?", 
+         ["A) A luz desliga.", "B) A curvatura do espaço-tempo é tão extrema que todos os caminhos apontam para o centro.", "C) Há campo magnético repulsivo.", "D) A luz é pesada.", "E) O vácuo absorve a cor."], "B", 
+         "Dentro do horizonte de eventos, escapar geometricamente é impossível."),
         
-        ("O que prediz a Relatividade sobre o movimento de relógios em satélites GPS orbitando a Terra?", 
-         ["A) Eles marcam exatamente o mesmo tempo que os relógios na Terra.", 
-          "B) Eles sofrem ajustes relativísticos (devido à velocidade e à gravidade menor) para funcionar com precisão milimétrica.", 
-          "C) Eles param de funcionar devido ao frio do espaço.", 
-          "D) Eles aceleram tanto que quebram em poucos dias.", 
-          "E) O tempo neles passa mais devagar que na superfície terrestre."], "B", 
-         "Sem correções da Relatividade Geral e Especial, o GPS acumularia erros de quilômetros por dia."),
+        ("O que a Relatividade prevê sobre relógios em satélites GPS?", 
+         ["A) Marcam o mesmo tempo.", "B) Sofrem ajustes relativísticos de velocidade e gravidade para funcionar com precisão.", "C) Param com o frio.", "D) Aceleram e quebram.", "E) O tempo passa mais devagar."], "B", 
+         "Sem correções relativísticas, o GPS falharia."),
         
-        ("O que é a 'Lente Gravitacional'?", 
-         ["A) Um óculos especial usado por astrônomos.", 
-          "B) O efeito em que massas gigantescas (como aglomerados de galáxias) curvam a luz de objetos situados atrás delas, amplificando-a ou distorcendo-a.", 
-          "C) Uma lupa feita de cristal de quartzo no espaço.", 
-          "D) A luz emitida por estrelas binárias.", 
-          "E) O brilho refletido pelos anéis de Saturno."], "B", 
-         "A massa desvia a trajetória da luz de forma análoga a uma lente óptica comum."),
+        ("O que é a Lente Gravitacional?", 
+         ["A) Óculos de astrônomo.", "B) Efeito em que massas gigantescas curvam e amplificam a luz de objetos atrás delas.", "C) Lupa de quartzo.", "D) Luz estelar binária.", "E) Brilho de anéis planetários."], "B", 
+         "A massa desvia a trajetória da luz de forma análoga a uma lente."),
         
-        ("Qual é a relação entre massa e energia expressa na famosa equação $E=mc^2$?", 
-         ["A) Massa e energia são totalmente independentes.", 
-          "B) Massa e energia são formas equivalentes da mesma grandeza física, convertíveis entre si.", 
-          "C) A energia é sempre maior que a massa em qualquer objeto.", 
-          "D) A massa viaja sempre na velocidade da luz.", 
-          "E) A energia não possui relação com a gravidade."], "B", 
-         "A energia em repouso ($E$) é igual à massa ($m$) multiplicada pelo quadrado da velocidade da luz ($c^2$); massa é energia concentrada."),
+        ("Qual é a relação em E=mc^2?", 
+         ["A) Massa e energia são independentes.", "B) Massa e energia são equivalentes e convertíveis entre si.", "C) Energia é sempre maior.", "D) Massa viaja na velocidade da luz.", "E) Sem relação com gravidade."], "B", 
+         "Massa é energia concentrada."),
 
-        ("O que os buracos de minhoca (wormholes) representam na física teórica?", 
-         ["A) Túnel criados por minhocas espaciais gigantes.", 
-          "B) Atalhos hipotéticos através do espaço-tempo conectando dois pontos distantes do universo.", 
-          "C) O interior de estrelas de nêutrons.", 
-          "D) Partículas subatômicas que viajam no tempo.", 
-          "E) A fumaça gerada por supernovas."], "B", 
-         "Embora permitidos matematicamente pela Relatividade Geral, sua existência física real permanece altamente especulativa e instável."),
+        ("O que são buracos de minhoca (wormholes)?", 
+         ["A) Túneis de minhocas.", "B) Atalhos hipotéticos conectando pontos distantes do espaço-tempo.", "C) Interior de estrelas de nêutrons.", "D) Partículas subatômicas.", "E) Fumaça de supernova."], "B", 
+         "Permitidos matematicamente, mas sua existência real é especulativa."),
 
         ("O que caracteriza uma estrela de nêutrons?", 
-         ["A) Uma estrela composta inteiramente de gás hidrogênio.", 
-         "B) O cadáver superdenso de uma estrela massiva onde os elétrons e prótons fundiram-se em nêutrons.", 
-         "C) Um planeta gasoso gigante sem núcleo sólido.", 
-         "D) Uma galáxia espiral em miniatura.", 
-         "E) Uma estrela que orbita um buraco negro de perto."], "B", 
-         "Uma colher de chá de matéria de estrela de nêutrons pesaria bilhões de toneladas na Terra devido à sua extrema densidade."),
+         ["A) Estrela de hidrogênio.", "B) Cadáver superdenso onde elétrons e prótons fundiram-se em nêutrons.", "C) Planeta gasoso gigante.", "D) Galáxia espiral.", "E) Órbita de buraco negro."], "B", 
+         "Sua densidade é extrema."),
 
-        ("O que significa dizer que o espaço é dinâmico na Relatividade Geral?", 
-         ["A) Que ele muda de cor dependendo da estação do ano.", 
-          "B) Que o espaço não é um palco rígido e imóvel, mas sim um meio flexível que pode curvar-se, vibrar e expandir-se.", 
-          "C) Que ele possui correntes de ar invisíveis.", 
-          "D) Que ele se move de leste para oeste como a Terra.", 
-          "E) Que ele possui fricção mecânica."], "B", 
-         "O espaço-tempo reage à presença de matéria e energia, alterando sua geometria constantemente."),
+        ("O que significa dizer que o espaço é dinâmico?", 
+         ["A) Muda de cor.", "B) É um meio flexível que curva, vibra e expande-se.", "C) Tem correntes de ar.", "D) Move-se de leste a oeste.", "E) Tem fricção."], "B", 
+         "O espaço-tempo reage à matéria e energia."),
 
         ("O que são pulsares?", 
-         ["A) Planetas que piscam no céu noturno.", 
-          "B) Estrelas de nêutrons altamente magnetizadas que giram rapidamente, emitindo feixes de radiação eletromagnética como um farol.", 
-          "C) Galáxias que pulsam expandindo e contraindo.", 
-          "D) Cometas com órbitas instáveis.", 
-          "E) Aglomerados globulares de estrelas jovens."], "B", 
-         "Seus pulsos de radiação são extremamente regulares, funcionando como relógios naturais precisos no cosmos."),
+         ["A) Planetas que piscam.", "B) Estrelas de nêutrons magnetizadas em rotação rápida emitindo feixes de radiação.", "C) Galáxias que pulsam.", "D) Cometas instáveis.", "E) Aglomerados globulares."], "B", 
+         "Funcionam como relógios naturais precisos."),
 
-        ("Qual é o limite máximo de velocidade para a transmissão de informações e movimento de matéria no universo?", 
-         ["A) A velocidade do som no ar", "B) A velocidade da luz no vácuo ($c$)", "C) A velocidade da gravidade quântica", "D) 1.000 km/s", "E) Não existe limite de velocidade."], "B", 
-         "Nenhum sinal ou objeto com massa pode ultrapassar a velocidade da luz no vácuo de acordo com a Relatividade."),
+        ("Qual é o limite máximo de velocidade para matéria e informação?", 
+         ["A) Velocidade do som", "B) Velocidade da luz no vácuo (c)", "C) Gravidade quântica", "D) 1.000 km/s", "E) Sem limite"], "B", 
+         "Nenhum objeto com massa supera a luz."),
 
-        # Bloco 3: Matéria Escura, Energia Escura e Estrutura do Universo (31 a 50)
-        ("Qual é a principal função da Matéria Escura na estruturação em grande escala do cosmos?", 
-         ["A) Emitir luz intensa para iluminar o espaço profundo.", 
-          "B) Atuar como uma 'cola gravitacional' invisível que mantém as galáxias coesas em alta velocidade.", 
-          "C) Acelerar a expansão do universo para longe.", 
-          "D) Proteger as estrelas contra radiação gama.", 
-          "E) Absorver buracos negros antigos."], "B", 
-         "A matéria visível não tem massa suficiente; a matéria escura fornece a atração gravitacional extra que segura as galáxias."),
+        # Matéria Escura e Energia Escura (31 a 50)
+        ("Qual é a função da Matéria Escura na estruturação cósmica?", 
+         ["A) Emitir luz intensa.", "B) Atuar como cola gravitacional invisível mantendo galáxias coesas.", "C) Acelerar a expansão.", "D) Proteger contra raios gama.", "E) Absorver buracos negros."], "B", 
+         "Fornece a atração gravitacional extra que segura as galáxias."),
         
-        ("Qual é a diferença conceitual fundamental entre Matéria Escura e Energia Escura?", 
-         ["A) A matéria escura atrai (gravidade), enquanto a energia escura repele (acelera a expansão).", 
-          "B) Ambas fazem exatamente a mesma coisa na estrutura cósmica.", 
-          "C) A energia escura é visível em telescópios ópticos comuns.", 
-          "D) A matéria escura acelera o universo para fora, enquanto a energia escura o comprime.", 
-          "E) Não há diferença teórica entre ambas."], "A", 
-         "Enquanto a matéria escura age aglutinando estruturas via gravidade, a energia escura impulsiona a expansão acelerada do cosmos."),
+        ("Qual a diferença entre Matéria Escura e Energia Escura?", 
+         ["A) Matéria escura atrai (gravidade), energia escura repele (expansão acelerada).", "B) Fazem a mesma coisa.", "C) Energia escura é visível.", "D) Matéria escura empurra para fora.", "E) Sem diferença."], "A", 
+         "Matéria escura aglutina; energia escura acelera a expansão."),
         
-        ("Aproximadamente, qual é a porcentagem da composição do universo entre Matéria Escura, Energia Escura e Matéria Ordinária (visível)?", 
-         ["A) 50% matéria visível, 30% escura, 20% energia escura", 
-          "B) 90% matéria ordinária, 5% matéria escura, 5% energia escura", 
-          "C) Cerca de 68% energia escura, 27% matéria escura e apenas 5% de matéria ordinária.", 
-          "D) 99% matéria escura e 1% de todo o resto.", 
-          "E) 33% para cada uma das três categorias."], "C", 
-         "O universo é dominado por componentes misteriosos e invisíveis (energia escura e matéria escura), sendo a matéria comum apenas uma fração menor."),
+        ("Qual a proporção aproximada no universo entre Matéria Escura, Energia Escura e Matéria Ordinária?", 
+         ["A) 50% / 30% / 20%", "B) 90% / 5% / 5%", "C) Cerca de 68% energia escura, 27% matéria escura e 5% matéria ordinária.", "D) 99% / 1%", "E) 33% cada."], "C", 
+         "O universo é dominado por componentes invisíveis."),
         
         ("Por que a Matéria Escura é chamada de 'escura'?", 
-         ["A) Porque ela bloqueia a luz como tinta preta.", 
-          "B) Porque ela não emite, absorve ou reflete luz nem qualquer outra radiação eletromagnética detectável diretamente.", 
-          "C) Porque ela só existe nas regiões mais sombrias do espaço.", 
-          "D) Devido à cor escura dos planetas que a compõem.", 
-          "E) Porque foi descoberta durante a noite."], "B", 
-         "Sua detecção é feita exclusivamente através dos seus efeitos gravitacionais indiretos sobre a matéria visível e a luz."),
+         ["A) Bloqueia luz como tinta.", "B) Não emite, absorve ou reflete radiação eletromagnética detectável diretamente.", "C) Só existe na sombra.", "D) Cor escura dos planetas.", "E) Descoberta à noite."], "B", 
+         "É detectada por efeitos gravitacionais indiretos."),
         
-        ("O que as curvas de rotação das galáxias espirais revelaram sobre a massa galáctica?", 
-         ["A) Que a massa está concentrada unicamente no centro brilhante.", 
-          "B) Que as estrelas nas bordas giram rápido demais para a massa visível, indicando a presença de um halo massivo invisível (matéria escura).", 
-          "C) Que as galáxias estão paradas no espaço.", 
-          "D) Que a gravidade diminui a zero nas bordas.", 
-          "E) Que todas as galáxias possuem buracos negros gêmeos."], "B", 
-         "As velocidades das estrelas periféricas provaram que há muito mais massa no halo do que aquela que conseguimos enxergar."),
+        ("O que as curvas de rotação de galáxias revelaram?", 
+         ["A) Massa concentrada no centro.", "B) Estrelas periféricas giram rápido demais, indicando halo massivo invisível.", "C) Galáxias paradas.", "D) Gravidade zero nas bordas.", "E) Buracos negros gêmeos."], "B", 
+         "Provam que há muito mais massa invisível no halo."),
 
-        ("O que causou a descoberta de que a expansão do universo está *acelerando* em vez de desacelerar?", 
-         ["A) A observação de supernovas distantes do tipo Ia na década de 1990.", 
-          "B) O cálculo da massa da Lua.", 
-          "C) A colisão entre a Via Láctea e a Grande Nuvem de Magalhães.", 
-          "D) A medição do campo magnético da Terra.", 
-          "E) Experimentos de laboratório com laser."], "A", 
-         "Supernovas distantes pareciam mais fracas (mais distantes) do que o esperado, provando que a expansão acelerou ao longo do tempo cosmológico."),
+        ("O que provou que a expansão do universo está acelerando?", 
+         ["A) Supernovas distantes tipo Ia na década de 1990.", "B) Cálculo da Lua.", "C) Colisão de Andrômeda.", "D) Campo magnético terrestre.", "E) Experimentos de laboratório."], "A", 
+         "Supernovas distantes indicaram aceleração na expansão."),
 
-        ("O que é a Constante Cosmológica ($\Lambda$) introduzida originalmente por Einstein?", 
-         ["A) A velocidade exata da luz.", 
-          "B) Um termo matemático adicionado por Einstein às suas equações para tentar manter um universo estático, mais tarde associado à energia escura.", 
-          "C) O peso de um átomo de hidrogênio.", 
-          "D) A taxa de rotação do Sol.", 
-          "E) A distância entre a Terra e Andrômeda."], "B", 
-         "Embora Einstein a tenha chamado de seu 'maior erro' ao pensar que o universo era estático, hoje ela reaparece explicada pela energia escura."),
+        ("O que é a Constante Cosmológica de Einstein?", 
+         ["A) Velocidade da luz.", "B) Termo matemático original para universo estático, hoje associado à energia escura.", "C) Peso do hidrogênio.", "D) Rotação solar.", "E) Distância até Andrômeda."], "B", 
+         "Hoje explica a energia escura."),
 
         ("O que são Aglomerados de Galáxias?", 
-         ["A) Estrelas solitárias vagando entre galáxias.", 
-          "B) Vastas estruturas formadas por centenas ou milhares de galáxias mantidas juntas pela gravidade.", 
-          "C) Anéis de poeira ao redor do Sol.", 
-          "D) Nuvens de gás frio sem estrelas.", 
-          "E) Sistemas planetários em rotação caótica."], "B", 
-         "Aglomerados são os maiores laboratórios cósmicos para estudar matéria escura e lentes gravitacionais."),
+         ["A) Estrelas solitárias.", "B) Vastas estruturas de centenas ou milhares de galáxias mantidas pela gravidade.", "C) Anéis de poeira.", "D) Nuvens de gás frio.", "E) Sistemas planetários."], "B", 
+         "Maiores laboratórios cósmicos para estudo gravitacional."),
 
-        ("Qual é o papel dos 'Filamentos Cósmicos' na teia cósmica do universo?", 
-         ["A) Conectar os computadores da NASA aos telescópios.", 
-          "B) Formar enormes pontes de matéria (visível e escura) que cercam vastas regiões vazias (vazios cósmicos).", 
-          "C) Conduzir raios solares entre sistemas planetários.", 
-          "D) Servir de trilho para cometas interestelares.", 
-          "E) Serem formados puramente por luz pura."], "B", 
-         "A grande teia cósmica do universo organiza-se em filamentos, nós e grandes vazios espaciais."),
+        ("Qual o papel dos Filamentos Cósmicos?", 
+         ["A) Conectar computadores.", "B) Formar pontes de matéria cercando vazios cósmicos.", "C) Conduzir raios solares.", "D) Trilhos de cometas.", "E) Luz pura."], "B", 
+         "A teia cósmica organiza-se em filamentos e nós."),
 
-        ("O que são os 'Vazios Cósmicos' (Cosmic Voids)?", 
-         ["A) Lugares onde o tempo para completamente.", 
-          "B) Enormes regiões do espaço com baixa densidade de galáxias, separando os filamentos da teia cósmica.", 
-          "C) O centro exato de cada buraco negro.", 
-          "D) O espaço vazio dentro de um átomo.", 
-          "E) Regiões sem nenhuma partícula de matéria escura."], "B", 
-         "Os vazios cobrem a maior parte do volume do universo, enquanto a matéria concentra-se nos filamentos e nós."),
+        ("O que são Vazios Cósmicos?", 
+         ["A) Lugares onde o tempo para.", "B) Regiões do espaço com baixa densidade de galáxias entre filamentos.", "C) Centro de buracos negros.", "D) Espaço dentro do átomo.", "E) Regiões sem matéria escura."], "B", 
+         "Cobrem a maior parte do volume do universo."),
 
-        ("O que significa WIMP no contexto da pesquisa de Matéria Escura?", 
-         ["A) Weakly Interacting Massive Particles (Partículas Massivas de Interação Fraca), candidatos teóricos a matéria escura.", 
-          "B) Waves in Microwave Pulses.", 
-          "C) White Dwarf Interstellar Matter Photon.", 
-          "D) Wormhole Integrated Mass Plasma.", 
-          "E) Water Isotope Molecular Process."], "A", 
-         "WIMPs são partículas hipotéticas que interagem apenas pela gravidade e força nuclear fraca, sendo principais alvos de buscas laboratoriais."),
+        ("O que significa WIMP em Matéria Escura?", 
+         ["A) Weakly Interacting Massive Particles (Partículas Massivas de Interação Fraca).", "B) Waves in Microwave.", "C) White Dwarf.", "D) Wormhole Plasma.", "E) Water Isotope."], "A", 
+         "Candidatos teóricos a partículas de matéria escura."),
 
         ("O que são Axions?", 
-         ["A) Partículas elementares hipotéticas leves propostas para resolver problemas de simetria e candidatas a matéria escura.", 
-          "B) Raios gama emitidos por estrelas jovens.", 
-          "C) A menor unidade de tempo possível.", 
-          "D) Composição química dos anéis de Júpiter.", 
-          "E) O nome dado à energia escura pura."], "A", 
-         "Axions são outra classe de partículas candidatas a explicar a natureza da matéria escura fria."),
+         ["A) Partículas elementares hipotéticas leves candidatas a matéria escura.", "B) Raios gama estelares.", "C) Menor unidade de tempo.", "D) Composição de Júpiter.", "E) Energia escura pura."], "A", 
+         "Outra classe candidata a explicar matéria escura."),
 
-        ("O que é a Matéria Escura 'Quente' (Hot Dark Matter) em contraste com a 'Fria'?", 
-         ["A) Matéria escura que emite calor infravermelho.", 
-          "B) Partículas de matéria escura que se movem a velocidades relativísticas (próximas à da luz), como neutrinos massivos.", 
-          "C) Lava derretida no núcleo de planetas exóticos.", 
-          "D) O gás superaquecido entre aglomerados galácticos.", 
-          "E) Matéria escura que orbita muito perto de estrelas."], "B", 
-         "A cosmologia moderna aponta para a Matéria Escura Fria (CDM) como o modelo dominante para a formação das estruturas do universo."),
+        ("O que é Matéria Escura Fria (CDM)?", 
+         ["A) Gelo no espaço.", "B) Partículas que se movem devagar em comparação à velocidade da luz, modelando estruturas.", "C) Planetas congelados.", "D) Gás superaquecido.", "E) Órbitas próximas."], "B", 
+         "Modelo padrão para formação estrutural."),
 
-        ("Como as simulações computacionais de N-corpos ajudam a entender a formação do universo?", 
-         ["A) Calculando a meteorologia da Terra em tempo real.", 
-          "B) Simulando a gravidade e interação de milhões de partículas de matéria escura para recriar a teia cósmica.", 
-          "C) Traduzindo sinais de rádio extraterrestres.", 
-          "D) Desenhando mapas estelares bidimensionais.", 
-          "E) Calculando a órbita da Lua."], "B", 
-         "Essas supercomputações mostram como pequenas flutuações primordiais evoluem para os aglomerados de galáxias atuais."),
+        ("Como simulações de N-corpos ajudam a cosmologia?", 
+         ["A) Meteorologia da Terra.", "B) Simulando gravidade de milhões de partículas para recriar a teia cósmica.", "C) Traduzindo rádio alienígena.", "D) Mapas 2D.", "E) Órbita lunar."], "B", 
+         "Recriam a evolução das estruturas cósmicas."),
 
-        ("Qual é o destino final mais provável do universo segundo os dados atuais sobre a Energia Escura?", 
-         ["A) O Big Crunch (colapso total em um ponto).", 
-          "B) A expansão eterna acelerada (Big Freeze / Morte Térmica), onde as galáxias se afastarão tanto que o cosmos ficará frio e escuro.", 
-          "C) Uma grande explosão de luz branca constante.", 
-          "D) A transformação de todas as estrelas em buracos brancos.", 
-          "E) A reversão do tempo."], "B", 
-         "Com a aceleração impulsionada pela energia escura, o universo caminha para uma dispersão eterna e resfriamento gradual."),
+        ("Qual o destino final mais provável do universo?", 
+         ["A) Big Crunch.", "B) Expansão eterna acelerada (Big Freeze / Morte Térmica), ficando frio e escuro.", "C) Explosão de luz.", "D) Buracos brancos.", "E) Reversão temporal."], "B", 
+         "Caminha para dispersão eterna."),
 
-        ("O que foi o experimento Planck da Agência Espacial Europeia (ESA)?", 
-         ["A) Uma missão tripulada a Marte.", 
-          "B) Um telescópio espacial que mapeou com precisão sem precedentes as flutuações da Radiação Cósmica de Fundo (CMB).", 
-          "C) Um acelerador de partículas subterrâneo.", 
-          "D) O primeiro satélite a orbitar o Sol.", 
-          "E) Um estudo sobre a atmosfera de Vênus."], "B", 
-         "Os dados do Planck refinaram os parâmetros cosmológicos da idade do universo, matéria escura e energia escura com altíssima precisão."),
+        ("O que foi o experimento Planck da ESA?", 
+         ["A) Viagem a Marte.", "B) Telescópio espacial que mapeou flutuações da Radiação Cósmica de Fundo.", "C) Acelerador subterrâneo.", "D) Satélite solar.", "E) Estudo de Vênus."], "B", 
+         "Refinou parâmetros cosmológicos com precisão."),
 
-        ("Por que a energia escura não se dilui da mesma forma que a matéria comum ou escura durante a expansão do universo?", 
-         ["A) Porque ela é criada constantemente pelas estrelas.", 
-          "B) Porque ela é uma propriedade inerente ao próprio vácuo do espaço; à medida que o espaço cresce, há mais vácuo e, portanto, mais energia escura.", 
-          "C) Porque ela possui massa negativa infinita.", 
-          "D) Porque ela viaja mais rápido que o universo.", 
-          "E) Porque ela interage fortemente com buracos negros."], "B", 
-         "Como a densidade de energia do vácuo permanece constante, sua influência domina o universo em eras de grande expansão."),
+        ("Por que a energia escura não se dilui com a expansão?", 
+         ["A) Criada por estrelas.", "B) É propriedade inerente ao vácuo; mais espaço significa mais vácuo e energia escura.", "C) Massa negativa.", "D) Viagem rápida.", "E) Interage com buracos negros."], "B", 
+         "A densidade de energia do vácuo permanece constante."),
 
-        ("O que os astrônomos querem dizer quando falam em 'Crise na Cosmologia' recente?", 
-         ["A) A falta de verbas para a pesquisa espacial.", 
-          "B) A discrepância persistente entre as medições da Constante de Hubble obtidas pelo universo local (supernovas) e pelo universo primordial (CMB).", 
-          "C) O esgotamento do hidrogênio em todas as estrelas.", 
-          "D) A colisão iminente entre galáxias e a Terra.", 
-          "E) A impossibilidade de usar computadores na astronomia."], "B", 
-         "Essa divergência em torno da taxa exata de expansão do universo desafia e instiga os físicos modernos."),
+        ("O que é a 'Crise na Cosmologia' recente?", 
+         ["A) Falta de verbas.", "B) Discrepância entre medições locais da Constante de Hubble e do universo primordial.", "C) Esgotamento de hidrogênio.", "D) Colisão iminente.", "E) Falta de computadores."], "B", 
+         "Divergência sobre a taxa exata de expansão."),
 
-        ("Qual é a idade estimada do nosso universo atualmente aceita pela comunidade científica?", 
-         ["A) Cerca de 6 mil anos", "B) 4,5 bilhões de anos", "C) Cerca de 13,8 bilhões de anos", "D) 100 bilhões de anos", "E) 500 milhões de anos"], "C", 
-         "Medições precisas da radiação de fundo confirmam que o Big Bang ocorreu há aproximadamente 13,8 bilhões de anos."),
+        ("Qual a idade estimada do universo?", 
+         ["A) 6 mil anos", "B) 4,5 bilhões de anos", "C) Cerca de 13,8 bilhões de anos", "D) 100 bilhões", "E) 500 milhões"], "C", 
+         "Confirmada por medições da radiação de fundo."),
 
-        ("Ao final desta jornada pelo Santuário, o que os participantes (futuros Cavaleiros de Athena) compreendem sobre o Cosmo?", 
-         ["A) Que o cosmo é apenas uma ilusão sem leis físicas.", 
-          "B) Que o verdadeiro cosmo está em harmonizar o poder interior com a compreensão racional das leis que regem a expansão, a gravidade e a estrutura do universo.", 
-          "C) Que apenas a força física bruta resolve qualquer batalha.", 
-          "D) Que a ciência e a mitologia são totalmente opostas e incompatíveis.", 
-          "E) Que o universo foi construído por Makarius."], "B", 
-         "A elevação do cosmo e o aprendizado científico unem-se para formar cavaleiros sábios, guardiões da justiça e da verdade no universo."]
+        ("O que os participantes aprendem ao chegar ao topo do Santuário?", 
+         ["A) O cosmo é ilusão.", "B) O verdadeiro cosmo une o poder interior à compreensão racional das leis do universo.", "C) Só força física importa.", "D) Ciência e mitologia são opostas.", "E) Universo feito por Makarius.", "F) A força bruta supera a razão."] , "B", 
+         "O verdadeiro cosmo une o poder interior à compreensão racional das leis do universo.")
     ]
 
-    # Monta o banco estruturado com guia aleatório e limpo
-    lista_formatada = []
-    for i, q in enumerate(questoes_base):
-        guia_escolhido = guias_cdz[i % len(guias_cdz)]
-        lista_formatada.append({
-            "id": i + 1,
-            "guia": guia_escolhido,
+    # Formata com guias e IDs limpos sem numeração visível na interface
+    lista_50 = []
+    for i, q in enumerate(dados_brutos):
+        guia = guias[i % len(guias)]
+        lista_50.append({
+            "guia": guia,
             "enunciado": q[0],
             "opcoes": q[1],
             "correta": q[2],
             "por_que": q[3]
         })
-    st.session_state.banco_50_questoes = lista_formatada
+    st.session_state.banco_50 = lista_50
 
 # Estilo visual
 st.markdown("""
@@ -456,28 +266,28 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("🏛️ CDZ: O Despertar do Cosmo - Rumo a Athena")
-st.markdown("### *Treinamento das Equipes: Domine o Cosmo, a Relatividade e o Big Bang para se tornar Cavaleiro!*")
+st.markdown("### *Treinamento das Equipes: Domine o Cosmo, a Relatividade e o Big Bang!*")
 st.markdown("---")
 
 # ==========================================
-# PAINEL DO ORGANIZADOR (EXPORTAÇÃO WORD / TXT)
+# PAINEL DO ORGANIZADOR
 # ==========================================
 st.sidebar.header("⚙️ Painel do Organizador")
 
 with st.sidebar.expander("📚 Baixar Relatório / Prova (Word / TXT)"):
-    st.markdown("Baixe todas as 50 questões do treinamento com alternativas e justificativas completas para usar em sala de aula, provas ou word:")
+    st.markdown("Baixe as 50 questões do treinamento com alternativas e justificativas completas:")
     
     texto_export = "====================================================\n"
     texto_export += "BANCO DE 50 QUESTÕES - CDZ COSMOLOGIA E O COSMO\n"
     texto_export += "====================================================\n\n"
     
-    for q in st.session_state.banco_50_questoes:
-        texto_export += f"Questão {q['id']} [Guia: {q['guia']}]\n"
+    for idx, q in enumerate(st.session_state.banco_50, 1):
+        texto_export += f"Guia do Templo: {q['guia']}\n"
         texto_export += f"Enunciado: {q['enunciado']}\n"
         for op in q['opcoes']:
             texto_export += f"   {op}\n"
         texto_export += f"-> Alternativa Correta: {q['correta']}\n"
-        texto_export += f"-> Justificativa (O Porquê): {q['por_que']}\n"
+        texto_export += f"-> Justificativa: {q['por_que']}\n"
         texto_export += "----------------------------------------------------\n\n"
         
     st.download_button(
@@ -495,25 +305,25 @@ with st.sidebar.expander("📚 Baixar Relatório / Prova (Word / TXT)"):
     )
 
 with st.sidebar.expander("🛠️ Histórico de Partidas"):
-    if st.session_state.historico_respostas:
-        for h in st.session_state.historico_respostas:
-            st.text(f"[Q{h['questao']} - {h['equipe']}] {h['status']}")
+    if st.session_state.historico:
+        for h in st.session_state.historico:
+            st.text(f"[{h['equipe']}] {h['status']}")
         if st.button("🗑️ Limpar Histórico"):
-            st.session_state.historico_respostas = []
+            st.session_state.historico = []
             st.rerun()
     else:
         st.info("Nenhuma resposta registrada ainda.")
 
-# Placar Geral das 3 Equipes na Barra Lateral
+# Placar Geral e Estabilidade na Barra Lateral
 st.sidebar.header("📊 Placar & Estabilidade do Cosmo")
 st.sidebar.metric(label="🛡️ Equipe Alfa (Pontos)", value=st.session_state.pontos_alfa)
-st.sidebar.text(f"⚡ Estabilidade Alfa: {st.session_state.estabilidade_alfa}%")
+st.sidebar.text(f"⚡ Estabilidade Alfa: {st.session_state.est_alfa}%")
 st.sidebar.markdown("---")
 st.sidebar.metric(label="🛡️ Equipe Beta (Pontos)", value=st.session_state.pontos_beta)
-st.sidebar.text(f"⚡ Estabilidade Beta: {st.session_state.estabilidade_beta}%")
+st.sidebar.text(f"⚡ Estabilidade Beta: {st.session_state.est_beta}%")
 st.sidebar.markdown("---")
 st.sidebar.metric(label="🛡️ Equipe Gama (Pontos)", value=st.session_state.pontos_gama)
-st.sidebar.text(f"⚡ Estabilidade Gama: {st.session_state.estabilidade_gama}%")
+st.sidebar.text(f"⚡ Estabilidade Gama: {st.session_state.est_gama}%")
 
 # ==========================================
 # INÍCIO DO JOGO
@@ -523,10 +333,10 @@ lista_equipes = ["Equipe Alfa", "Equipe Beta", "Equipe Gama"]
 if not st.session_state.jogo_iniciado:
     st.subheader("🔥 Cerimônia de Abertura: O Despertar do Cosmo")
     st.markdown("""
-    > Jovens aspirantes de bronze reúnem-se no sopé do Santuário. Para se tornarem verdadeiros **Cavaleiros de Athena**, 
-    > vocês não precisam apenas de força física, mas de **sabedoria cosmológica** — compreendendo o Big Bang, a Relatividade Geral de Einstein e a Matéria Escura.
+    > Jovens aspirantes reúnem-se no sopé do Santuário. Para se tornarem verdadeiros **Cavaleiros de Athena**, 
+    > vocês precisam dominar a **sabedoria cosmológica** — compreendendo o Big Bang, a Relatividade Geral e a Matéria Escura.
     > 
-    > As três equipes enfrentam agora os desafios em rodadas alternadas. Cada erro abala a **Estabilidade do Cosmo** individual da sua equipe!
+    > As três equipes enfrentam desafios em rodadas alternadas. Cada erro abala a **Estabilidade do Cosmo** individual da equipe!
     """)
     
     if st.button("🌟 Iniciar Jornada de Treinamento Rumo a Athena"):
@@ -535,32 +345,31 @@ if not st.session_state.jogo_iniciado:
     st.stop()
 
 # ==========================================
-# FLUXO DAS QUESTÕES DE MÚLTIPLA ESCHOLE (RODADAS)
+# FLUXO DAS QUESTÕES
 # ==========================================
-total_questoes = len(st.session_state.banco_50_questoes)
-r_idx = st.session_state.rodada_atual - 1
+total_questoes = len(st.session_state.banco_50)
+idx_p = st.session_state.indice_pergunta
 e_idx = st.session_state.equipe_sub_idx
 equipe_da_vez = lista_equipes[e_idx]
 
-# Verifica estabilidade da equipe da vez
+# Define estabilidade atual da equipe
 if equipe_da_vez == "Equipe Alfa":
-    est_atual = st.session_state.estabilidade_alfa
+    est_atual = st.session_state.est_alfa
 elif equipe_da_vez == "Equipe Beta":
-    est_atual = st.session_state.estabilidade_beta
+    est_atual = st.session_state.est_beta
 else:
-    est_atual = st.session_state.estabilidade_gama
+    est_atual = st.session_state.est_gama
 
-if r_idx < total_questoes:
-    q_atual = st.session_state.banco_questoes[r_idx]
+if idx_p < total_questoes:
+    q_atual = st.session_state.banco_50[idx_p]
     
-    st.subheader(f"⚔️ **DESAFIO {st.session_state.rodada_atual} de {total_questoes}** | Vez de: **{equipe_da_vez}**")
+    st.subheader(f"⚔️ Vez de: **{equipe_da_vez}**")
     st.markdown(f"**Guia do Templo:** *{q_atual['guia']}* (Estabilidade da Equipe: **{est_atual}%**) ✨")
     st.markdown("---")
     
     st.markdown(f"### **Enigma:** {q_atual['enunciado']}")
     
-    # Exibe as opções de múltipla escolha (A a E)
-    escolha_usuario = st.radio("Selecione a alternativa correta:", q_atual['opcoes'], key=f"q_{r_idx}_{e_idx}")
+    escolha_usuario = st.radio("Selecione a alternativa correta:", q_atual['opcoes'], key=f"radio_{idx_p}_{e_idx}")
 
     if st.button("Enviar Resposta e Elevar o Cosmo"):
         letra_escolhida = escolha_usuario.split(")")[0].strip()
@@ -568,27 +377,22 @@ if r_idx < total_questoes:
         
         status = "CORRETA" if acertou else "INCORRETA"
         
-        # Computa pontos e estabilidade por equipe
         if acertou:
             if equipe_da_vez == "Equipe Alfa": st.session_state.pontos_alfa += 20
             elif equipe_da_vez == "Equipe Beta": st.session_state.pontos_beta += 20
             else: st.session_state.pontos_gama += 20
         else:
-            if equipe_da_vez == "Equipe Alfa": st.session_state.estabilidade_alfa = max(0, st.session_state.estabilidade_alfa - 10)
-            elif equipe_da_vez == "Equipe Beta": st.session_state.estabilidade_beta = max(0, st.session_state.estabilidade_beta - 10)
-            else: st.session_state.estabilidade_gama = max(0, st.session_state.estabilidade_gama - 10)
+            if equipe_da_vez == "Equipe Alfa": st.session_state.est_alfa = max(0, st.session_state.est_alfa - 10)
+            elif equipe_da_vez == "Equipe Beta": st.session_state.est_beta = max(0, st.session_state.est_beta - 10)
+            else: st.session_state.est_gama = max(0, st.session_state.est_gama - 10)
 
-        # Salva histórico
-        st.session_state.historico_respostas.append({
-            "rodada": st.session_state.rodada_atual,
-            "questao": q_atual['id'],
+        st.session_state.historico.append({
             "equipe": equipe_da_vez,
             "resposta": escolha_usuario,
             "status": status,
             "por_que": q_atual['por_que']
         })
 
-        # Define feedback visual com a justificativa
         st.session_state.ultimo_feedback = {
             "status": status,
             "equipe": equipe_da_vez,
@@ -596,41 +400,38 @@ if r_idx < total_questoes:
             "por_que": q_atual['por_que']
         }
 
-        # Avança a sub-equipe (0 -> 1 -> 2) ou avança a rodada de questão
         if e_idx < 2:
             st.session_state.equipe_sub_idx += 1
         else:
             st.session_state.equipe_sub_idx = 0
-            st.session_state.rodada_atual += 1
+            st.session_state.indice_pergunta += 1
             
         st.rerun()
 
-    # Mostra feedback e justificativa detalhada se houver resposta recente
     if st.session_state.ultimo_feedback:
         st.markdown("---")
         fb = st.session_state.ultimo_feedback
         if fb['status'] == "CORRETA":
-            st.success(f"🎉 Excelente! A **{fb['equipe']}** acertou em cheio e elevou seu cosmo ao sétimo sentido!")
+            st.success(f"🎉 Excelente! A **{fb['equipe']}** acertou e elevou seu cosmo ao sétimo sentido!")
         else:
             st.error(f"❌ Resposta Incorreta da **{fb['equipe']}**. A alternativa correta era a letra **{fb['correta_letra']}**.")
             
         st.info(f"💡 **JUSTIFICATIVA (O PORQUÊ):**\n\n{fb['por_que']}")
 
 else:
-    # FASE FINAL: CHEGADA AO TETO DE ATHENA
     st.balloons()
     st.subheader("🏛️ Chegada Gloriosa ao Templo de Athena!")
     st.markdown("""
-    > As 50 estações do Santuário foram vencidas! As equipes provaram seu valor, compreenderam as leis do Big Bang, 
-    > da Relatividade Geral e da Matéria Escura, despertando o verdadeiro Cosmo supremo. 
+    > As estações do Santuário foram vencidas! As equipes provaram seu valor, compreenderam o Big Bang, 
+    > a Relatividade Geral e a Matéria Escura, despertando o verdadeiro Cosmo supremo. 
     > Athena desce do altar principal para condecorar os novos Cavaleiros!
     """)
     
     st.markdown("---")
     st.markdown("### 🏆 **Placar Final dos Aspirantes a Cavaleiro**")
-    st.markdown(f"* **🛡️ Equipe Alfa:** {st.session_state.pontos_alfa} pontos | Estabilidade: {st.session_state.estabilidade_alfa}%")
-    st.markdown(f"* **🛡️ Equipe Beta:** {st.session_state.pontos_beta} pontos | Estabilidade: {st.session_state.estabilidade_beta}%")
-    st.markdown(f"* **🛡️ Equipe Gama:** {st.session_state.pontos_gama} pontos | Estabilidade: {st.session_state.estabilidade_gama}%")
+    st.markdown(f"* **🛡️ Equipe Alfa:** {st.session_state.pontos_alfa} pontos | Estabilidade: {st.session_state.est_alfa}%")
+    st.markdown(f"* **🛡️ Equipe Beta:** {st.session_state.pontos_beta} pontos | Estabilidade: {st.session_state.est_beta}%")
+    st.markdown(f"* **🛡️ Equipe Gama:** {st.session_state.pontos_gama} pontos | Estabilidade: {st.session_state.est_gama}%")
     
     pontuacoes = {
         "Equipe Alfa": st.session_state.pontos_alfa,
@@ -649,14 +450,14 @@ else:
     st.markdown("---")
     if st.button("🔄 Reiniciar Novo Treinamento do Santuário"):
         st.session_state.jogo_iniciado = False
-        st.session_state.rodada_atual = 1
+        st.session_state.indice_pergunta = 0
         st.session_state.equipe_sub_idx = 0
         st.session_state.pontos_alfa = 0
         st.session_state.pontos_beta = 0
         st.session_state.pontos_gama = 0
-        st.session_state.estabilidade_alfa = 100
-        st.session_state.estabilidade_beta = 100
-        st.session_state.estabilidade_gama = 100
+        st.session_state.est_alfa = 100
+        st.session_state.est_beta = 100
+        st.session_state.est_gama = 100
         st.session_state.ultimo_feedback = None
         st.rerun()
 
