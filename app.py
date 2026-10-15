@@ -5,7 +5,7 @@ import random
 st.set_page_config(page_title="CDZ: O Despertar do Cosmo - Rumo a Athena", page_icon="🌌", layout="centered")
 
 # ==========================================
-# LISTA DAS CASAS DO SANTUÁRIO
+# LISTA DAS 12 CASAS DO SANTUÁRIO
 # ==========================================
 CASAS_SANTUARIO = [
     "1ª Casa: Templo de Áries ♈",
@@ -23,20 +23,10 @@ CASAS_SANTUARIO = [
     "🏛️ Salão do Mestre / Templo de Athena 🏛️"
 ]
 
-def obter_casa_atual(indice_q):
-    if indice_q < 4: return CASAS_SANTUARIO[0]
-    elif indice_q < 8: return CASAS_SANTUARIO[1]
-    elif indice_q < 12: return CASAS_SANTUARIO[2]
-    elif indice_q < 16: return CASAS_SANTUARIO[3]
-    elif indice_q < 20: return CASAS_SANTUARIO[4]
-    elif indice_q < 24: return CASAS_SANTUARIO[5]
-    elif indice_q < 28: return CASAS_SANTUARIO[6]
-    elif indice_q < 32: return CASAS_SANTUARIO[7]
-    elif indice_q < 36: return CASAS_SANTUARIO[8]
-    elif indice_q < 40: return CASAS_SANTUARIO[9]
-    elif indice_q < 44: return CASAS_SANTUARIO[10]
-    elif indice_q < 48: return CASAS_SANTUARIO[11]
-    else: return CASAS_SANTUARIO[12]
+def obter_nome_casa(num_casa):
+    # Garante que não ultrapasse o índice máximo da lista
+    idx = min(num_casa, len(CASAS_SANTUARIO) - 1)
+    return CASAS_SANTUARIO[idx]
 
 # ==========================================
 # INICIALIZAÇÃO DO ESTADO GLOBAL
@@ -119,7 +109,7 @@ if "banco_50" not in st.session_state:
           "Que todas as estrelas possuem exatamente a mesma idade e tamanho.",
           "Que o universo possui um centro fixo e bem definido no espaço.",
           "Que a temperatura é zero absoluto em todo o cosmo."], "A",
-         "Homogêneo indica igualdade de densidade em larga escala e isotrópico indica ausência de direção privileged."),
+         "Homogêneo indica igualdade de densidade em larga escala e isotrópico indica ausência de direção privilegiada."),
 
         ("Durante o eclipse solar de 1919, astrônomos fotografaram estrelas próximas ao Sol em Sobral (Brasil) e Príncipe.",
          "Arthur Eddington e Albert Einstein",
@@ -533,7 +523,7 @@ if "banco_50" not in st.session_state:
           "Nuvens de gás frio desprovidas de qualquer estrela.",
           "Sistemas planetários em rotação caótica ao redor de pulsares.",
           "Vastas estruturas de centenas ou milhares de galáxias mantidas juntas pela atração gravitacional."], "E",
-         "Aglomerados de galáxias são as maiores estruturas unidas pela gravidade."),
+         "Aglomerados galácticos são as maiores estruturas unidas pela gravidade."),
 
         ("Na física do espaço-tempo, objetos massivos alteram a trajetória de corpos em movimento.",
          "Albert Einstein",
@@ -650,7 +640,7 @@ if st.session_state.prof_logado:
     if st.session_state.historico_professor:
         for idx, item in enumerate(st.session_state.historico_professor, 1):
             relatorio_txt += f"Registro #{idx} | Equipe: {item['equipe']}\n"
-            relatorio_txt += f"Local: {item['casa_santuario']}\n"
+            relatorio_txt += f"Local na Pergunta: {item['casa_santuario']}\n"
             relatorio_txt += f"Guia do Templo: {item['guia']} | Cientista Relacionado: {item['cientista']}\n"
             relatorio_txt += f"Enunciado: {item['enunciado']}\n"
             relatorio_txt += f"Resposta Escolhida: {item['resposta']}\n"
@@ -679,17 +669,27 @@ if st.session_state.prof_logado:
         st.sidebar.success("Histórico limpo!")
         st.rerun()
 
-# Placar por Casas na Barra Lateral
-st.sidebar.header("📊 Progresso do Santuário")
+# ==========================================
+# PLACAR NA BARRA LATERAL (COM A CASA EXATA ACIMA DE CADA EQUIPE)
+# ==========================================
+st.sidebar.header("📊 Posição no Santuário (Meta: 12 Casas)")
 
-st.sidebar.metric(label="🛡️ Equipe Alfa", value=f"{st.session_state.casas_alfa} / 10 Casas Conquistadas")
-st.sidebar.progress(min(1.0, st.session_state.casas_alfa / 10))
+# Equipe Alfa
+casa_alfa_str = obter_nome_casa(st.session_state.casas_alfa)
+st.sidebar.markdown(f"🛡️ **Equipe Alfa**\n*📍 Localização: {casa_alfa_str}*")
+st.sidebar.progress(min(1.0, st.session_state.casas_alfa / 12))
 st.sidebar.markdown("---")
-st.sidebar.metric(label="🛡️ Equipe Beta", value=f"{st.session_state.casas_beta} / 10 Casas Conquistadas")
-st.sidebar.progress(min(1.0, st.session_state.casas_beta / 10))
+
+# Equipe Beta
+casa_beta_str = obter_nome_casa(st.session_state.casas_beta)
+st.sidebar.markdown(f"🛡️ **Equipe Beta**\n*📍 Localização: {casa_beta_str}*")
+st.sidebar.progress(min(1.0, st.session_state.casas_beta / 12))
 st.sidebar.markdown("---")
-st.sidebar.metric(label="🛡️ Equipe Gama", value=f"{st.session_state.casas_gama} / 10 Casas Conquistadas")
-st.sidebar.progress(min(1.0, st.session_state.casas_gama / 10))
+
+# Equipe Gama
+casa_gama_str = obter_nome_casa(st.session_state.casas_gama)
+st.sidebar.markdown(f"🛡️ **Equipe Gama**\n*📍 Localização: {casa_gama_str}*")
+st.sidebar.progress(min(1.0, st.session_state.casas_gama / 12))
 
 # BOTÃO DE REINICIAR PERMANENTE
 st.sidebar.markdown("---")
@@ -706,12 +706,12 @@ if not st.session_state.jogo_iniciado:
     st.subheader("🔥 Cerimônia de Abertura: O Despertar do Cosmo")
     st.markdown("""
     > Jovens aspirantes reúnem-se no sopé do Santuário. Para se tornarem verdadeiros **Cavaleiros de Athena**, 
-    > vocês avançarão pelas **Casas do Santuário** dominando a **sabedoria cosmológica** (Big Bang, Relatividade Geral e Matéria Escura).
+    > vocês avançarão pelas **12 Casas do Santuário** dominando a **sabedoria cosmológica** (Big Bang, Relatividade Geral e Matéria Escura).
     > 
     > **Regras da Competição:**
-    > * **Acerto:** +1 Casa conquistada no Santuário!
-    > * **Erro:** **Não perde Casas**, mas a questão muda para a próxima e a vez passa para a próxima equipe!
-    > * **Meta de Vitória:** A primeira equipe a conquistar **10 Casas** alcança o Templo de Athena e vence o jogo!
+    > * **Acerto:** Avança 1 Casa no Santuário!
+    > * **Erro:** **Não perde Casas**, mas a questão muda imediatamente e a vez passa para a próxima equipe!
+    > * **Meta de Vitória:** A primeira equipe a atravessar as **12 Casas** e alcançar o **Templo de Athena** vence o jogo!
     """)
     
     if st.button("🌟 Iniciar Treinamento do Santuário"):
@@ -723,16 +723,16 @@ if not st.session_state.jogo_iniciado:
 # VERIFICAÇÃO DE FIM DE JOGO
 # ==========================================
 vencedor_instantaneo = None
-if st.session_state.casas_alfa >= 10: vencedor_instantaneo = "Equipe Alfa"
-elif st.session_state.casas_beta >= 10: vencedor_instantaneo = "Equipe Beta"
-elif st.session_state.casas_gama >= 10: vencedor_instantaneo = "Equipe Gama"
+if st.session_state.casas_alfa >= 12: vencedor_instantaneo = "Equipe Alfa"
+elif st.session_state.casas_beta >= 12: vencedor_instantaneo = "Equipe Beta"
+elif st.session_state.casas_gama >= 12: vencedor_instantaneo = "Equipe Gama"
 
 if vencedor_instantaneo or st.session_state.indice_pergunta >= len(st.session_state.banco_50):
     st.balloons()
     st.subheader("🏛️ Chegada Gloriosa ao Templo de Athena!")
     
     if vencedor_instantaneo:
-        st.success(f"🥇 **A {vencedor_instantaneo} conquistou 10 Casas do Santuário primeiro e recebeu a Armadura de Ouro de Athena!**")
+        st.success(f"🥇 **A {vencedor_instantaneo} atravessou as 12 Casas do Santuário e conquistou a Armadura de Ouro no Templo de Athena!**")
     else:
         pontuacoes = {
             "Equipe Alfa": st.session_state.casas_alfa,
@@ -743,15 +743,15 @@ if vencedor_instantaneo or st.session_state.indice_pergunta >= len(st.session_st
         vencedores = [eq for eq, pts in pontuacoes.items() if pts == maior_pts]
         
         if len(vencedores) > 1:
-            st.success(f"🤝 **Empate Lendário com {maior_pts} Casas Conquistadas entre: {', '.join(vencedores)}! Todos tornaram-se Cavaleiros de Athena juntos!**")
+            st.success(f"🤝 **Empate Lendário alcançando a {obter_nome_casa(maior_pts)} entre: {', '.join(vencedores)}! Todos tornaram-se Cavaleiros de Athena juntos!**")
         else:
-            st.success(f"🥇 **A {vencedores[0]} encerrou a travessia com {maior_pts} Casas Conquistadas e sagrou-se campeã!**")
+            st.success(f"🥇 **A {vencedores[0]} avançou mais longe no Santuário, chegando até a {obter_nome_casa(maior_pts)}, e sagrou-se campeã!**")
             
     st.markdown("---")
-    st.markdown("### 🏆 **Placar Final dos Aspirantes**")
-    st.markdown(f"* **🛡️ Equipe Alfa:** {st.session_state.casas_alfa} Casas Conquistadas")
-    st.markdown(f"* **🛡️ Equipe Beta:** {st.session_state.casas_beta} Casas Conquistadas")
-    st.markdown(f"* **🛡️ Equipe Gama:** {st.session_state.casas_gama} Casas Conquistadas")
+    st.markdown("### 🏆 **Posição Final das Equipes**")
+    st.markdown(f"* **🛡️ Equipe Alfa:** {obter_nome_casa(st.session_state.casas_alfa)}")
+    st.markdown(f"* **🛡️ Equipe Beta:** {obter_nome_casa(st.session_state.casas_beta)}")
+    st.markdown(f"* **🛡️ Equipe Gama:** {obter_nome_casa(st.session_state.casas_gama)}")
     
     st.markdown("---")
     if st.button("🔄 Iniciar Novo Treinamento do Santuário"):
@@ -767,7 +767,11 @@ idx_p = st.session_state.indice_pergunta
 e_idx = st.session_state.equipe_sub_idx
 equipe_da_vez = lista_equipes[e_idx]
 
-casa_atual_str = obter_casa_atual(idx_p)
+# Define a casa atual da equipe que está jogando na rodada
+if equipe_da_vez == "Equipe Alfa": casa_equipe_str = obter_nome_casa(st.session_state.casas_alfa)
+elif equipe_da_vez == "Equipe Beta": casa_equipe_str = obter_nome_casa(st.session_state.casas_beta)
+else: casa_equipe_str = obter_nome_casa(st.session_state.casas_gama)
+
 q_atual = st.session_state.banco_50[idx_p]
 
 # Embaralha as alternativas dinamicamente
@@ -782,8 +786,8 @@ if chave_opcoes not in st.session_state:
         opcoes_rotuladas.append(f"{letras[i]}) {texto}")
     st.session_state[chave_opcoes] = opcoes_rotuladas
 
-# CABEÇALHO DO LOCAL NO SANTUÁRIO
-st.warning(f"📍 **Localização Atual no Santuário:** {casa_atual_str}")
+# EXIBE A LOCALIZAÇÃO DA EQUIPE NA TELA PRINCIPAL
+st.warning(f"📍 **{equipe_da_vez} encontra-se atualmente em:** {casa_equipe_str}")
 
 st.subheader(f"⚔️ Vez da: **{equipe_da_vez}**")
 st.markdown(f"**Guia da Casa:** *{q_atual['guia']}* ✨")
@@ -819,7 +823,7 @@ if st.button("Enviar Resposta e Elevar o Cosmo"):
     # Registra no relatório do professor
     st.session_state.historico_professor.append({
         "equipe": equipe_da_vez,
-        "casa_santuario": casa_atual_str,
+        "casa_santuario": casa_equipe_str,
         "guia": q_atual['guia'],
         "cientista": q_atual['cientista'],
         "enunciado": q_atual['enunciado'],
@@ -842,7 +846,7 @@ if st.session_state.ultimo_feedback:
     st.markdown("---")
     fb = st.session_state.ultimo_feedback
     if fb['status'] == "CORRETA":
-        st.success(f"🎉 Excelente! A **{fb['equipe']}** acertou e conquistou +1 Casa no Santuário!")
+        st.success(f"🎉 Excelente! A **{fb['equipe']}** acertou e avançou para a próxima Casa do Santuário!")
     else:
         st.error(f"❌ Resposta Incorreta da **{fb['equipe']}**. A opção correta era: *\"{fb['correta_texto']}\"*. A questão mudou e a vez passou para a próxima equipe!")
         
