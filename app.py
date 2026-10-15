@@ -2,7 +2,7 @@ import streamlit as st
 
 # Configuração da Página
 st.set_page_config(
-    page_title="Olimpíada de Cosmologia e Big Bang",
+    page_title="Olimpíada Online de Cosmologia",
     page_icon="🌌",
     layout="centered",
 )
@@ -39,6 +39,13 @@ st.markdown(
         border-radius: 5px;
         margin-top: 15px;
         margin-bottom: 15px;
+    }
+    .admin-box {
+        background-color: #1a0033;
+        border: 2px dashed #ff00ff;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
     }
     </style>
 """,
@@ -147,173 +154,221 @@ QUESTOES = [
     },
 ]
 
-# Inicialização do Estado da Sessão
-if "etapa" not in st.session_state:
-  st.session_state.etapa = "cadastro"  # cadastro, quiz, resultado
+# Inicialização do Estado da Sessão (Persistência)
+if "modo" not in st.session_state:
+  st.session_state.modo = "menu"  # 'menu', 'aluno', 'gerente'
+if "etapa_aluno" not in st.session_state:
+  st.session_state.etapa_aluno = "cadastro"  # 'cadastro', 'quiz', 'resultado'
 if "nome_usuario" not in st.session_state:
   st.session_state.nome_usuario = ""
 if "indice_pergunta" not in st.session_state:
   st.session_state.indice_pergunta = 0
 if "pontuacao" not in st.session_state:
   st.session_state.pontuacao = 0
+if "logado_gerente" not in st.session_state:
+  st.session_state.logado_gerente = False
 if "ranking" not in st.session_state:
-  # Ranking simulado inicial para você ver os concorrentes
   st.session_state.ranking = [
       {"nome": "Kepler Silva", "pontos": 50},
       {"nome": "Hypatia Lima", "pontos": 40},
-      {"nome": "Carl Sagan Jr.", "pontos": 30},
   ]
 
 # Título Principal
 st.markdown("<h1>🌌 Olimpíada Online de Cosmologia</h1>", unsafe_allow_html=True)
 st.markdown(
-    "<p style='text-align: center; color: #aaa;'>Teste seus conhecimentos"
-    " sobre o Big Bang, História da Física e Teoria do Universo!</p>",
+    "<p style='text-align: center; color: #aaa;'>Plataforma oficial de"
+    " avaliação e estudos sobre o Big Bang e o Universo.</p>",
     unsafe_allow_html=True,
 )
 st.divider()
 
-# ETAPA 1: Cadastro do Participante
-if st.session_state.etapa == "cadastro":
-  st.subheader("📝 Identificação do Concorrente")
-  nome = st.text_input(
-      "Digite seu Nome Completo ou Apelido para entrar na Competição:"
-  )
+# ==========================================
+# MENU INICIAL (Escolha de Perfil)
+# ==========================================
+if st.session_state.modo == "menu":
+  st.subheader("📌 Selecione o seu Perfil de Acesso:")
 
-  if st.button("🚀 Iniciar Olimpíada"):
-    if nome.strip() == "":
-      st.warning("Por favor, digite um nome válido para continuar.")
-    else:
-      st.session_state.nome_usuario = nome.strip()
-      st.session_state.etapa = "quiz"
-      st.session_state.indice_pergunta = 0
-      st.session_state.pontuacao = 0
+  col1, col2 = st.columns(2)
+
+  with col1:
+    st.markdown("### 👨‍🎓 Aluno / Concorrente")
+    st.write(
+        "Inscreva-se com seu nome, participe da olimpíada de perguntas e veja"
+        " sua posição no ranking."
+    )
+    if st.button("Entrar como Aluno"):
+      st.session_state.modo = "aluno"
+      st.session_state.etapa_aluno = "cadastro"
       st.rerun()
 
-# ETAPA 2: O Quiz Interativo
-elif st.session_state.etapa == "quiz":
-  idx = st.session_state.indice_pergunta
-  total_questoes = len(QUESTOES)
+  with col2:
+    st.markdown("### ⚙️ Gerente de Rede")
+    st.write(
+        "Área restrita ao organizador para gerenciar a plataforma, ver o"
+        " ranking e resetar dados."
+    )
+    if st.button("Entrar como Gerente"):
+      st.session_state.modo = "gerente"
+      st.rerun()
 
-  st.write(
-      f"**Concorrente:** 👤 {st.session_state.nome_usuario} | **Questão**"
-      f" {idx + 1} de {total_questoes}"
-  )
-  st.progress((idx) / total_questoes)
 
-  q = QUESTOES[idx]
-  st.markdown(f"### {q['pergunta']}")
+# ==========================================
+# FLUXO DO ALUNO
+# ==========================================
+elif st.session_state.modo == "aluno":
 
-  # Opções de resposta em botões
-  for op in q["opcoes"]:
-    if st.button(op, key=f"opt_{op}"):
-      # Avalia a resposta
-      if op == q["resposta_correta"]:
-        st.session_state.pontuacao += 10
-        st.success("✨ Correto! Excelente raciocínio cosmológico.")
+  if st.button("⬅️ Voltar ao Menu Principal"):
+    st.session_state.modo = "menu"
+    st.rerun()
+
+  st.divider()
+
+  # ETAPA: Cadastro do Aluno
+  if st.session_state.etapa_aluno == "cadastro":
+    st.subheader("📝 Inscrição do Aluno")
+    nome_aluno = st.text_input("Digite seu Nome Completo para começar:")
+
+    if st.button("🚀 Começar a Olimpíada"):
+      if nome_aluno.strip() == "":
+        st.warning("Por favor, digite um nome válido.")
       else:
-        st.error(
-            f"❌ Incorreto. A resposta correta era: **{q['resposta_correta']}**"
+        st.session_state.nome_usuario = nome_aluno.strip()
+        st.session_state.etapa_aluno = "quiz"
+        st.session_state.indice_pergunta = 0
+        st.session_state.pontuacao = 0
+        st.rerun()
+
+  # ETAPA: Quiz
+  elif st.session_state.etapa_aluno == "quiz":
+    idx = st.session_state.indice_pergunta
+    total_questoes = len(QUESTOES)
+
+    st.write(
+        f"**Concorrente:** 👤 {st.session_state.nome_usuario} | **Questão**"
+        f" {idx + 1} de {total_questoes}"
+    )
+    st.progress((idx) / total_questoes)
+
+    q = QUESTOES[idx]
+    st.markdown(f"### {q['pergunta']}")
+
+    for op in q["opcoes"]:
+      if st.button(op, key=f"aluno_opt_{op}"):
+        if op == q["resposta_correta"]:
+          st.session_state.pontuacao += 10
+          st.success("✨ Correto! Excelente raciocínio.")
+        else:
+          st.error(
+              f"❌ Incorreto. A resposta correta era: **{q['resposta_correta']}**"
+          )
+
+        st.markdown(
+            f"<div class='curiosidade-box'><b>💡 Curiosidade da"
+            f" Questão:</b><br>{q['curiosidade']}</div>",
+            unsafe_allow_html=True,
         )
 
-      # Exibe Curiosidade Científica da Questão
+        if st.button("Próxima Questão ➡️", key="btn_prox"):
+          st.session_state.indice_pergunta += 1
+          if st.session_state.indice_pergunta >= total_questoes:
+            # Salva no ranking geral
+            st.session_state.ranking.append({
+                "nome": st.session_state.nome_usuario,
+                "pontos": st.session_state.pontuacao,
+            })
+            st.session_state.ranking = sorted(
+                st.session_state.ranking, key=lambda x: x["pontos"], reverse=True
+            )
+            st.session_state.etapa_aluno = "resultado"
+          st.rerun()
+        st.stop()
+
+  # ETAPA: Resultado e Ranking Parcial do Aluno
+  elif st.session_state.etapa_aluno == "resultado":
+    st.success("🎉 Parabéns por concluir a Olimpíada!")
+    st.markdown(f"### 🏆 Sua Pontuação Final: {st.session_state.pontuacao} / 50")
+
+    st.divider()
+    st.subheader("📊 Ranking Geral Atualizado")
+    for pos, c in enumerate(st.session_state.ranking[:10], start=1):
+      medalha = (
+          "🥇"
+          if pos == 1
+          else ("🥈" if pos == 2 else ("🥉" if pos == 3 else "🔸"))
+      )
       st.markdown(
-          f"<div class='curiosidade-box'><b>💡 Curiosidade da"
-          f" Questão:</b><br>{q['curiosidade']}</div>",
-          unsafe_allow_html=True,
+          f"**{medalha} {pos}º lugar:** {c['nome']} — **{c['pontos']} pts**"
       )
 
-      # Botão para avançar
-      if st.button("Próxima Questão ➡️"):
-        st.session_state.indice_pergunta += 1
-        if st.session_state.indice_pergunta >= total_questoes:
-          # Fim do quiz: insere no ranking
-          st.session_state.ranking.append({
-              "nome": st.session_state.nome_usuario,
-              "pontos": st.session_state.pontuacao,
-          })
-          # Ordena o ranking por pontuação (maior para menor)
-          st.session_state.ranking = sorted(
-              st.session_state.ranking, key=lambda x: x["pontos"], reverse=True
-          )
-          st.session_state.etapa = "resultado"
-        st.rerun()
-      st.stop()
-
-# ETAPA 3: Resultados Finais e Ranking dos Concorrentes
-elif st.session_state.etapa == "resultado":
-  st.success("🎉 Olimpíada Concluída com Sucesso!")
-  st.markdown(f"### 🏆 Sua Pontuação Final: {st.session_state.pontuacao} / 50")
-
-  if st.session_state.pontuacao >= 40:
-    st.markdown(
-        "🌟 **Classificação: Astrônomo(a) Sênior!** Você domina profundamente"
-        " os mistérios do Big Bang."
-    )
-  elif st.session_state.pontuacao >= 20:
-    st.markdown(
-        "🔭 **Classificação: Explorador(a) do Cosmo!** Tem uma boa base, vale"
-        " a pena aprofundar nas teorias."
-    )
-  else:
-    st.markdown(
-        "📚 **Classificação: Cadete Estelar!** Continue estudando as origens do"
-        " universo."
-    )
-
-  st.divider()
-
-  # Exibição do Ranking de Concorrentes
-  st.subheader("📊 Ranking Geral de Concorrentes")
-  st.write(
-      "Veja abaixo a posição de todos os participantes que concluíram a"
-      " olimpíada:"
-  )
-
-  for rank_pos, concorrente in enumerate(
-      st.session_state.ranking[:10], start=1
-  ):
-    medalha = (
-        "🥇"
-        if rank_pos == 1
-        else ("🥈" if rank_pos == 2 else ("🥉" if rank_pos == 3 else "🔸"))
-    )
-    st.markdown(
-        f"**{medalha} {rank_pos}º lugar:** {concorrente['nome']} —"
-        f" **{concorrente['pontos']} pontos**"
-    )
-
-  st.divider()
-
-  # Sites recomendados para Pesquisa e Aprofundamento
-  st.subheader("🔗 Sites Recomendados para Pesquisa em Cosmologia")
-  st.markdown(
-      "- [NASA Science - Big Bang & Universe"
-      " (Inglês)](https://science.nasa.gov/universe/)"
-  )
-  st.markdown(
-      "- [European Space Agency (ESA) - Cosmology"
-      " (Inglês)](https://www.esa.int/Science_Exploration/Space_Science/Herschel/Cosmology)"
-  )
-  st.markdown(
-      "- [Portal de Astronomia do Observatório Nacional"
-      " (Brasil)](https://www.gov.br/mcti/pt-br/acompanhe-o-mcti/on)"
-  )
-  st.markdown(
-      "- [Astronomia no USP (Divulgação Científica)]"
-      "(https://www.astro.iag.usp.br/)"
-  )
-
-  st.divider()
-
-  c1, c2 = st.columns(2)
-  with c1:
-    if st.button("🔄 Jogar Novamente"):
-      st.session_state.etapa = "cadastro"
+    st.divider()
+    if st.button("🔄 Refazer / Novo Aluno"):
+      st.session_state.etapa_aluno = "cadastro"
       st.session_state.nome_usuario = ""
       st.rerun()
-  with c2:
-    if st.button("🗑️ Limpar Ranking e Recomeçar"):
-      st.session_state.ranking = []
-      st.session_state.etapa = "cadastro"
-      st.rerun()
+
+
+# ==========================================
+# FLUXO DO GERENTE (Painel Administrativo)
+# ==========================================
+elif st.session_state.modo == "gerente":
+
+  if st.button("⬅️ Voltar ao Menu Principal"):
+    st.session_state.modo = "menu"
+    st.rerun()
+
+  st.divider()
+  st.markdown("<h2>⚙️ Painel de Controle do Gerente</h2>", unsafe_allow_html=True)
+
+  # Sistema de Login do Gerente
+  if not st.session_state.logado_gerente:
+    with st.container():
+      st.markdown(
+          "<div class='admin-box'>🔒 <b>Área Restrita:</b> Digite as"
+          " credenciais de organizador.</div>",
+          unsafe_allow_html=True,
+      )
+      user_input = st.text_input("Usuário do Gerente:")
+      pass_input = st.text_input("Senha:", type="password")
+
+      if st.button("🔑 Entrar no Sistema"):
+        if (
+            user_input.strip() == "Felipe241198"
+            and pass_input.strip() == "123456789"
+        ):
+          st.session_state.logado_gerente = True
+          st.success("Login efetuado com sucesso! Carregando painel...")
+          st.rerun()
+        else:
+          st.error("❌ Usuário ou senha incorretos.")
+  else:
+    st.success("✅ Sessão de Gerente Ativa (Felipe)")
+
+    # Ferramentas do Gerente
+    st.markdown("### 📊 Gerenciamento de Concorrentes e Alunos")
+    st.write(
+        "Aqui você acompanha todos os alunos que enviaram respostas e a"
+        " classificação geral:"
+    )
+
+    if len(st.session_state.ranking) == 0:
+      st.info("Nenhum aluno cadastrado no ranking até o momento.")
+    else:
+      for pos, c in enumerate(st.session_state.ranking, start=1):
+        st.markdown(
+            f"**{pos}º Colocado:** 👤 {c['nome']} — **{c['pontos']} pontos**"
+        )
+
+    st.divider()
+
+    col_m1, col_m2 = st.columns(2)
+    with col_m1:
+      if st.button("🗑️ Limpar Todo o Ranking"):
+        st.session_state.ranking = []
+        st.success("Ranking limpo com sucesso!")
+        st.rerun()
+
+    with col_m2:
+      if st.button("🔒 Sair (Logout do Gerente)"):
+        st.session_state.logado_gerente = False
+        st.session_state.modo = "menu"
+        st.rerun()
