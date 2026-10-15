@@ -3,17 +3,17 @@ import streamlit as st
 
 # Configuração da Página
 st.set_page_config(
-    page_title="Investigação Cósmica: O Mistério do Big Bang",
+    page_title="Investigação Cósmica: O Segredo de Makarius Tahim",
     page_icon="🌌",
     layout="wide",
 )
 
-# Estilização Visual (Tema Espacial Sci-Fi Investigativo)
+# Estilização Visual (Tema Sci-Fi Investigativo)
 st.markdown(
     """
     <style>
     .stApp {
-        background-color: #04040d;
+        background-color: #03030a;
         color: #ffffff;
     }
     h1, h2, h3 {
@@ -31,24 +31,33 @@ st.markdown(
     }
     .stButton>button:hover {
         background-color: #00ffff;
-        color: #04040d;
+        color: #03030a;
+    }
+    .texto-base-box {
+        background-color: #0b0b1c;
+        border-left: 5px solid #00ffff;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 16px;
+        line-height: 1.5;
     }
     .pergunta-box {
-        background-color: #09091d;
+        background-color: #0a0a1a;
         border: 1px solid #ff00ff;
         padding: 20px;
         border-radius: 12px;
         margin-bottom: 20px;
     }
     .raquel-box {
-        background-color: #150b2e;
+        background-color: #120a26;
         border: 2px solid #00ffff;
         padding: 15px;
         border-radius: 12px;
         margin-bottom: 15px;
     }
     .vilao-box {
-        background-color: #2e0b0b;
+        background-color: #260a0a;
         border: 2px solid #ff3333;
         padding: 15px;
         border-radius: 12px;
@@ -67,245 +76,239 @@ st.markdown(
 )
 
 # =========================================================================
-# CASOS INVESTIGATIVOS (AULAS DA HISTÓRIA) COM RAQUEL E MAKARIUS THAIM
+# BANCO DE CASOS INVESTIGATIVOS BASEADOS EM TEXTOS E BLOQUEIO POR ERRO
 # =========================================================================
 
-CASO_1 = [
+CASOS_INVESTIGACAO = [
     {
-        "tipo": "hibrida",
-        "pergunta": (
-            "1. (Caso 1: O Início) Makarius Thaim tentou corromper os registros"
-            " antigos afirmando que o cosmos sempre foi estático. Qual"
-            " evidência histórica e matemática derruba a farsa de Makarius e"
-            " prova o modelo do 'Átomo Primitivo' de Georges Lemaître?"
+        "id": 1,
+        "titulo": "Caso 1: O Texto do Átomo Primitivo e a Queda do Dogma Estático",
+        "texto_base": (
+            "📜 **Arquivo Histórico nº 01:** Durante séculos, a humanidade e"
+            " grandes mentes aceitavam um universo estático, eterno e sem"
+            " mudanças estruturais globais. No entanto, em 1927, o físico e"
+            " padre Georges Lemaître analisou as equações de Einstein e"
+            " propôs que o universo não era imutável. Ele deduziu que, voltando"
+            " o tempo no passado, toda a matéria e energia estariam reunidas"
+            " em um 'Átomo Primitivo' superdenso, cujo colapso e explosão"
+            " inicial deram origem ao espaço e ao tempo — o que mais tarde"
+            " seria chamado de Big Bang. Makarius Tahim, o enigma cósmico,"
+            " tentou corromper este arquivo para manter o cosmo paralisado na"
+            " ilusão estática."
         ),
-        "opcoes": [
-            (
-                "A prova de que a Via Láctea está parada no centro de um"
-                " universo vazio."
+        # Questão Inicial
+        "pergunta_inicial": {
+            "enunciado": (
+                "Com base no Arquivo Histórico nº 01, qual foi a principal"
+                " ruptura conceitual introduzida por Georges Lemaître contra"
+                " o modelo estático?"
             ),
-            (
-                "A dedução de que toda a matéria esteve concentrada em um"
-                " quantum superdenso que deu início à expansão."
+            "opcoes": [
+                (
+                    "Afirmar que a Via Láctea era o centro gravitacional"
+                    " absoluto do universo."
+                ),
+                (
+                    "Propor que o universo teve um início dinâmico a partir"
+                    " de um ponto superdenso ('Átomo Primitivo') e está em"
+                    " expansão."
+                ),
+                (
+                    "Provar que o tempo é estático e que o passado e o futuro"
+                    " coexistem simultaneamente sem alteração."
+                ),
+                (
+                    "Demonstrar que o espaço é preenchido por um fluido fixo"
+                    " chamado éter luminoso."
+                ),
+            ],
+            "correta": (
+                "Propor que o universo teve um início dinâmico a partir de um"
+                " ponto superdenso ('Átomo Primitivo') e está em expansão."
             ),
-            (
-                "A criação de um campo magnético eterno que impede qualquer"
-                " mudança cósmica."
+        },
+        # Pergunta de Resgate caso o aluno erre (Bloqueio)
+        "pergunta_resgate": {
+            "enunciado": (
+                "⚠️ **Alerta de Segurança da Raquel:** Você errou a dedução"
+                " principal! Releia o texto: o que Lemaître defendeu sobre a"
+                " origem do cosmos para contrariar o universo estático?"
             ),
-            (
-                "A teoria de que o Sol é a única estrela real do universo"
-                " conhecido."
+            "opcoes": [
+                (
+                    "Que o cosmos nasceu de um estado inicial hiperdenso e"
+                    " iniciou sua expansão contínua."
+                ),
+                ("Que as estrelas nunca mudam de posição ao longo dos eras."),
+                ("Que o universo foi criado sem espaço nem tempo fixos."),
+                ("Que a matéria surge espontaneamente no vácuo estático."),
+            ],
+            "correta": (
+                "Que o cosmos nasceu de um estado inicial hiperdenso e iniciou"
+                " sua expansão contínua."
             ),
-        ],
-        "resposta_correta": (
-            "A dedução de que toda a matéria esteve concentrada em um quantum"
-            " superdenso que deu início à expansão."
+        },
+        "comentario_raquel": (
+            "👧 **Raquel Ferreira diz:** 'Agente, preste muita atenção nas"
+            " evidências do texto. Makarius quer que a gente acredite que"
+            " nada começou, mas Lemaître provou o contrário!'"
         ),
-        "dica_raquel": (
-            "👧 **Raquel diz:** 'Agente, o Makarius quer nos enganar! Lemaître"
-            " combinou física e astúcia para mostrar que o universo evolui a"
-            " partir de um início denso.'"
-        ),
-        "ameaca_makarius": (
-            "😈 **Makarius Thaim sussurra:** 'Tolhinhos... Um universo estático"
-            " e sem começo é muito mais confortável para o meu Vazio!"
-            " Vocês jamais provarão o contrário!'"
-        ),
-        "indicacao": (
-            "🎥 **Relatório de Apoio da Raquel:** Estude a história do"
-            " *Átomo Primitivo* no portal da [NASA Science -"
-            " Universe](https://science.nasa.gov/universe/)."
+        "comentario_makarius": (
+            "😈 **Makarius Tahim sussurra:** 'Vocês ousam desafiar a imutabilidade"
+            " do Vazio? Tentem passar por esta pista se tiverem capacidade!'"
         ),
     },
     {
-        "tipo": "hibrida",
-        "pergunta": (
-            "2. (Caso 1: O Paradoxo) Makarius Thaim espalhou trevas nas"
-            " anotações de Heinrich Olbers. O que o Paradoxo de Olbers"
-            " realmente revela sobre a estrutura do cosmos?"
+        "id": 2,
+        "titulo": "Caso 2: O Texto da Expansão e o Desvio para o Vermelho",
+        "texto_base": (
+            "📜 **Arquivo Histórico nº 02:** Na década de 1920, o astrônomo"
+            " Edwin Hubble fez uma descoberta que abalou a ciência: ao"
+            " analisar a luz de galáxias distantes, ele percebeu que o"
+            " comprimento de onda dessa luz estava esticado em direção ao"
+            " espectro avermelhado (o chamado *redshift* ou desvio para o"
+            " vermelho). Isso indicava que as galáxias estavam se afastando"
+            " de nós. Mas a verdadeira sacada cosmológica não era que elas"
+            " corriam pelo espaço, e sim que o próprio tecido do espaço-tempo"
+            " estava se esticando, afastando todas as regiões entre si"
+            " proporcionalmente à distância. Makarius Tahim tentou distorcer"
+            " esses dados para fazer parecer que o universo estava encolhendo"
+            " em direção a um colapso prematuro."
         ),
-        "opcoes": [
-            (
-                "Que o céu noturno é escuro justamente porque o universo é"
-                " dinâmico, finito em idade e teve um começo (o Big Bang)."
+        "pergunta_inicial": {
+            "enunciado": (
+                "De acordo com o Arquivo Histórico nº 02, o que o desvio para"
+                " o vermelho (*redshift*) das galáxias distantes realmente"
+                " significa sobre o cosmos?"
             ),
-            ("Que as estrelas da noite emitem apenas luz invisível aos olhos."),
-            ("Que a luz das galáxias é bloqueada por espelhos cósmicos secretos."),
-            (
-                "Que a Via Láctea bloqueia todas as estrelas do universo do"
-                " lado norte."
+            "opcoes": [
+                (
+                    "Que as galáxias estão correndo em alta velocidade dentro"
+                    " de um espaço rígido e imóvel."
+                ),
+                (
+                    "Que o próprio tecido do espaço-tempo está se esticando,"
+                    " fazendo com que o universo se expanda."
+                ),
+                (
+                    "Que as estrelas estão esfriando e emitindo apenas luz"
+                    " vermelha por envelhecimento."
+                ),
+                (
+                    "Que o universo está encolhendo em direção ao centro da"
+                    " Via Láctea."
+                ),
+            ],
+            "correta": (
+                "Que o próprio tecido do espaço-tempo está se esticando, fazendo"
+                " com que o universo se expanda."
             ),
-        ],
-        "resposta_correta": (
-            "Que o céu noturno é escuro justamente porque o universo é dinâmico,"
-            " finito em idade e teve um começo (o Big Bang)."
+        },
+        "pergunta_resgate": {
+            "enunciado": (
+                "⚠️ **Alerta de Resgate da Raquel:** Atenção! O desvio para o"
+                " vermelho não é sobre as galáxias 'correndo' no espaço. Qual"
+                " é o fenômeno real descrito no texto?"
+            ),
+            "opcoes": [
+                (
+                    "O estiramento do próprio espaço entre as galáxias,"
+                    " provando a expansão cósmica."
+                ),
+                ("O reflexo da luz do Sol nas lentes dos telescópios."),
+                ("A absorção de luz por nuvens de poeira escura."),
+                ("A rotação acelerada do núcleo de Andrômeda."),
+            ],
+            "correta": (
+                "O estiramento do próprio espaço entre as galáxias, provando a"
+                " expansão cósmica."
+            ),
+        },
+        "comentario_raquel": (
+            "👧 **Raquel Ferreira diz:** 'Lembre-se da nossa analogia do balão,"
+            " agente! O espaço é que estica, e a luz estica junto com ele!'"
         ),
-        "dica_raquel": (
-            "👧 **Raquel diz:** 'Se o universo fosse eterno e infinito, o céu"
-            " brilharia como o Sol! O fato de ser escuro é a nossa maior pista"
-            " contra o Makarius!'"
-        ),
-        "ameaca_makarius": (
-            "😈 **Makarius Thaim sussurra:** 'A escuridão da noite é minha"
-            " aliada, agentes! Vocês nunca decifrarão o enigma de Olbers!'"
-        ),
-        "indicacao": (
-            "📖 **Relatório de Apoio da Raquel:** Pesquise artigos sobre o"
-            " *Paradoxo de Olbers* no site do [Observatório"
-            " Nacional](https://www.gov.br/mcti/pt-br/acompanhe-o-mcti/on)."
+        "comentario_makarius": (
+            "😈 **Makarius Tahim sussurra:** 'O tecido do espaço é frágil... Eu"
+            " posso rasgá-lo a qualquer momento se vocês falharem na"
+            " investigação!'"
         ),
     },
     {
-        "tipo": "dissertativa",
-        "pergunta": (
-            "3. (Caso 1 - Relatório Investigativo) Escreva em detalhes o seu"
-            " relatório para a base, explicando com suas palavras como a"
-            " ciência desmascarou o mito do universo estático e formulou a"
-            " teoria do Big Bang."
+        "id": 3,
+        "titulo": "Caso 3: O Texto da Matéria Escura e da Energia Escura",
+        "texto_base": (
+            "📜 **Arquivo Histórico nº 03:** Ao mapear a velocidade de rotação"
+            " das estrelas nas bordas das galáxias espirais, os cientistas"
+            " descobriram um grande mistério: as estrelas giravam rápido demais"
+            " para a quantidade de matéria luminosa visível. Se houvesse"
+            " apenas gás e estrelas, a gravidade seria fraca e elas se"
+            " dispersariam. Era necessária uma massa invisível — a Matéria"
+            " Escura —, que atrai e une as estruturas cósmicas. Por outro"
+            " lado, descobriu-se que a expansão do universo não está freando,"
+            " mas sim acelerando devido a uma pressão de vácuo repulsiva chamada"
+            " Energia Escura. Makarius Tahim se escondeu atrás dessas forças"
+            " invisíveis para fingir ser o mestre absoluto do caos."
         ),
-        "dica_raquel": (
-            "👧 **Raquel diz:** 'Monte um relatório impecável, agente! Mostre"
-            " como a humanidade superou a visão antiga de um céu imóvel.'"
-        ),
-        "ameaca_makarius": (
-            "😈 **Makarius Thaim sussurra:** 'Escrevam o que quiserem nos seus"
-            " relatórios de papel, o tempo apagará todas as provas!'"
-        ),
-        "indicacao": (
-            "🎥 **Relatório de Apoio da Raquel:** Assista a documentários sobre"
-            " *A Origem do Tempo*."
-        ),
-    },
-]
-
-CASO_2 = [
-    {
-        "tipo": "hibrida",
-        "pergunta": (
-            "1. (Caso 2: A Expansão) Makarius Thaim sabotou os instrumentos de"
-            " Edwin Hubble para esconder a verdade. O que a Lei de Hubble"
-            " prova sobre o tecido do cosmos?"
-        ),
-        "opcoes": [
-            (
-                "Que as galáxias distantes se afastam umas das outras porque o"
-                " próprio espaço está se expandindo."
+        "pergunta_inicial": {
+            "enunciado": (
+                "Com base no Arquivo Histórico nº 03, qual é a principal"
+                " diferença funcional entre a Matéria Escura e a Energia Escura"
+                " na evolução do universo?"
             ),
-            ("Que a Terra está navegando em alta velocidade pelo espaço."),
-            ("Que as galáxias estão caindo em direção a um buraco negro central."),
-            ("Que o universo está girando como um pião em volta de Andrômeda."),
-        ],
-        "resposta_correta": (
-            "Que as galáxias distantes se afastam umas das outras porque o"
-            " próprio espaço está se expandindo."
-        ),
-        "dica_raquel": (
-            "👧 **Raquel diz:** 'Não caia na armadilha do Makarius! As"
-            " galáxias não correm pelo espaço, é o espaço entre elas que estica!'"
-        ),
-        "ameaca_makarius": (
-            "😈 **Makarius Thaim sussurra:** 'Acelerar a expansão é minha"
-            " especialidade... Vou esticar tudo até virar pó frio e vazio!'"
-        ),
-        "indicacao": (
-            "🎥 **Relatório de Apoio da Raquel:** Analise os dados da"
-            " [ESA](https://www.esa.int/) sobre a expansão cósmica."
-        ),
-    },
-    {
-        "tipo": "dissertativa",
-        "pergunta": (
-            "2. (Caso 2 - Relatório Investigativo) Descreva a analogia do balão"
-            " com pontinhos na superfície para explicar ao quartel-general por"
-            " que a expansão cósmica não tem um centro fixo."
-        ),
-        "dica_raquel": (
-            "👧 **Raquel diz:** 'Use o exemplo do balão de aniversário que"
-            " usamos na investigação anterior, agente! Nenhum ponto é o"
-            " centro.'"
-        ),
-        "ameaca_makarius": (
-            "😈 **Makarius Thaim sussurra:** 'Balões estouram, agentes... e o"
-            " cosmo de vocês também vai estourar!'"
-        ),
-        "indicacao": (
-            "📖 **Relatório de Apoio da Raquel:** Leia publicações de"
-            " divulgação do IAG-USP sobre o *Redshift*."
-        ),
-    },
-]
-
-CASO_3 = [
-    {
-        "tipo": "hibrida",
-        "pergunta": (
-            "1. (Caso 3: Matéria e Energia Escura) Makarius Thaim tentou apagar"
-            " as curvas de rotação galáctica para ocultar sua presença. O"
-            " que prova a existência da Matéria Escura?"
-        ),
-        "opcoes": [
-            (
-                "As estrelas periféricas giram rápido demais, exigindo um halo"
-                " gravitacional de massa invisível."
+            "opcoes": [
+                (
+                    "A Matéria Escura atrai gravitacionalmente e ajuda a unir"
+                    " as estruturas; a Energia Escura atua repelindo e"
+                    " acelerando a expansão cósmica."
+                ),
+                (
+                    "A Matéria Escura emite raios gama; a Energia Escura cria"
+                    " estrelas azuis."
+                ),
+                (
+                    "A Matéria Escura existe apenas na Terra; a Energia Escura"
+                    " fica no centro do Sol."
+                ),
+                (
+                    "Ambas exercem exatamente a mesma força de atração em todo"
+                    " o cosmo."
+                ),
+            ],
+            "correta": (
+                "A Matéria Escura atrai gravitacionalmente e ajuda a unir as"
+                " estruturas; a Energia Escura atua repelindo e acelerando a"
+                " expansão cósmica."
             ),
-            ("O centro da galáxia brilha com luz verde fluorescente e tóxica."),
-            ("A expansão do universo empurra as estrelas para fora das órbitas."),
-            ("O gás estelar consome toda a gravidade das bordas galácticas."),
-        ],
-        "resposta_correta": (
-            "As estrelas periféricas giram rápido demais, exigindo um halo"
-            " gravitacional de massa invisível."
-        ),
-        "dica_raquel": (
-            "👧 **Raquel diz:** 'O Makarius adora se esconder nas sombras, mas"
-            " a gravidade extra nas bordas das galáxias entregou o esconderijo"
-            " dele! É a Matéria Escura!'"
-        ),
-        "ameaca_makarius": (
-            "😈 **Makarius Thaim sussurra:** 'Vocês ousam investigar minhas"
-            " sombras? A Matéria Escura é o meu manto, e a Energia Escura é a"
-            " minha espada!'"
-        ),
-        "indicacao": (
-            "🎥 **Relatório de Apoio da Raquel:** Explore o portal [NASA"
-            " Science - Dark Matter]"
-            "(https://science.nasa.gov/universe/)."
-        ),
-    },
-    {
-        "tipo": "hibrida",
-        "pergunta": (
-            "2. (Caso 3: O Destino Final) Qual é a diferença fundamental"
-            " entre a Matéria Escura e a Energia Escura na grande batalha do"
-            " universo?"
-        ),
-        "opcoes": [
-            (
-                "A Matéria Escura atrai e une as estruturas; a Energia Escura"
-                " repele e acelera a expansão cósmica."
+        },
+        "pergunta_resgate": {
+            "enunciado": (
+                "⚠️ **Alerta Crítico da Raquel:** Cuidado! Não confunda os"
+                " papéis das duas forças invisíveis. O que cada uma faz de"
+                " acordo com o texto?"
             ),
-            ("A Matéria Escura emite raios X; a Energia Escura congela o tempo."),
-            ("A Matéria Escura é visível aos telescópios; a Energia Escura é um"
-             " planeta rochoso."),
-            ("Elas fazem exatamente a mesma coisa para o universo."),
-        ],
-        "resposta_correta": (
-            "A Matéria Escura atrai e une as estruturas; a Energia Escura"
-            " repele e acelera a expansão cósmica."
+            "opcoes": [
+                (
+                    "Uma aglutina massa (Matéria Escura) e a outra acelera a"
+                    " expansão (Energia Escura)."
+                ),
+                ("Uma congela o tempo e a outra derrete os buracos negros."),
+                ("Uma ilumina as galáxias e a outra cria cometas."),
+                ("Ambas destroem o espaço imediatamente."),
+            ],
+            "correta": (
+                "Uma aglutina massa (Matéria Escura) e a outra acelera a expansão"
+                " (Energia Escura)."
+            ),
+        },
+        "comentario_raquel": (
+            "👧 **Raquel Ferreira diz:** 'Esta é a última pista crítica,"
+            " agente! Entenda bem o papel de cada força invisível para"
+            " desmascarar o Makarius!'"
         ),
-        "dica_raquel": (
-            "👧 **Raquel diz:** 'Uma segura o tecido cósmico com atração"
-            " gravitacional, enquanto a outra empurra tudo para longe. Uma"
-            " verdadeira disputa cósmica!'"
-        ),
-        "ameaca_makarius": (
-            "😈 **Makarius Thaim sussurra:** 'No fim, minha Energia Escura"
-            " vencerá! O Big Freeze consumirá cada estrela, e eu reinarei"
-            " sozinho!'"
-        ),
-        "indicacao": (
-            "📖 **Relatório de Apoio da Raquel:** Estude os relatórios da"
-            " expansão acelerada no site oficial da NASA."
+        "comentario_makarius": (
+            "😈 **Makarius Tahim sussurra:** 'Vocês estão chegando perto do"
+            " santuário final... Mas minhas sombras não cederão tão fácil!'"
         ),
     },
 ]
@@ -316,34 +319,36 @@ CASO_3 = [
 if "modo" not in st.session_state:
   st.session_state.modo = "menu"
 if "etapa_agente" not in st.session_state:
-  st.session_state.etapa_agente = "escolha_caso"
-if "caso_escolhido" not in st.session_state:
-  st.session_state.caso_escolhido = ""
+  st.session_state.etapa_agente = "investigacao"
+if "indice_caso" not in st.session_state:
+  st.session_state.indice_caso = 0
+if "em_resgate" not in st.session_state:
+  st.session_state.em_resgate = False  # Controle se errou e está na pergunta de resgate bloqueante
 if "nome_usuario" not in st.session_state:
   st.session_state.nome_usuario = ""
-if "questoes_sessao" not in st.session_state:
-  st.session_state.questoes_sessao = []
-if "indice_pergunta" not in st.session_state:
-  st.session_state.indice_pergunta = 0
-if "respostas_usuario" not in st.session_state:
-  st.session_state.respostas_usuario = []
+if "respostas_agente" not in st.session_state:
+  st.session_state.respostas_agente = []
 if "logado_gerente" not in st.session_state:
   st.session_state.logado_gerente = False
 if "ranking" not in st.session_state:
   st.session_state.ranking = [
-      {"nome": "Agente Felipe", "caso": "Caso 1", "pontos": 2},
-      {"nome": "Raquel (Heroína Líder)", "caso": "Caso 3", "pontos": 2},
+      {"nome": "Agente Felipe", "status": "Concluído", "pontos": 3},
+      {
+          "nome": "Raquel Ferreira (Heroína)",
+          "status": "Comandante",
+          "pontos": 3,
+      },
   ]
 
 # Título Principal
 st.markdown(
-    "<h1>🌌 Investigação Cósmica: O Desafio contra Makarius Thaim</h1>",
+    "<h1>🌌 Investigação Cósmica: O Segredo de Makarius Tahim</h1>",
     unsafe_allow_html=True,
 )
 st.markdown(
-    "<p style='text-align: center; color: #aaa;'>Junto com a heroína Raquel,"
-    " investigue os segredos do Big Bang e derrote o vilão Makarius"
-    " Thaim!</p>",
+    "<p style='text-align: center; color: #aaa;'>Investigue os textos"
+    " históricos, supere os bloqueios ao errar e descubra a verdadeira face"
+    " de Makarius Tahim junto com Raquel Ferreira!</p>",
     unsafe_allow_html=True,
 )
 st.divider()
@@ -356,19 +361,22 @@ if st.session_state.modo == "menu":
   with col_m1:
     st.markdown("### 🕵️‍♂️ Área do Aluno (Agente Investigativo)")
     st.write(
-        "Entre na espaçonave, escolha seu caso investigativo com a Raquel e"
-        " derrote Makarius Thaim!"
+        "Inicie sua investigação baseada em textos, resolva os casos e desvende"
+        " o mistério final!"
     )
     if st.button("Entrar como Agente"):
       st.session_state.modo = "aluno"
-      st.session_state.etapa_agente = "escolha_caso"
+      st.session_state.etapa_agente = "investigacao"
+      st.session_state.indice_caso = 0
+      st.session_state.em_resgate = False
+      st.session_state.respostas_agente = []
       st.rerun()
 
   with col_m2:
     st.markdown("### ⚙️ Área do Gerente (Quartel-General)")
     st.write(
-        "Acesso restrito ao organizador com credenciais para inspecionar os"
-        " relatórios e o ranking."
+        "Acesso restrito ao organizador com credenciais (Felipe) para"
+        " inspecionar os relatórios."
     )
     if st.button("Entrar como Gerente"):
       st.session_state.modo = "gerente"
@@ -385,204 +393,194 @@ elif st.session_state.modo == "aluno":
 
   st.divider()
 
-  # ETAPA 1: Identificação e Escolha do Caso
-  if st.session_state.etapa_agente == "escolha_caso":
-    st.subheader("🎯 Passo 1: Credenciamento do Agente e Seleção do Caso")
+  # Se ainda não inseriu o nome
+  if (
+      st.session_state.nome_usuario == ""
+      and st.session_state.etapa_agente == "investigacao"
+  ):
+    st.subheader("🎯 Credenciamento do Agente Investigativo")
     nome_input = st.text_input("Digite seu Nome de Agente ou Apelido:")
-
-    st.markdown("### Selecione o Caso Cósmico para Investigar:")
-    caso_sel = st.selectbox(
-        "Caso:",
-        [
-            "Caso 1: O Início do Cosmos e o Átomo Primitivo",
-            "Caso 2: A Grande Expansão do Espaço-Tempo",
-            "Caso 3: O Mistério da Matéria e Energia Escura",
-        ],
-    )
-
-    if st.button("🚀 Iniciar Missão com a Raquel"):
+    if st.button("🚀 Entrar no Laboratório de Investigação"):
       if nome_input.strip() == "":
-        st.warning("Por favor, digite um nome de agente válido.")
+        st.warning("Por favor, digite um nome válido.")
       else:
         st.session_state.nome_usuario = nome_input.strip()
-        st.session_state.caso_escolhido = caso_sel
-
-        if "Caso 1" in caso_sel:
-          st.session_state.questoes_sessao = list(CASO_1)
-        elif "Caso 2" in caso_sel:
-          st.session_state.questoes_sessao = list(CASO_2)
-        else:
-          st.session_state.questoes_sessao = list(CASO_3)
-
-        st.session_state.indice_pergunta = 0
-        st.session_state.respostas_usuario = []
-        st.session_state.etapa_agente = "missao"
         st.rerun()
+    st.stop()
 
-  # ETAPA 2: Missão Investigativa (Painel da Raquel e Ameaças de Makarius)
-  elif st.session_state.etapa_agente == "missao":
-    idx = st.session_state.indice_pergunta
-    total_q = len(st.session_state.questoes_sessao)
-    q_atual = st.session_state.questoes_sessao[idx]
+  # ETAPA DE INVESTIGAÇÃO (CASOS 1, 2 e 3 COM BLOQUEIO POR ERRO)
+  if st.session_state.etapa_agente == "investigacao":
+    idx = st.session_state.indice_caso
+    total_casos = len(CASOS_INVESTIGACAO)
 
-    st.write(
-        f"🕵️‍♂️ **Agente:** {st.session_state.nome_usuario} | 📁 **Missão:**"
-        f" {st.session_state.caso_escolhido} | **Pista {idx + 1} de"
-        f" {total_q}**"
-    )
-    st.progress((idx) / total_q)
+    if idx < total_casos:
+      caso_atual = CASOS_INVESTIGACAO[idx]
 
-    # Layout de Duas Colunas: Esquerda (Pista e Investigação), Direita (Apoio da Raquel & Vilão)
-    col_q, col_r = st.columns([2, 1])
+      st.markdown(f"<h2>📁 {caso_atual['titulo']}</h2>", unsafe_allow_html=True)
+      st.write(
+          f"🕵️‍♂️ **Agente:** {st.session_state.nome_usuario} | **Progresso da"
+          f" Investigação:** Pista {idx + 1} de {total_casos}"
+      )
+      st.progress((idx) / total_casos)
 
-    with col_r:
+      # Exibição do Texto Base de Investigação
       st.markdown(
-          f"""
-            <div class='raquel-box'>
-                <h3 style='margin:0; color:#00ffff;'>👧 Raquel, a Heroína</h3>
-                <p style='margin-top:10px; font-size:14px;'>{q_atual['dica_raquel']}</p>
-                <hr style='border-color: #333;'>
-                <p style='font-size:12px; color:#ccc;'>{q_atual['indicacao']}</p>
-            </div>
-            """,
+          f"<div class='texto-base-box'>{caso_atual['texto_base']}</div>",
           unsafe_allow_html=True,
       )
 
-      st.markdown(
-          f"""
-            <div class='vilao-box'>
-                <h3 style='margin:0; color:#ff3333;'>😈 Makarius Thaim</h3>
-                <p style='margin-top:10px; font-size:13px; font-style:italic;'>{q_atual['ameaca_makarius']}</p>
-            </div>
-            """,
-          unsafe_allow_html=True,
-      )
+      # Layout Lateral: Esquerda (Questão), Direita (Raquel e Vilão)
+      col_q, col_r = st.columns([2, 1])
 
-    with col_q:
-      st.markdown(
-          f"<div class='pergunta-box'><h3>{q_atual['pergunta']}</h3></div>",
-          unsafe_allow_html=True,
-      )
-
-      if q_atual["tipo"] == "hibrida":
-        escolha_agente = st.radio(
-            "Selecione a evidência científica correta:",
-            q_atual["opcoes"],
-            key=f"opt_{idx}",
+      with col_r:
+        st.markdown(
+            f"""
+                <div class='raquel-box'>
+                    <h3 style='margin:0; color:#00ffff;'>👧 Raquel Ferreira</h3>
+                    <p style='margin-top:8px; font-size:13px;'>{caso_atual['comentario_raquel']}</p>
+                </div>
+                """,
+            unsafe_allow_html=True,
         )
+        st.markdown(
+            f"""
+                <div class='vilao-box'>
+                    <h3 style='margin:0; color:#ff3333;'>😈 Makarius Tahim</h3>
+                    <p style='margin-top:8px; font-size:13px; font-style:italic;'>{caso_atual['comentario_makarius']}</p>
+                </div>
+                """,
+            unsafe_allow_html=True,
+        )
+
+      with col_q:
+        # Define se mostra a pergunta inicial ou a pergunta de resgate (caso tenha errado antes)
+        if not st.session_state.em_resgate:
+          q_ativa = caso_atual["pergunta_inicial"]
+          modo_pergunta = "inicial"
+        else:
+          q_ativa = caso_atual["pergunta_resgate"]
+          modo_pergunta = "resgate"
+
+        st.markdown(
+            f"<div class='pergunta-box'><h4>{q_ativa['enunciado']}</h4></div>",
+            unsafe_allow_html=True,
+        )
+
+        escolha_agente = st.radio(
+            "Selecione a dedução investigativa correta:",
+            q_ativa["opcoes"],
+            key=f"radio_caso_{idx}_{modo_pergunta}",
+        )
+
         st.markdown("<br>", unsafe_allow_html=True)
-        relatorio_agente = st.text_area(
-            "✍️ Relatório de Investigação (Justifique sua escolha com suas"
-            " palavras):",
-            key=f"exp_{idx}",
-            placeholder=(
-                "Escreva os detalhes da sua dedução investigativa aqui..."
-            ),
+        if st.button("🔒 Validar Evidência e Avançar"):
+          if escolha_agente == q_ativa["correta"]:
+            # ACERTOU!
+            st.success(
+                "✨ Evidência validada com sucesso! Pista desvendada com"
+                " êxito."
+            )
+            st.session_state.respostas_agente.append({
+                "caso": caso_atual["titulo"],
+                "status": "Acertado",
+            })
+            st.session_state.em_resgate = (
+                False  # Reseta o resgate para o próximo caso
+            )
+            st.session_state.indice_caso += 1
+            st.rerun()
+          else:
+            # ERROU! BLOQUEIO ATIVO
+            if not st.session_state.em_resgate:
+              st.session_state.em_resgate = True
+              st.error(
+                  "❌ **Evidência Incorreta!** Makarius Tahim bloqueou sua"
+                  " passagem. Você não pode avançar enquanto não decifrar a"
+                  " pista correta. Leia atentamente o aviso da Raquel e tente"
+                  " novamente!"
+              )
+              st.rerun()
+            else:
+              st.error(
+                  "❌ Errado novamente! A pista continua bloqueada. Concentre-se"
+                  " no texto e na dica da Raquel para superar o obstáculo de"
+                  " Makarius."
+              )
+
+    else:
+      # Passou de todos os 3 casos investigativos -> Vai para o Relatório Final e a Revelação (Plot Twist)
+      st.session_state.etapa_agente = "relatorio_final"
+      st.rerun()
+
+  # ETAPA 3: RELATÓRIO FINAL E A GRANDE REVELAÇÃO (PLOT TWIST DE MAKARIUS THAIM)
+  elif st.session_state.etapa_agente == "relatorio_final":
+    st.markdown(
+        "<h2>📝 Relatório Final de Investigação & A Revelação Cósmica</h2>",
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        """
+        <div style='background-color: #0b1a2e; border: 2px solid #00ffff; padding: 20px; border-radius: 12px; margin-bottom: 20px;'>
+            <h3 style='color: #00ffff; margin-top:0;'>📜 Transmissão Urgente do Quartel-General</h3>
+            <p>Parabéns, Agente <b>{nome}</b>! Você investigou todos os arquivos base, superou os bloqueios impostos e chegou ao núcleo do mistério cósmico.</p>
+            <p>De repente, as luzes da espaçonave mudam de cor. <b>Raquel Ferreira</b> e <b>Makarius Tahim</b> aparecem juntos no painel central de controle. O clima tenso se dissipa e uma grande verdade é revelada:</p>
+            <p style='color: #ffcc00; font-style: italic; font-size: 17px;'>
+            "Agente... Makarius Tahim nunca foi o vilão do mal", diz Raquel sorrindo. "Ele foi o criador de todo este sistema de segurança e testes rigorosos. Makarius assumiu o papel de antagonista cósmico para forçar a humanidade a estudar a fundo, pensar criticamente, questionar o universo e nunca aceitar respostas fáceis! O 'lado negro' dele era apenas o rigor científico necessário para que os verdadeiros investigadores despertassem!"
+            </p>
+            <p>Makarius Tahim assente e completa: <i>"Exatamente, agente. Sem o desafio, a mente humana estagna. Eu criei os obstáculos para garantir que apenas mentes brilhantes como a sua protegessem o conhecimento real do Big Bang."</i></p>
+        </div>
+        """.format(
+            nome=st.session_state.nome_usuario
+        ),
+        unsafe_allow_html=True,
+    )
+
+    st.subheader("✍️ Sua Conclusão Descritiva Final")
+    st.write(
+        "Antes de oficializar sua patente no ranking, redija abaixo com suas"
+        " próprias palavras o que você entendeu sobre toda esta jornada"
+        " investigativa (Big Bang, Expansão e a verdadeira intenção por trás dos"
+        " testes de Makarius):"
+    )
+
+    conclusao_final = st.text_area(
+        "Escreva seu relatório descritivo final:",
+        placeholder=(
+            "Descreva aqui sua compreensão geral sobre a ciência e a reviravolta"
+            " da história..."
+        ),
+    )
+
+    if st.button("📤 Protocolar Relatório e Finalizar Missão"):
+      if not conclusao_final.strip():
+        st.warning(
+            "Por favor, escreva sua conclusão descritiva para finalizar o"
+            " protocolo."
         )
       else:
-        escolha_agente = "Relatório Descritivo de Missão"
-        relatorio_agente = st.text_area(
-            "✍️ Escreva seu relatório investigativo completo sobre o caso:",
-            key=f"text_{idx}",
-            placeholder="Descreva a conclusão da investigação...",
+        # Insere no ranking oficial
+        st.session_state.ranking.append({
+            "nome": st.session_state.nome_usuario,
+            "status": "Missão Concluída (Investigador Supremo)",
+            "pontos": 3,
+        })
+        st.session_state.ranking = sorted(
+            st.session_state.ranking, key=lambda x: x["pontos"], reverse=True
         )
+        st.session_state.etapa_agente = "fim_sucesso"
+        st.rerun()
 
-    st.divider()
-    c_btn1, c_btn2 = st.columns(2)
-    with c_btn2:
-      if st.button("Enviar Pista e Avançar ➡️"):
-        if not relatorio_agente.strip():
-          st.warning(
-              "Agente, você precisa preencher o relatório investigativo antes"
-              " de prosseguir!"
-          )
-        else:
-          correta = (
-              q_atual["resposta_correta"]
-              if q_atual["tipo"] == "hibrida"
-              else "Relatório Descritivo"
-          )
-          is_acerto = (
-              (escolha_agente == q_atual["resposta_correta"])
-              if q_atual["tipo"] == "hibrida"
-              else True
-          )
-
-          st.session_state.respostas_usuario.append({
-              "pergunta": q_atual["pergunta"],
-              "escolhida": escolha_agente,
-              "relatorio": relatorio_agente,
-              "correta": correta,
-              "acertou": is_acerto,
-          })
-
-          st.session_state.indice_pergunta += 1
-          if st.session_state.indice_pergunta >= total_q:
-            pontos = sum(
-                1 for r in st.session_state.respostas_usuario if r["acertou"]
-            )
-
-            st.session_state.ranking.append({
-                "nome": st.session_state.nome_usuario,
-                "caso": st.session_state.caso_escolhido.split(":")[0],
-                "pontos": pontos,
-            })
-            st.session_state.ranking = sorted(
-                st.session_state.ranking, key=lambda x: x["pontos"], reverse=True
-            )
-            st.session_state.etapa_agente = "resultado"
-          st.rerun()
-
-  # ETAPA 3: Fim da Missão, Relatório Final e Derrota de Makarius
-  elif st.session_state.etapa_agente == "resultado":
+  # ETAPA 4: TELA DE SUCESSO E RANKING
+  elif st.session_state.etapa_agente == "fim_sucesso":
     st.success(
-        "🎉 Missão Concluída! Você e a Raquel derrotaram as trapaças de"
-        " Makarius Thaim!"
+        "🎉 Missão Concluída com Honraria Máxima! Relatório protocolado no"
+        " Quartel-General."
     )
+    st.markdown("### 🏆 Patente Concedida: Investigador(a) do Multiverso")
 
-    pontos = sum(
-        1 for r in st.session_state.respostas_usuario if r["acertou"]
-    )
-    total_q = len(st.session_state.questoes_sessao)
-    st.markdown(
-        f"### 🏆 Desempenho do Agente: {pontos} de {total_q} Pistas Solucionadas"
-    )
-
-    if pontos <= 1:
-      patente = (
-          "🎖️ **Investigador(a) Estelar Iniciante** (Raquel diz: Bom trabalho"
-          " agente, mas Makarius quase nos pegou! Vamos revisar os arquivos.)"
-      )
-    elif pontos == 2:
-      patente = (
-          "🏅 **Detetive do Espaço-Tempo** (Raquel diz: Excelente dedução!"
-          " Desmascaramos o plano de Makarius com sucesso.)"
-      )
-    else:
-      patente = (
-          "🌟 **Comandante Supremo do Cosmos** (Raquel diz: Perfeito!"
-          " Salvamos o Big Bang e expulsamos Makarius para o Vazio Absoluto!)"
-      )
-
-    st.markdown(f"### Sua Patente Cósmica: {patente}")
     st.divider()
-
-    st.subheader(
-        "📁 Relatório Oficial de Investigação, Gabarito e Justificativas"
-    )
-    for i, resp in enumerate(st.session_state.respostas_usuario, start=1):
-      st.markdown(f"**Pista {i}:** {resp['pergunta']}")
-      if resp["correta"] != "Relatório Descritivo":
-        icon = "✅" if resp["escolhida"] == resp["correta"] else "❌"
-        st.markdown(f"- Evidência selecionada: {resp['escolhida']} {icon}")
-        if resp["escolhida"] != resp["correta"]:
-          st.markdown(
-              f"- 💡 **Evidência Científica Correta:** `{resp['correta']}`"
-          )
-      st.markdown(f"- ✍️ *Seu relatório:* {resp['relatorio']}")
-      st.markdown("---")
-
-    st.subheader("📊 Ranking Geral de Agentes Investigativos")
+    st.subheader("📊 Ranking Oficial de Agentes Investigativos")
     for pos, c in enumerate(st.session_state.ranking[:10], start=1):
       medalha = (
           "🥇"
@@ -590,13 +588,16 @@ elif st.session_state.modo == "aluno":
           else ("🥈" if pos == 2 else ("🥉" if pos == 3 else "🔸"))
       )
       st.markdown(
-          f"**{medalha} {pos}º lugar:** {c['nome']} ({c['caso']}) —"
-          f" **{c['pontos']} pts**"
+          f"**{medalha} {pos}º lugar:** {c['nome']} — **Status:**"
+          f" {c['status']}"
       )
 
     st.divider()
-    if st.button("🔄 Nova Missão / Escolher Outro Caso"):
-      st.session_state.etapa_agente = "escolha_caso"
+    if st.button("🔄 Realizar Nova Investigação"):
+      st.session_state.etapa_agente = "investigacao"
+      st.session_state.indice_caso = 0
+      st.session_state.em_resgate = False
+      st.session_state.respostas_agente = []
       st.session_state.nome_usuario = ""
       st.rerun()
 
@@ -629,7 +630,7 @@ elif st.session_state.modo == "gerente":
         if user_inp.strip() == "Felipe241198" and pass_inp.strip() == "123456789":
           st.session_state.logado_gerente = True
           st.success(
-              "Acesso liberado! Bem-vindo de volta ao Quartel-General,"
+              "Acesso liberado! Bem-vindo ao Quartel-General do Gerente,"
               " Felipe."
           )
           st.rerun()
@@ -638,14 +639,13 @@ elif st.session_state.modo == "gerente":
   else:
     st.success("✅ Sessão de Gerente Ativa (Felipe - Quartel-General)")
 
-    st.subheader("📊 Relatório de Agentes em Missão")
+    st.subheader("📊 Relatório de Agentes Investigativos na Base")
     if len(st.session_state.ranking) == 0:
-      st.info("Nenhum agente registrou relatórios de missão ainda.")
+      st.info("Nenhum agente concluiu as investigações ainda.")
     else:
       for pos, c in enumerate(st.session_state.ranking, start=1):
         st.markdown(
-            f"**{pos}º:** 🕵️‍♂️ {c['nome']} | **Missão:** {c['caso']} |"
-            f" **Pontos:** {c['pontos']}"
+            f"**{pos}º:** 🕵️‍♂️ {c['nome']} — **Status:** {c['status']}"
         )
 
     st.divider()
