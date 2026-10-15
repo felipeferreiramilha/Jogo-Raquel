@@ -3,12 +3,12 @@ import streamlit as st
 
 # Configuração da Página
 st.set_page_config(
-    page_title="Olimpíada de Cosmologia - Sequência Didática",
+    page_title="Sequência Didática: Cosmologia, Big Bang e Expansão",
     page_icon="🌌",
-    layout="centered",
+    layout="wide",
 )
 
-# Estilização Visual (Tema Espacial)
+# Estilização Visual (Tema Espacial com Painel da Raquel)
 st.markdown(
     """
     <style>
@@ -40,6 +40,13 @@ st.markdown(
         border-radius: 10px;
         margin-bottom: 20px;
     }
+    .raquel-box {
+        background-color: #1a0f35;
+        border: 2px solid #ff00ff;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 15px;
+    }
     .admin-box {
         background-color: #1a0033;
         border: 2px dashed #ff00ff;
@@ -53,410 +60,242 @@ st.markdown(
 )
 
 # =========================================================================
-# BANCO DE QUESTÕES CONCEITUAIS PARA SEQUÊNCIA DIDÁTICA (COSMOLOGIA, NEWTON, BIG BANG, MATÉRIA ESCURA)
+# BANCO DE QUESTÕES DIVIDIDO POR AULAS COM O SUPORTE DA RAQUEL (ASSISTENTE)
 # =========================================================================
 
-BANCO_BASICO = [
+AULA_1_QUESTOES = [
     {
+        "tipo": "hibrida",  # Marcação + Explicação obrigatória
         "pergunta": (
-            "1. Na perspectiva histórica e conceitual da cosmologia, o que o"
-            " modelo do 'Átomo Primitivo' de Georges Lemaître propôs inicialmente"
-            " para a origem do universo?"
+            "1. (Aula 1) Como o modelo do 'Átomo Primitivo' de Georges"
+            " Lemaître revolucionou a visão de um universo estático?"
         ),
         "opcoes": [
-            "Um estado estático eterno que sofreu uma expansão repentina devido a perturbações térmicas.",
-            "A concentração de toda a matéria do universo em um único quantum superdenso que iniciou a expansão.",
-            "Um universo cíclico que colapsa e renasce infinitamente sem ponto inicial.",
-            "A criação contínua de matéria nos espaços vazios entre as galáxias.",
+            (
+                "Propondo que o universo nem teve início nem terá fim,"
+                " mantendo densidade constante."
+            ),
+            (
+                "Sugerindo que toda a massa do cosmos esteve concentrada em um"
+                " único ponto hiperdenso que iniciou sua expansão."
+            ),
+            (
+                "Afirmando que a Via Láctea é o centro absoluto e imóvel de"
+                " todas as galáxias."
+            ),
+            (
+                "Defendendo que o espaço é preenchido por um fluido estático"
+                " imutável chamado éter."
+            ),
         ],
         "resposta_correta": (
-            "A concentração de toda a matéria do universo em um único quantum"
-            " superdenso que iniciou a expansão."
+            "Sugerindo que toda a massa do cosmos esteve concentrada em um"
+            " único ponto hiperdenso que iniciou sua expansão."
+        ),
+        "dica_raquel": (
+            "👧 **Raquel diz:** 'Lembre-se da nossa Aula 1! Lemaître usou a"
+            " física para mostrar que o universo teve um começo dinâmico.'"
+        ),
+        "indicacao": (
+            "🎥 **Indicação da Raquel para Estudo:** Assista à videoaula sobre"
+            " *A Origem do Universo e Georges Lemaître* no YouTube ou pesquise"
+            " no portal da [NASA Science -"
+            " Universe](https://science.nasa.gov/universe/)."
         ),
     },
     {
+        "tipo": "hibrida",
         "pergunta": (
-            "2. Como a Lei de Hubble modificou a visão clássica de um universo"
-            " estático predominante na época de Einstein?"
+            "2. (Aula 1) O que o famoso 'Paradoxo de Olbers' questionava sobre"
+            " o modelo de universo infinito e estático?"
         ),
         "opcoes": [
-            "Demonstrou que as estrelas da Via Láctea estão freando sua rotação.",
-            "Comprovou que as galáxias distantes afastam-se umas das outras, indicando que o espaço está em expansão.",
-            "Revelou que o universo possui um centro físico fixo de onde tudo se originou.",
-            "Provou que a velocidade da luz diminui com a distância intergaláctica.",
+            (
+                "Por que o céu noturno é escuro se o universo fosse infinito,"
+                " estático e povoado por infinitas estrelas."
+            ),
+            (
+                "Por que os planetas do Sistema Solar giram no mesmo sentido"
+                " ao redor do Sol."
+            ),
+            (
+                "Por que a luz das estrelas não sofre atrito ao atravessar o"
+                " vácuo."
+            ),
+            (
+                "Por que a massa do Sol é menor em comparação com as"
+                " supergigantes."
+            ),
         ],
         "resposta_correta": (
-            "Comprovou que as galáxias distantes afastam-se umas das outras,"
-            " indicando que o espaço está em expansão."
+            "Por que o céu noturno é escuro se o universo fosse infinito,"
+            " estático e povoado por infinitas estrelas."
+        ),
+        "dica_raquel": (
+            "👧 **Raquel diz:** 'Olhe para a noite! Se o universo fosse"
+            " eterno e infinito, o céu brilharia como o sol!'"
+        ),
+        "indicacao": (
+            "📖 **Indicação da Raquel:** Pesquise artigos sobre o *Paradoxo de"
+            " Olbers* no portal do [Observatório"
+            " Nacional](https://www.gov.br/mcti/pt-br/acompanhe-o-mcti/on)."
         ),
     },
     {
+        "tipo": "dissertativa",
         "pergunta": (
-            "3. O que representa a Radiação Cósmica de Fundo em Micro-ondas (CMB)"
-            " no contexto do modelo do Big Bang?"
+            "3. (Aula 1 - Reflexão Descritiva) Com suas próprias palavras,"
+            " descreva como a ciência mudou a forma de pensar a origem do"
+            " universo desde a antiguidade até a proposta do Big Bang."
         ),
-        "opcoes": [
-            "O calor emitido por buracos negros supermassivos centrais.",
-            "O eco térmico e eletromagnético remanescente do período em que o universo tornou-se transparente.",
-            "A radiação ultravioleta gerada pelo atrito entre ventos estelares e o gás interestelar.",
-            "O reflexo da luz das primeiras estrelas nas nuvens de poeira cósmica.",
-        ],
-        "resposta_correta": (
-            "O eco térmico e eletromagnético remanescente do período em que o"
-            " universo tornou-se transparente."
+        "dica_raquel": (
+            "👧 **Raquel diz:** 'Escreva com suas palavras o que marcou você"
+            " nesta aula! Pense na transição do céu eterno para o cosmo em"
+            " expansão.'"
         ),
-    },
-    {
-        "pergunta": (
-            "4. Qual é o papel principal atribuído à Matéria Escura nas"
-            " estruturas em grande escala do cosmos?"
-        ),
-        "opcoes": [
-            "Acelerar a expansão do universo através de uma pressão negativarepulsiva.",
-            "Fornecer a massa gravitacional adicional necessária para aglutinar e manter as galáxias coesas.",
-            "Bloquear a radiação nociva emitida pelos núcleos galácticos ativos.",
-            "Servir como combustível primário para a fusão nuclear nas anãs brancas.",
-        ],
-        "resposta_correta": (
-            "Fornecer a massa gravitacional adicional necessária para aglutinar"
-            " e manter as galáxias coesas."
-        ),
-    },
-    {
-        "pergunta": (
-            "5. Por que a luz visível de estrelas e gás luminoso não é suficiente"
-            " para explicar a rotação observada das galáxias espirais?"
-        ),
-        "opcoes": [
-            "Porque a gravidade de Newton deixa de valer em distâncias galácticas.",
-            "Porque a massa visível é muito menor do que a exigida gravitacionalmente para sustentar as altas velocidades periféricas.",
-            "Porque o campo magnético intergaláctico desacelera as bordas das galáxias.",
-            "Porque a expansão do universo empurra as estrelas para fora.",
-        ],
-        "resposta_correta": (
-            "Porque a massa visível é muito menor do que a exigida"
-            " gravitacionalmente para sustentar as altas velocidades"
-            " periféricas."
-        ),
-    },
-    {
-        "pergunta": (
-            "6. O que diferencia essencialmente a Matéria Escura da Energia"
-            " Escura no modelo cosmológico padrão?"
-        ),
-        "opcoes": [
-            "A Matéria Escura atrai gravitacionalmente aglutinando estruturas; a Energia Escura atua de forma repulsiva acelerando a expansão.",
-            "A Matéria Escura emite raios X, enquanto a Energia Escura é totalmente invisível a qualquer espectro.",
-            "A Matéria Escura localiza-se apenas no centro do Sistema Solar, enquanto a Energia Escura fica fora dele.",
-            "Não há diferença física; são apenas nomenclaturas diferentes para o mesmo fenômeno quântico.",
-        ],
-        "resposta_correta": (
-            "A Matéria Escura atrai gravitacionalmente aglutinando estruturas;"
-            " a Energia Escura atua de forma repulsiva acelerando a expansão."
-        ),
-    },
-    {
-        "pergunta": (
-            "7. No contexto de uma sequência didática sobre o Big Bang, qual é"
-            " a importância de ensinar a Nucleossíntese Primordial?"
-        ),
-        "opcoes": [
-            "Explicar como os planetas rochosos se condensaram a partir de poeira estelar.",
-            "Demonstrar como a proporção cósmica de Hidrogênio e Hélio prevista teoricamente bate com as observações do universo.",
-            "Comprovar que o universo teve origem em uma colisão entre galáxias ancestrais.",
-            "Descrever a formação exclusiva de elementos pesados como o ouro e o urânio.",
-        ],
-        "resposta_correta": (
-            "Demonstrar como a proporção cósmica de Hidrogênio e Hélio prevista"
-            " teoricamente bate com as observações do universo."
-        ),
-    },
-    {
-        "pergunta": (
-            "8. O que significa afirmar que o universo é homogêneo e isotrópico"
-            " em grande escala?"
-        ),
-        "opcoes": [
-            "Que ele possui exatamente a mesma temperatura em qualquer ponto microscópico.",
-            "Que a distribuição de matéria é uniforme em grande escala (homogênea) e parece igual em todas as direções (isotrópica).",
-            "Que todas as galáxias possuem o mesmo tamanho, formato e número exato de estrelas.",
-            "Que o espaço não sofre alterações temporais nem gravitacionais.",
-        ],
-        "resposta_correta": (
-            "Que a distribuição de matéria é uniforme em grande escala"
-            " (homogênea) e parece igual em todas as direções (isotrópica)."
+        "indicacao": (
+            "🎥 **Indicação da Raquel:** Procure videoaulas de divulgação"
+            " científica sobre *A História da Cosmologia* (como canais do Space"
+            " Today ou Ciência Todo Dia)."
         ),
     },
 ]
 
-BANCO_MEDIO = [
+AULA_2_QUESTOES = [
     {
+        "tipo": "hibrida",
         "pergunta": (
-            "1. Como a Cosmologia Neo-Newtoniana (como os modelos de"
-            " Milne-McCrea) consegue descrever a dinâmica da expansão cósmica"
-            " sem recorrer de imediato à Relatividade Geral completa?"
+            "1. (Aula 2) O que a Lei de Hubble demonstrou sobre o movimento das"
+            " galáxias distantes?"
         ),
         "opcoes": [
-            "Aplicando a gravitação universal newtoniana em uma esfera de fluido homogêneo em expansão finita com condições de simetria.",
-            "Assumindo que a velocidade da luz é infinita em sistemas estelares distantes.",
-            "Desconsiderando totalmente a pressão do gás e focando apenas na força centrífuga.",
-            "Substituindo a massa gravitacional por cargas elétricas estáticas distribuídas no espaço.",
+            (
+                "Que as galáxias mais distantes da Terra se afastam com"
+                " velocidades maiores e proporcionais à sua distância."
+            ),
+            (
+                "Que todas as galáxias orbitam o centro da Via Láctea em"
+                " trajetórias circulares fixas."
+            ),
+            (
+                "Que o universo está encolhendo gradualmente em direção a um"
+                " ponto central."
+            ),
+            (
+                "Que a luz das galáxias perde velocidade com o passar dos"
+                " bilhões de anos."
+            ),
         ],
         "resposta_correta": (
-            "Aplicando a gravitação universal newtoniana em uma esfera de"
-            " fluido homogêneo em expansão finita com condições de simetria."
+            "Que as galáxias mais distantes da Terra se afastam com velocidades"
+            " maiores e proporcionais à sua distância."
+        ),
+        "dica_raquel": (
+            "👧 **Raquel diz:** 'Quanto mais longe a galáxia está, mais rápido"
+            " o espaço entre nós e ela se estica!'"
+        ),
+        "indicacao": (
+            "🎥 **Indicação da Raquel:** Assista a videoaulas sobre a *Lei de"
+            " Hubble e o Redshift* ou visite a página de cosmologia da"
+            " [ESA](https://www.esa.int/)."
         ),
     },
     {
+        "tipo": "dissertativa",
         "pergunta": (
-            "2. Qual é a principal limitação conceitual da Cosmologia"
-            " Newtoniana quando aplicada a um universo infinitamente estendido e"
-            " homogêneo?"
+            "2. (Aula 2 - Experimento Mental) Explique como a analogia do balão"
+            " com pontinhos desenhados ajuda a entender por que todas as"
+            " galáxias se afastam umas das outras sem que exista um 'centro' no"
+            " universo."
         ),
-        "opcoes": [
-            "A impossibilidade matemática de definir potenciais gravitacionais convergentes sem paradoxos como o de Olbers ou divergências nas forças.",
-            "A incapacidade de prever órbitas elípticas para planetas fora do Sistema Solar.",
-            "O conflito direto com as Leis de Kepler sobre o movimento dos cometas.",
-            "A suposição incorreta de que o vácuo possui propriedades magnéticas.",
-        ],
-        "resposta_correta": (
-            "A impossibilidade matemática de definir potenciais"
-            " gravitacionais convergentes sem paradoxos como o de Olbers ou"
-            " divergências nas forças."
+        "dica_raquel": (
+            "👧 **Raquel diz:** 'Pense no balão inflando: na borracha não há"
+            " centro privilegiado! Todos os pontos se distanciam de todos.'"
         ),
-    },
-    {
-        "pergunta": (
-            "3. O que as Curvas de Rotação Plana das galáxias revelam sobre a"
-            " distribuição de massa quando analisadas sob a ótica da física"
-            " clássica e da gravitação?"
-        ),
-        "opcoes": [
-            "Que a massa da galáxia concentra-se exclusivamente no buraco negro supermassivo central.",
-            "Que a velocidade orbital das estrelas externas não cai conforme esperado por Kepler, exigindo um halo esférico extensivo de matéria não luminosa.",
-            "Que a força gravitacional decresce proporcionalmente ao cubo da distância nas bordas.",
-            "Que o atrito com o meio interestelar consome a energia cinética das estrelas periféricas.",
-        ],
-        "resposta_correta": (
-            "Que a velocidade orbital das estrelas externas não cai conforme"
-            " esperado por Kepler, exigindo um halo esférico extensivo de"
-            " matéria não luminosa."
-        ),
-    },
-    {
-        "pergunta": (
-            "4. Qual o significado físico do 'Parâmetro de Deceleração/Aceleração'"
-            " no estudo da expansão do universo?"
-        ),
-        "opcoes": [
-            "Mede a taxa na qual a rotação da Terra diminui devido à fricção das marés lunares.",
-            "Indica se a taxa de expansão do cosmos está freando devido à gravidade da matéria ou acelerando devido à energia escura.",
-            "Calcula o tempo exato que um fóton leva para cruzar o horizonte observável.",
-            "Determina a perda de energia cinética de galáxias em colisão direta.",
-        ],
-        "resposta_correta": (
-            "Indica se a taxa de expansão do cosmos está freando devido à"
-            " gravidade da matéria ou acelerando devido à energia escura."
-        ),
-    },
-    {
-        "pergunta": (
-            "5. No contexto do modelo cosmológico $\\Lambda$CDM, o que"
-            " representa o termo $\\Lambda$ (Lambda)?"
-        ),
-        "opcoes": [
-            "O coeficiente de atrito do espaço-tempo quântico.",
-            "A Constante Cosmológica, associada à densidade de energia do vácuo que impulsiona a expansão acelerada.",
-            "A taxa de decaimento radioativo dos elementos primordiais do Big Bang.",
-            "O momento angular total acumulado por todas as galáxias espirais.",
-        ],
-        "resposta_correta": (
-            "A Constante Cosmológica, associada à densidade de energia do vácuo"
-            " que impulsiona a expansão acelerada."
-        ),
-    },
-    {
-        "pergunta": (
-            "6. O que foi o problema resolvido pela introdução da Teoria da"
-            " Inflação Cósmica na física do Big Bang?"
-        ),
-        "opcoes": [
-            "A ausência de evidências sobre a existência de buracos negros estelares.",
-            "Os problemas do horizonte e da planura, explicando por que o universo é isotrópico e geometricamente plano em grande escala.",
-            "A divergência entre a massa do próton e a massa do nêutron no plasma primordial.",
-            "A colisão iminente entre a Via Láctea e a galáxia de Andrômeda.",
-        ],
-        "resposta_correta": (
-            "Os problemas do horizonte e da planura, explicando por que o"
-            " universo é isotrópico e geometricamente plano em grande escala."
-        ),
-    },
-    {
-        "pergunta": (
-            "7. Como as Supernovas do Tipo Ia atuam como 'velas padrão' na"
-            " determinação da geometria e expansão do universo?"
-        ),
-        "opcoes": [
-            "Por possuírem uma luminosidade de pico intrínseca extremamente uniforme e previsível devido ao limite de Chandrasekhar da anã branca.",
-            "Por brilharem constantemente sem nunca diminuir de intensidade ao longo dos milênios.",
-            "Por estarem fixas em pontos estelares de referência que não sofrem efeito Doppler.",
-            "Por emitirem exclusivamente ondas de rádio de frequência fixa calibrada.",
-        ],
-        "resposta_correta": (
-            "Por possuírem uma luminosidade de pico intrínseca extremamente"
-            " uniforme e previsível devido ao limite de Chandrasekhar da anã"
-            " branca."
+        "indicacao": (
+            "📖 **Indicação da Raquel:** Leia artigos de divulgação sobre a"
+            " *Expansão do Tecido do Espaço-Tempo* no site do IAG-USP."
         ),
     },
 ]
 
-BANCO_AVANCADO = [
+AULA_3_QUESTOES = [
     {
+        "tipo": "hibrida",
         "pergunta": (
-            "1. Analisando as Equações de Friedmann derivadas da Relatividade"
-            " Geral (e em paralelo na Cosmologia Neo-Newtoniana), qual é a"
-            " relação fundamental entre a curvatura espacial $k$, a densidade"
-            " de energia e a taxa de expansão $H$?"
+            "1. (Aula 3) Por que as curvas de rotação galáctica exigiram a"
+            " proposta da existência da Matéria Escura?"
         ),
         "opcoes": [
-            "A curvatura depende estritamente da temperatura absoluta da radiação de fundo, ignorando a massa.",
-            "A equação de Friedmann relaciona o quadrado do parâmetro de Hubble com a densidade total de energia e a curvatura espacial normalizada.",
-            "A taxa de expansão é independente da densidade de matéria, dependendo apenas da constante de Planck.",
-            "A geometria do espaço é sempre hiperbólica, independentemente da densidade crítica do cosmos.",
+            (
+                "Porque as estrelas nas bordas giram muito mais rápido do que a"
+                " massa luminosa visível conseguiria sustentar."
+            ),
+            (
+                "Porque o centro das galáxias emite mais luz do que a soma de"
+                " todas as estrelas."
+            ),
+            (
+                "Porque a expansão do universo empurra as bordas galácticas para"
+                " fora."
+            ),
+            (
+                "Porque o gás interestelar absorve toda a luz visível das"
+                " estrelas centrais."
+            ),
         ],
         "resposta_correta": (
-            "A equação de Friedmann relaciona o quadrado do parâmetro de"
-            " Hubble com a densidade total de energia e a curvatura espacial"
-            " normalizada."
+            "Porque as estrelas nas bordas giram muito mais rápido do que a"
+            " massa luminosa visível conseguiria sustentar."
+        ),
+        "dica_raquel": (
+            "👧 **Raquel diz:** 'Pela gravidade de Newton, as estrelas das"
+            " bordas deveriam ir devagar. Se giram rápido, tem massa invisível"
+            " lá!'"
+        ),
+        "indicacao": (
+            "🎥 **Indicação da Raquel:** Assista a documentários sobre *O Mistério"
+            " da Matéria Escura e Energia Escura*."
         ),
     },
     {
+        "tipo": "hibrida",
         "pergunta": (
-            "2. No estudo da instabilidade gravitacional de Jeans na"
-            " cosmologia newtoniana, o que representa o 'Comprimento de Jeans'?"
+            "2. (Aula 3) Qual é a principal diferença de atuação entre a"
+            " Matéria Escura e a Energia Escura na evolução do universo?"
         ),
         "opcoes": [
-            "A distância máxima que a luz percorre em um segundo de tempo cosmológico.",
-            "O limiar crítico de escala no qual as forças gravitacionais superam as forças de pressão térmica, permitindo o colapso e formação de estruturas.",
-            "O raio exato do horizonte de eventos de um buraco negro primordial.",
-            "A espessura da fronteira entre a matéria escura fria e a matéria bariônica.",
+            (
+                "A Matéria Escura atrai gravitacionalmente e une as estruturas;"
+                " a Energia Escura atua repelindo e acelerando a expansão."
+            ),
+            (
+                "A Matéria Escura brilha no escuro; a Energia Escura absorve"
+                " luz."
+            ),
+            (
+                "A Matéria Escura existe apenas no Sistema Solar; a Energia"
+                " Escura fica nas galáxias distantes."
+            ),
+            (
+                "Não há diferença prática entre as duas."
+            ),
         ],
         "resposta_correta": (
-            "O limiar crítico de escala no qual as forças gravitacionais"
-            " superam as forças de pressão térmica, permitindo o colapso e"
-            " formação de estruturas."
+            "A Matéria Escura atrai gravitacionalmente e une as estruturas; a"
+            " Energia Escura atua repelindo e acelerando a expansão."
         ),
-    },
-    {
-        "pergunta": (
-            "3. O que caracteriza conceitualmente a Tensão de Hubble (Hubble"
-            " Tension) na cosmologia contemporânea de precisão?"
+        "dica_raquel": (
+            "👧 **Raquel diz:** 'Uma puxa (atração) para formar galáxias, e a"
+            " outra empurra (repulsão) para acelerar a expansão cósmica!'"
         ),
-        "opcoes": [
-            "A falha mecânica dos espelhos do telescópio espacial James Webb ao focar galáxias distantes.",
-            "A discrepância estatística irredutível entre a taxa de expansão medida localmente (supernovas/cefeidas) e a inferida via CMB (Planck).",
-            "O atrito quântico sofrido pelos fótons ao atravessarem campos magnéticos intergalácticos fortes.",
-            "A variação na constante gravitacional $G$ medida em diferentes estações do ano na Terra.",
-        ],
-        "resposta_correta": (
-            "A discrepância estatística irredutível entre a taxa de expansão"
-            " medida localmente (supernovas/cefeidas) e a inferida via CMB"
-            " (Planck)."
-        ),
-    },
-    {
-        "pergunta": (
-            "4. Qual é o papel epistemológico e metodológico de utilizar a"
-            " abordagem da Cosmologia Neo-Newtoniana em sequências didáticas"
-            " avançadas antes da Relatividade Geral?"
-        ),
-        "opcoes": [
-            "Substituir definitivamente a relatividade por ser um modelo matematicamente mais correto.",
-            "Permitir que estudantes compreendam a dinâmica da expansão, conservação de energia e equações de movimento usando cálculo e mecânica clássica familiar.",
-            "Evitar qualquer uso de equações diferenciais no ensino de física moderna.",
-            "Provar que o universo é estático e newtoniano em sua essência profunda.",
-        ],
-        "resposta_correta": (
-            "Permitir que estudantes compreendam a dinâmica da expansão,"
-            " conservação de energia e equações de movimento usando cálculo e"
-            " mecânica clássica familiar."
-        ),
-    },
-    {
-        "pergunta": (
-            "5. O que postula o Princípio Holográfico e sua relação com a"
-            " entropia dos horizontes cosmológicos e de buracos negros?"
-        ),
-        "opcoes": [
-            "Que a informação de um volume tridimensional de espaço pode ser inteiramente codificada em sua fronteira bidimensional, limitando graus de liberdade.",
-            "Que as imagens de galáxias distantes são geradas por projeções holográficas de laser quântico no vácuo.",
-            "Que o tempo cósmico flui em duasdireções simultâneas em dimensões compactificadas.",
-            "Que a matéria escura é uma ilusão óptica gerada por interferência de ondas eletromagnéticas.",
-        ],
-        "resposta_correta": (
-            "Que a informação de um volume tridimensional de espaço pode ser"
-            " inteiramente codificada em sua fronteira bidimensional, limitando"
-            " graus de liberdade."
+        "indicacao": (
+            "📖 **Indicação da Raquel:** Explore o portal científico da [NASA"
+            " Science - Dark Energy & Dark"
+            " Matter](https://science.nasa.gov/universe/)."
         ),
     },
 ]
-
-# Garantir robustez caso precise complementar
-while len(BANCO_BASICO) < 25:
-  BANCO_BASICO.append({
-      "pergunta": (
-          f"Questão Conceitual Básica Adicional {len(BANCO_BASICO)+1}: Qual a"
-          " evidência primária da expansão cósmica?"
-      ),
-      "opcoes": [
-          "O desvio para o vermelho (redshift) das galáxias distantes.",
-          "O esfriamento do Sol ao longo dos anos.",
-          "A aproximação contínua da Lua em relação à Terra.",
-          "O aumento da luminosidade das estrelas cadentes.",
-      ],
-      "resposta_correta": (
-          "O desvio para o vermelho (redshift) das galáxias distantes."
-      ),
-  })
-
-while len(BANCO_MEDIO) < 25:
-  BANCO_MEDIO.append({
-      "pergunta": (
-          f"Questão Conceitual Média Adicional {len(BANCO_MEDIO)+1}: No"
-          " contexto newtoniano aplicado à cosmologia, como a energia total de"
-          " uma casca esférica em expansão determina o destino do universo?"
-      ),
-      "opcoes": [
-          "Energia total negativa indica universo fechado (recolapso); positiva indica aberto; nula indica plano (crítico).",
-          "A energia total não tem relação com o destino dinâmico do cosmo.",
-          "Apenas a pressão magnética define se haverá expansão infinita.",
-          "A energia total determina exclusivamente a temperatura da radiação de fundo.",
-      ],
-      "resposta_correta": (
-          "Energia total negativa indica universo fechado (recolapso);"
-          " positiva indica aberto; nula indica plano (crítico)."
-      ),
-  })
-
-while len(BANCO_AVANCADO) < 20:
-  BANCO_AVANCADO.append({
-      "pergunta": (
-          f"Questão Conceitual Avançada Adicional"
-          f" {len(BANCO_AVANCADO)+1}: Qual a implicação termodinâmica da"
-          " predominância da Energia Escura na evolução tardia do universo?"
-      ),
-      "opcoes": [
-          "O universo caminha para um cenário de expansão acelerada perpétua, levando ao 'Big Freeze' (Morte Térmica), onde estruturas isolam-se causalmente.",
-          "O sistema sofrerá um colapso imediato revertendo para o estado de alta densidade.",
-          "A entropia total do universo passará a decrescer exponencialmente.",
-          "Haverá conversão total de energia escura em matéria bariônica luminosa.",
-      ],
-      "resposta_correta": (
-          "O universo caminha para um cenário de expansão acelerada perpétua,"
-          " levando ao 'Big Freeze' (Morte Térmica), onde estruturas"
-          " isolam-se causalmente."
-      ),
-  })
 
 # =========================================================================
 # GERENCIAMENTO DE ESTADO DA SESSÃO
@@ -464,13 +303,13 @@ while len(BANCO_AVANCADO) < 20:
 if "modo" not in st.session_state:
   st.session_state.modo = "menu"
 if "etapa_aluno" not in st.session_state:
-  st.session_state.etapa_aluno = "escolha_nivel"
-if "nivel_escolhido" not in st.session_state:
-  st.session_state.nivel_escolhido = ""
+  st.session_state.etapa_aluno = "escolha_aula"
+if "aula_escolhida" not in st.session_state:
+  st.session_state.aula_escolhida = ""
 if "nome_usuario" not in st.session_state:
   st.session_state.nome_usuario = ""
-if "perguntas_sessao" not in st.session_state:
-  st.session_state.perguntas_sessao = []
+if "questoes_sessao" not in st.session_state:
+  st.session_state.questoes_sessao = []
 if "indice_pergunta" not in st.session_state:
   st.session_state.indice_pergunta = 0
 if "respostas_usuario" not in st.session_state:
@@ -479,19 +318,18 @@ if "logado_gerente" not in st.session_state:
   st.session_state.logado_gerente = False
 if "ranking" not in st.session_state:
   st.session_state.ranking = [
-      {"nome": "Prof. Francisco", "nivel": "Avançado", "pontos": 5},
-      {"nome": "Estudante Pesquisador", "nivel": "Médio", "pontos": 4},
+      {"nome": "Felipe Lima", "aula": "Aula 1", "pontos": 2},
+      {"nome": "Raquel (Assistente)", "aula": "Aula 3", "pontos": 2},
   ]
 
 # Título Principal
 st.markdown(
-    "<h1>🌌 Sequência Didática: Cosmologia, Big Bang & Gravitação</h1>",
+    "<h1>🌌 Sequência Didática: Cosmologia & Big Bang</h1>",
     unsafe_allow_html=True,
 )
 st.markdown(
-    "<p style='text-align: center; color: #aaa;'>Ambiente conceitual de"
-    " avaliação e estudo para Sequências Didáticas em Física e"
-    " Astronomia.</p>",
+    "<p style='text-align: center; color: #aaa;'>Com o auxílio da assistente"
+    " Raquel, estude a história, a expansão e os mistérios do cosmo.</p>",
     unsafe_allow_html=True,
 )
 st.divider()
@@ -500,23 +338,23 @@ st.divider()
 # MENU INICIAL
 # =========================================================================
 if st.session_state.modo == "menu":
-  st.subheader("📌 Selecione o seu Perfil de Acesso:")
-
-  c1, c2 = st.columns(2)
-  with c1:
+  col_m1, col_m2 = st.columns(2)
+  with col_m1:
     st.markdown("### 👨‍🎓 Aluno / Participante")
     st.write(
-        "Realize a sequência de perguntas conceituais (Básico, Médio ou"
-        " Avançado) e descubra seu status cósmico!"
+        "Selecione sua aula, estude com as dicas da Raquel e responda às"
+        " questões conceituais!"
     )
     if st.button("Entrar como Aluno"):
       st.session_state.modo = "aluno"
-      st.session_state.etapa_aluno = "escolha_nivel"
+      st.session_state.etapa_aluno = "escolha_aula"
       st.rerun()
 
-  with c2:
+  with col_m2:
     st.markdown("### ⚙️ Gerente de Rede (Organizador)")
-    st.write("Acesso restrito ao professor/gerente para gerenciar a turma.")
+    st.write(
+        "Acesso restrito ao professor/organizador para gerenciar a turma."
+    )
     if st.button("Entrar como Gerente"):
       st.session_state.modo = "gerente"
       st.rerun()
@@ -532,149 +370,188 @@ elif st.session_state.modo == "aluno":
 
   st.divider()
 
-  # ETAPA 1: Escolha de Nível e Cadastro
-  if st.session_state.etapa_aluno == "escolha_nivel":
-    st.subheader(
-        "🎯 Passo 1: Identificação e Nível da Sequência Didática"
-    )
+  # ETAPA 1: Identificação e Escolha da Aula
+  if st.session_state.etapa_aluno == "escolha_aula":
+    st.subheader("🎯 Passo 1: Identificação e Seleção da Aula")
     nome_input = st.text_input("Seu Nome Completo ou Apelido:")
 
-    st.markdown("### Selecione o Nível de Profundidade Conceitual:")
-    nivel_sel = st.selectbox(
-        "Nível:",
+    st.markdown("### Escolha a Aula da Sequência Didática:")
+    aula_sel = st.selectbox(
+        "Aula:",
         [
-            "Básico (Fundamentos do Big Bang & Matéria Escura)",
-            "Médio (Cosmologia Neo-Newtoniana & Dinâmica)",
-            "Avançado (Equações de Friedmann, Tensão de Hubble & Termodinâmica)",
+            "Aula 1: História da Cosmologia e o Big Bang",
+            "Aula 2: A Expansão do Universo",
+            "Aula 3: Matéria Escura, Energia Escura e Estrutura Cósmica",
         ],
     )
 
-    if st.button("🚀 Iniciar Sequência de Questões"):
+    if st.button("🚀 Iniciar Atividade com a Raquel"):
       if nome_input.strip() == "":
         st.warning("Por favor, digite um nome válido.")
       else:
         st.session_state.nome_usuario = nome_input.strip()
-        st.session_state.nivel_escolhido = nivel_sel
+        st.session_state.aula_escolhida = aula_sel
 
-        if "Básico" in nivel_sel:
-          banco = list(BANCO_BASICO)
-        elif "Médio" in nivel_sel:
-          banco = list(BANCO_MEDIO)
+        if "Aula 1" in aula_sel:
+          st.session_state.questoes_sessao = list(AULA_1_QUESTOES)
+        elif "Aula 2" in aula_sel:
+          st.session_state.questoes_sessao = list(AULA_2_QUESTOES)
         else:
-          banco = list(BANCO_AVANCADO)
+          st.session_state.questoes_sessao = list(AULA_3_QUESTOES)
 
-        random.shuffle(banco)
-        st.session_state.perguntas_sessao = banco[
-            :5
-        ]  # Bloco focado de 5 a 10 questões por teste pedagógico
         st.session_state.indice_pergunta = 0
         st.session_state.respostas_usuario = []
         st.session_state.etapa_aluno = "quiz"
         st.rerun()
 
-  # ETAPA 2: O Quiz Conceitual (Pergunta por Pergunta)
+  # ETAPA 2: Questões com Painel da Raquel ao Lado (Híbridas: Marcação + Explicação)
   elif st.session_state.etapa_aluno == "quiz":
     idx = st.session_state.indice_pergunta
-    total_q = len(st.session_state.perguntas_sessao)
-    q_atual = st.session_state.perguntas_sessao[idx]
+    total_q = len(st.session_state.questoes_sessao)
+    q_atual = st.session_state.questoes_sessao[idx]
 
     st.write(
         f"👤 **Participante:** {st.session_state.nome_usuario} | 📚"
-        f" **Trilha:** {st.session_state.nivel_escolhido} | **Questão"
+        f" **Trilha:** {st.session_state.aula_escolhida} | **Questão"
         f" {idx + 1} de {total_q}**"
     )
     st.progress((idx) / total_q)
 
-    st.markdown(
-        f"<div class='pergunta-box'><h3>{q_atual['pergunta']}</h3></div>",
-        unsafe_allow_html=True,
-    )
+    # Layout de Duas Colunas: Esquerda (Questão), Direita (Painel da Raquel)
+    col_q, col_r = st.columns([2, 1])
 
-    escolha = st.radio(
-        "Selecione a interpretação conceitual correta:",
-        q_atual["opcoes"],
-        key=f"q_{idx}",
-    )
+    with col_r:
+      st.markdown(
+          f"""
+            <div class='raquel-box'>
+                <h3 style='margin:0; color:#ff00ff;'>👧 Raquel, a Assistente</h3>
+                <p style='margin-top:10px; font-size:15px;'>{q_atual['dica_raquel']}</p>
+                <hr style='border-color: #444;'>
+                <p style='font-size:13px; color:#ddd;'>{q_atual['indicacao']}</p>
+            </div>
+            """,
+          unsafe_allow_html=True,
+      )
 
-    c_avanco1, c_avanco2 = st.columns(2)
-    with c_avanco2:
+    with col_q:
+      st.markdown(
+          f"<div class='pergunta-box'><h3>{q_atual['pergunta']}</h3></div>",
+          unsafe_allow_html=True,
+      )
+
+      if q_atual["tipo"] == "hibrida":
+        resposta_escolhida = st.radio(
+            "Selecione a alternativa correta:",
+            q_atual["opcoes"],
+            key=f"opt_{idx}",
+        )
+        st.markdown("<br>", unsafe_allow_html=True)
+        explicacao_aluno = st.text_area(
+            "✍️ Explique com suas palavras o porquê da sua escolha:",
+            key=f"exp_{idx}",
+            placeholder=(
+                "Escreva aqui a sua justificativa detalhada para esta resposta..."
+            ),
+        )
+      else:
+        resposta_escolhida = "Questão Descritiva"
+        explicacao_aluno = st.text_area(
+            "✍️ Escreva sua resposta e reflexão detalhada:",
+            key=f"text_{idx}",
+            placeholder=(
+                "Digite aqui sua descrição aprofundada sobre o tema..."
+            ),
+        )
+
+    st.divider()
+    c_btn1, c_btn2 = st.columns(2)
+    with c_btn2:
       if st.button("Avançar para Próxima ➡️"):
-        st.session_state.respostas_usuario.append({
-            "pergunta": q_atual["pergunta"],
-            "escolhida": escolha,
-            "correta": q_atual["resposta_correta"],
-        })
-
-        st.session_state.indice_pergunta += 1
-        if st.session_state.indice_pergunta >= total_q:
-          acertos = sum(
-              1
-              for r in st.session_state.respostas_usuario
-              if r["escolhida"] == r["correta"]
+        if (
+            q_atual["tipo"] == "hibrida" and not explicacao_aluno.strip()
+        ) or (q_atual["tipo"] == "dissertativa" and not explicacao_aluno.strip()):
+          st.warning(
+              "Por favor, preencha a explicação/descrição antes de avançar!"
+          )
+        else:
+          correta = (
+              q_atual["resposta_correta"]
+              if q_atual["tipo"] == "hibrida"
+              else "Resposta Descritiva"
+          )
+          is_acerto = (
+              (resposta_escolhida == q_atual["resposta_correta"])
+              if q_atual["tipo"] == "hibrida"
+              else True
           )
 
-          st.session_state.ranking.append({
-              "nome": st.session_state.nome_usuario,
-              "nivel": st.session_state.nivel_escolhido.split(" ")[0],
-              "pontos": acertos,
+          st.session_state.respostas_usuario.append({
+              "pergunta": q_atual["pergunta"],
+              "escolhida": resposta_escolhida,
+              "explicacao": explicacao_aluno,
+              "correta": correta,
+              "acertou": is_acerto,
           })
-          st.session_state.ranking = sorted(
-              st.session_state.ranking, key=lambda x: x["pontos"], reverse=True
-          )
-          st.session_state.etapa_aluno = "resultado"
-        st.rerun()
 
-  # ETAPA 3: Resultados Finais, Gabarito e Ranks Temáticos
+          st.session_state.indice_pergunta += 1
+          if st.session_state.indice_pergunta >= total_q:
+            pontos = sum(
+                1 for r in st.session_state.respostas_usuario if r["acertou"]
+            )
+
+            st.session_state.ranking.append({
+                "nome": st.session_state.nome_usuario,
+                "aula": st.session_state.aula_escolhida.split(":")[0],
+                "pontos": pontos,
+            })
+            st.session_state.ranking = sorted(
+                st.session_state.ranking, key=lambda x: x["pontos"], reverse=True
+            )
+            st.session_state.etapa_aluno = "resultado"
+          st.rerun()
+
+  # ETAPA 3: Resultados Finais e Gabarito
   elif st.session_state.etapa_aluno == "resultado":
-    st.success("🎉 Sequência Didática Concluída com Sucesso!")
+    st.success("🎉 Atividade da Aula Concluída com Sucesso!")
 
-    acertos = sum(
-        1
-        for r in st.session_state.respostas_usuario
-        if r["escolhida"] == r["correta"]
+    pontos = sum(
+        1 for r in st.session_state.respostas_usuario if r["acertou"]
     )
-    total_q = len(st.session_state.perguntas_sessao)
+    total_q = len(st.session_state.questoes_sessao)
     st.markdown(
-        f"### 🏆 Sua Pontuação Final: {acertos} de {total_q} acertos"
+        f"### 🏆 Sua Pontuação de Desempenho: {pontos} de {total_q}"
     )
 
-    # Classificação Cósmica Temática
-    if acertos <= 1:
+    if pontos <= 1:
       status_cosmico = (
-          "🌍 **Cosmólogo(a) da Terra** (Você iniciou sua jornada compreendendo"
-          " os alicerces observacionais clássicos!)"
+          "🌍 **Cosmólogo(a) da Terra** (Raquel diz: Bom começo! Continue"
+          " revisando as indicações de estudo.)"
       )
-    elif acertos <= 3:
+    elif pontos == 2:
       status_cosmico = (
-          "🔭 **Cosmólogo(a) dos Céus** (Você domina a dinâmica de rotação,"
-          " gravitação e expansão galáctica!)"
-      )
-    elif acertos == 4:
-      status_cosmico = (
-          "🌌 **Cosmólogo(a) do Universo** (Excelente domínio conceitual sobre"
-          " o Big Bang, matéria escura e modelos cosmológicos!)"
+          "🔭 **Cosmólogo(a) dos Céus** (Raquel diz: Ótimo trabalho! Excelente"
+          " raciocínio conceitual.)"
       )
     else:
       status_cosmico = (
-          "🌀 **Cosmólogo(a) do Multiverso** (Domínio profundo e rigoroso da"
-          " física teórica, termodinâmica e equações de campo!)"
+          "🌌 **Cosmólogo(a) do Universo** (Raquel diz: Perfeito! Domínio"
+          " absoluto da matéria e expansão!)"
       )
 
-    st.markdown(f"### Seu Título na Sequência: {status_cosmico}")
+    st.markdown(f"### Seu Título Cósmico: {status_cosmico}")
     st.divider()
 
-    # Gabarito Exibido Apenas ao Final
-    st.subheader("📋 Gabarito e Análise Conceitual Detalhada")
+    st.subheader("📋 Gabarito, Explicações Enviadas e Correção")
     for i, resp in enumerate(st.session_state.respostas_usuario, start=1):
-      acertou = resp["escolhida"] == resp["correta"]
-      icon = "✅" if acertou else "❌"
       st.markdown(f"**Questão {i}:** {resp['pergunta']}")
-      st.markdown(f"- Sua resposta: {resp['escolhida']} {icon}")
-      if not acertou:
-        st.markdown(f"- 💡 **Conceito Correto:** `{resp['correta']}`")
+      if resp["correta"] != "Resposta Descritiva":
+        icon = "✅" if resp["escolhida"] == resp["correta"] else "❌"
+        st.markdown(f"- Alternativa escolhida: {resp['escolhida']} {icon}")
+        if resp["escolhida"] != resp["correta"]:
+          st.markdown(f"- 💡 **Conceito Correto:** `{resp['correta']}`")
+      st.markdown(f"- ✍️ *Sua explicação:* {resp['explicacao']}")
       st.markdown("---")
 
-    # Ranking Geral da Turma/Participantes
     st.subheader("📊 Ranking Geral de Participantes")
     for pos, c in enumerate(st.session_state.ranking[:10], start=1):
       medalha = (
@@ -683,13 +560,13 @@ elif st.session_state.modo == "aluno":
           else ("🥈" if pos == 2 else ("🥉" if pos == 3 else "🔸"))
       )
       st.markdown(
-          f"**{medalha} {pos}º lugar:** {c['nome']} ({c['nivel']}) —"
+          f"**{medalha} {pos}º lugar:** {c['nome']} ({c['aula']}) —"
           f" **{c['pontos']} pts**"
       )
 
     st.divider()
-    if st.button("🔄 Refazer a Sequência Didática"):
-      st.session_state.etapa_aluno = "escolha_nivel"
+    if st.button("🔄 Refazer / Escolher Outra Aula"):
+      st.session_state.etapa_aluno = "escolha_aula"
       st.session_state.nome_usuario = ""
       st.rerun()
 
@@ -725,13 +602,13 @@ elif st.session_state.modo == "gerente":
   else:
     st.success("✅ Sessão de Gerente Ativa (Felipe)")
 
-    st.subheader("📊 Desempenho dos Alunos na Sequência Didática")
+    st.subheader("📊 Acompanhamento dos Alunos")
     if len(st.session_state.ranking) == 0:
-      st.info("Nenhum registro de aluno na turma ainda.")
+      st.info("Nenhum registro na turma ainda.")
     else:
       for pos, c in enumerate(st.session_state.ranking, start=1):
         st.markdown(
-            f"**{pos}º:** 👤 {c['nome']} | **Trilha:** {c['nivel']} |"
+            f"**{pos}º:** 👤 {c['nome']} | **Aula:** {c['aula']} |"
             f" **Pontos:** {c['pontos']}"
         )
 
