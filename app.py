@@ -3,7 +3,7 @@ import streamlit as st
 
 # Configuração da Página
 st.set_page_config(
-    page_title="Investigação Cósmica & Ausubel: Death Tahim",
+    page_title="Investigação Cósmica: O Segredo de Death Tahim",
     page_icon="🌌",
     layout="wide",
 )
@@ -85,7 +85,7 @@ st.markdown(
 )
 
 # =========================================================================
-# BANCO GIGANTE DE QUESTÕES E TEXTOS EXPANDIDOS (AUSUBEL)
+# BANCO DE CASOS COM TEXTOS EXPANDIDOS E RESPOSTAS VARIADAS (SEM PADRÃO 'A')
 # =========================================================================
 
 CASOS_INVESTIGACAO = [
@@ -95,13 +95,11 @@ CASOS_INVESTIGACAO = [
             "Caso 1: O Nascimento do Cosmos e a Queda do Dogma Estático"
         ),
         "subsunsor_previo": (
-            "🧠 **Ativação de Conhecimento Prévio (Subsunçor):** Pense na sua"
-            " vivência cotidiana e na herança cultural e filosófica de que o"
-            " céu noturno e o mundo físico representam um cenário eterno,"
-            " imutável e estruturalmente fixo. Na teoria de David Ausubel, esse"
-            " conceito arraigado na sua mente funciona como o subsunçor de"
-            " ancoragem que será confrontado pelas evidências da astrofísica"
-            " moderna."
+            "🧠 **Ativação de Conhecimento Prévio:** Pense na sua vivência"
+            " cotidiana e na herança cultural de que o céu noturno e o mundo"
+            " físico representam um cenário eterno, imutável e estruturalmente"
+            " fixo. Essa ideia arraigada na mente será desafiada pelas"
+            " evidências da astrofísica moderna."
         ),
         "texto_base": (
             "📜 **Arquivo Histórico Extendido nº 01 (Relatório Científico):**"
@@ -139,31 +137,30 @@ CASOS_INVESTIGACAO = [
         "banco_questoes": [
             {
                 "enunciado": (
-                    "1. Qual pilar filosófico e intuitivo sustentou a visão de"
+                    "Qual pilar filosófico e intuitivo sustentou a visão de"
                     " mundo da humanidade a respeito do cosmo durante"
                     " milênios?"
                 ),
                 "opcoes": [
                     (
-                        "A crença firmada em um cenário universal estático,"
-                        " eterno e estruturalmente inalterável."
+                        "Imutabilidade perpétua de um cenário cósmico visto"
+                        " como perene e estagnado."
                     ),
                     (
-                        "A certeza de que as galáxias se chocavam periodicamente"
+                        "Colisões cíclicas e regulares entre galáxias distantes"
                         " a cada século."
                     ),
                     (
-                        "A hipótese de que o tempo fluía de trás para frente no"
-                        " vácuo."
+                        "Fluxo temporal invertido nas regiões de vácuo absoluto."
                     ),
                     (
-                        "A tese de que o Sol ocupava a borda externa e isolada"
-                        " da galáxia."
+                        "Posicionamento do Sol na margem externa e isolada da"
+                        " via Láctea."
                     ),
                 ],
                 "correta": (
-                    "A crença firmada em um cenário universal estático,"
-                    " eterno e estruturalmente inalterável."
+                    "Imutabilidade perpétua de um cenário cósmico visto como"
+                    " perene e estagnado."
                 ),
                 "resgate": {
                     "enunciado": (
@@ -172,38 +169,36 @@ CASOS_INVESTIGACAO = [
                         " Como o cosmo era visto antes da física moderna?"
                     ),
                     "opcoes": [
-                        ("Como uma estrutura permanente, perene e estagnada."),
-                        ("Como um laboratório dinâmico em expansão rápida."),
-                        ("Como um oceano de fluidos magnéticos flutuantes."),
-                        ("Como um sistema estelar em colapso cíclico."),
+                        ("Estrutura permanente, perene e estagnada."),
+                        ("Laboratório dinâmico em expansão acelerada."),
+                        ("Oceano de fluidos magnéticos flutuantes no vácuo."),
+                        ("Sistema estelar em processo de colapso cíclico."),
                     ],
-                    "correta": (
-                        "Como uma estrutura permanente, perene e estagnada."
-                    ),
+                    "correta": ("Estrutura permanente, perene e estagnada."),
                 },
             },
             {
                 "enunciado": (
-                    "2. De que maneira a Relatividade Geral de Einstein alterou"
+                    "De que maneira a Relatividade Geral de Einstein alterou"
                     " a compreensão clássica sobre a gravidade em escala"
                     " macroscópica?"
                 ),
                 "opcoes": [
                     (
+                        "Forças eletromagnéticas geradas por núcleos densos de"
+                        " ferro."
+                    ),
+                    (
                         "Vinculando o fenômeno gravitacional à deformação e"
                         " curvatura geométrica do espaço-tempo."
                     ),
                     (
-                        "Tratando a gravidade como uma força eletromagnética"
-                        " gerada por núcleos de ferro."
+                        "Atração mecânica mediada por fios invisíveis de"
+                        " matéria escura."
                     ),
                     (
-                        "Comprovando que a atração ocorre por meio de fios"
-                        " invisíveis de matéria escura."
-                    ),
-                    (
-                        "Estabelecendo que a massa de um corpo diminui à medida"
-                        " que ele se desloca."
+                        "Redução progressiva da massa corporal conforme o corpo"
+                        " se desloca."
                     ),
                 ],
                 "correta": (
@@ -217,12 +212,12 @@ CASOS_INVESTIGACAO = [
                         " universo?"
                     ),
                     "opcoes": [
+                        ("Que a força gravitacional repele galáxias distantes."),
+                        ("Que o espaço é plano, rígido e imune a massas."),
                         (
                             "Que a gravidade modela a geometria e a curvatura"
                             " do espaço-tempo."
                         ),
-                        ("Que a força gravitacional repele galáxias distantes."),
-                        ("Que o espaço é plano, rígido e imune a massas."),
                         ("Que o tempo flui independentemente da massa estelar."),
                     ],
                     "correta": (
@@ -233,31 +228,31 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "3. Ao examinar as equações de campo einsteinianas, qual"
+                    "Ao examinar as equações de campo einsteinianas, qual"
                     " contradição matemática inevitável Lemaître identificou em"
                     " relação ao modelo vigente?"
                 ),
                 "opcoes": [
                     (
-                        "As equações demonstravam que o sistema físico era"
-                        " instável e exigia expansão ou contração."
+                        "Centro universal ocupado inteiramente por antimatéria"
+                        " pura."
                     ),
                     (
-                        "A matemática provava que o centro do universo era"
-                        " ocupado por antimatéria pura."
+                        "Cálculos indicando massa infinita para fótons no vácuo"
+                        " interestelar."
                     ),
                     (
-                        "Os cálculos indicavam que a luz possuía massa infinita"
-                        " no vácuo interestelar."
+                        "Invalidação total da existência de corpos celestes com"
+                        " massa."
                     ),
                     (
-                        "A teoria anulava totalmente a existência de corpos"
-                        " celestes com massa."
+                        "Instabilidade do sistema físico, exigindo expansão"
+                        " ininterrupta ou contração."
                     ),
                 ],
                 "correta": (
-                    "As equações demonstravam que o sistema físico era"
-                    " instável e exigia expansão ou contração."
+                    "Instabilidade do sistema físico, exigindo expansão"
+                    " ininterrupta ou contração."
                 ),
                 "resgate": {
                     "enunciado": (
@@ -276,13 +271,13 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "4. Qual foi o conceito conceitual batizado por Georges"
+                    "Qual foi o conceito conceitual batizado por Georges"
                     " Lemaître para representar o ponto inicial de concentração"
                     " máxima da realidade física?"
                 ),
                 "opcoes": [
-                    ("Átomo Primitivo."),
                     ("Semente de Vácuo Quântico."),
+                    ("Átomo Primitivo."),
                     ("Núcleo de Entropia Zero."),
                     ("Plasmocentro Primordial."),
                 ],
@@ -293,9 +288,9 @@ CASOS_INVESTIGACAO = [
                         " do caso o nome dado à singularidade hiperdensa."
                     ),
                     "opcoes": [
-                        ("Átomo Primitivo."),
                         ("Coração de Quantum."),
                         ("Ponto Omega Absoluto."),
+                        ("Átomo Primitivo."),
                         ("Esfera de Neutrônicos."),
                     ],
                     "correta": ("Átomo Primitivo."),
@@ -303,18 +298,21 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "5. Quais dimensões estruturais e fundamentais foram"
+                    "Quais dimensões estruturais e fundamentais foram"
                     " deflagradas a partir da descompressão explosiva desse"
                     " núcleo primordial?"
                 ),
                 "opcoes": [
                     (
+                        "Campos magnéticos isolados e partículas dispersas de"
+                        " éter."
+                    ),
+                    ("Buracos negros estelares e cometas de gelo cósmico."),
+                    (
                         "O espaço tridimensional, o fluxo do tempo e a"
                         " expansão métrica universal."
                     ),
-                    ("Apenas os campos magnéticos e as partículas de éter."),
-                    ("Somente os buracos negros estelares e cometas."),
-                    ("A atmosfera gasosa dos planetas rochosos."),
+                    ("A atmosfera gasosa dos planetas do sistema solar."),
                 ],
                 "correta": (
                     "O espaço tridimensional, o fluxo do tempo e a expansão"
@@ -327,9 +325,9 @@ CASOS_INVESTIGACAO = [
                         " quê?"
                     ),
                     "opcoes": [
-                        ("Do espaço, do tempo e da expansão cósmica."),
                         ("Apenas da luz visível e do calor estelar."),
                         ("Somente das órbitas planetárias e luas."),
+                        ("Do espaço, do tempo e da expansão cósmica."),
                         ("Unicamente dos campos gravitacionais locais."),
                     ],
                     "correta": (
@@ -339,30 +337,30 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "6. Qual papel estratégico a narrativa atribui à"
+                    "Qual papel estratégico a narrativa atribui à"
                     " intervenção de Death Tahim perante estas descobertas?"
                 ),
                 "opcoes": [
                     (
-                        "Tentar abafar e corromper os arquivos para manter o"
+                        "Financiar a construção de sondas para exploração"
+                        " exoplanetária."
+                    ),
+                    (
+                        "Abafar e corromper os arquivos para manter o"
                         " intelecto humano preso ao dogma estático."
                     ),
                     (
-                        "Financiar a construção de espaçonaves para explorar"
-                        " exoplanetas distantes."
+                        "Auxiliar Lemaître diretamente nos cálculos de"
+                        " expansão diferencial."
                     ),
                     (
-                        "Auxiliar diretamente Lemaître nos cálculos"
-                        " diferenciais de expansão."
-                    ),
-                    (
-                        "Medir com precisão a temperatura da radiação de fundo"
-                        " em micro-ondas."
+                        "Medir com precisão milimétrica a temperatura da"
+                        " radiação fóssil."
                     ),
                 ],
                 "correta": (
-                    "Tentar abafar e corromper os arquivos para manter o"
-                    " intelecto humano preso ao dogma estático."
+                    "Abafar e corromper os arquivos para manter o intelecto"
+                    " humano preso ao dogma estático."
                 ),
                 "resgate": {
                     "enunciado": (
@@ -387,33 +385,31 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "7. Analisando o impacto epistemológico da proposta de"
+                    "Analisando o impacto epistemológico da proposta de"
                     " Lemaître, por que ela representou uma revolução no"
                     " pensamento científico?"
                 ),
                 "opcoes": [
                     (
-                        "Porque substituiu a visão de um cosmo estagnado e"
-                        " eterno por uma linha temporal finita com um marco"
-                        " inicial dinâmico."
+                        "Comprovação de massa infinita distribuída em qualquer"
+                        " ponto espacial."
                     ),
                     (
-                        "Porque comprovou que a matéria possui massa"
-                        " inesgotável em qualquer ponto espacial."
+                        "Banimento total da matemática nas investigações da"
+                        " astrofísica."
                     ),
                     (
-                        "Porque baniu definitivamente o uso da matemática nas"
-                        " investigações de astrofísica."
+                        "Demonstração de que cometas superam a velocidade limite"
+                        " da luz."
                     ),
                     (
-                        "Porque demonstrou que a velocidade da luz pode ser"
-                        " superada por cometas."
+                        "Substituição de um cosmo eterno por uma linha"
+                        " temporal finita com um marco inicial dinâmico."
                     ),
                 ],
                 "correta": (
-                    "Porque substituiu a visão de um cosmo estagnado e eterno"
-                    " por uma linha temporal finita com um marco inicial"
-                    " dinâmico."
+                    "Substituição de um cosmo eterno por uma linha temporal"
+                    " finita com um marco inicial dinâmico."
                 ),
                 "resgate": {
                     "enunciado": (
@@ -438,27 +434,28 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "8. Que qualificações fundamentais caracterizam a formação"
+                    "Que qualificações fundamentais caracterizam a formação"
                     " acadêmica e profissional de Georges Lemaître conforme o"
                     " texto?"
                 ),
                 "opcoes": [
+                    ("Atuação exclusiva como engenheiro naval militar."),
                     (
-                        "Ele acumulava conhecimentos como físico teórico e"
-                        " sacerdote católico."
-                    ),
-                    ("Ele atuava exclusivamente como engenheiro naval militar."),
-                    (
-                        "Ele era um astrônomo amador focado em cometas do"
-                        " sistema solar."
+                        "Acúmulo de saberes como físico teórico e sacerdote"
+                        " católico."
                     ),
                     (
-                        "Ele exercia funções de diplomata e matemático financeiro."
+                        "Dedicação integral a astronomia amadora focada em"
+                        " cometas."
+                    ),
+                    (
+                        "Funções diplomáticas exercidas em conjunto com"
+                        " finanças."
                     ),
                 ],
                 "correta": (
-                    "Ele acumulava conhecimentos como físico teórico e"
-                    " sacerdote católico."
+                    "Acúmulo de saberes como físico teórico e sacerdote"
+                    " católico."
                 ),
                 "resgate": {
                     "enunciado": (
@@ -489,11 +486,11 @@ CASOS_INVESTIGACAO = [
         "id": 2,
         "titulo": "Caso 2: A Grande Expansão do Espaço-Tempo e o Redshift",
         "subsunsor_previo": (
-            "🧠 **Ativação de Conhecimento Prévio (Subsunçor):** Pense em um"
-            " trem que apita ao se afastar: o som fica mais grave porque as"
-            " ondas sonoras se esticam. Na astronomia, utilizamos essa analogia"
-            " intuitiva para compreender como a luz de galáxias distantes se"
-            " altera ao viajar pelo espaço."
+            "🧠 **Ativação de Conhecimento Prévio:** Pense em um trem que apita"
+            " ao se afastar: o som fica mais grave porque as ondas sonoras se"
+            " esticam. Na astronomia, utilizamos essa analogia intuitiva para"
+            " compreender como a luz de galáxias distantes se altera ao viajar"
+            " pelo espaço."
         ),
         "texto_base": (
             "📜 **Arquivo Histórico Extendido nº 02 (Relatório Científico):**"
@@ -529,14 +526,14 @@ CASOS_INVESTIGACAO = [
         "banco_questoes": [
             {
                 "enunciado": (
-                    "1. Qual metodologia instrumental foi adotada por Edwin"
+                    "Qual metodologia instrumental foi adotada por Edwin"
                     " Hubble para examinar a radiação luminosa dos confins"
                     " cósmicos?"
                 ),
                 "opcoes": [
+                    ("Medições diretas de campo magnético em planetas."),
                     ("Investigações espectroscópicas de alta precisão."),
-                    ("Medições diretas de campo magnético planetário."),
-                    ("Cálculos de densidade atmosférica estelar."),
+                    ("Cálculos estatísticos de densidade atmosférica."),
                     ("Análise de reflexão de radar em meteoroides."),
                 ],
                 "correta": ("Investigações espectroscópicas de alta precisão."),
@@ -556,15 +553,15 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "2. Como a astrofísica define o fenômeno de deslocamento"
-                    " das linhas espectrais luminosas em direção a faixas mais"
+                    "Como a astrofísica define o fenômeno de deslocamento das"
+                    " linhas espectrais luminosas em direção a faixas mais"
                     " longas?"
                 ),
                 "opcoes": [
+                    ("Compressão cromática azulada de feixes."),
+                    ("Polarização quântica de vácuo interestelar."),
                     ("Redshift (desvio para o vermelho)."),
-                    ("Compressão cromática azulada."),
-                    ("Polarização de vácuo quântico."),
-                    ("Refração de prisma estelar."),
+                    ("Refração direta em prisma estelar."),
                 ],
                 "correta": ("Redshift (desvio para o vermelho)."),
                 "resgate": {
@@ -584,7 +581,7 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "3. Qual era a armadilha conceitual em que observadores"
+                    "Qual era a armadilha conceitual em que observadores"
                     " desatentos costumavam cair ao analisar o afastamento"
                     " galáctico?"
                 ),
@@ -594,16 +591,16 @@ CASOS_INVESTIGACAO = [
                         " dentro de um palco estático."
                     ),
                     (
-                        "Acreditar que os aglomerados estelares estavam"
-                        " evaporando em calor."
+                        "Acreditar que aglomerados estelares evaporavam em"
+                        " calor puro."
                     ),
                     (
-                        "Imaginar que a Terra encontrava-se imóvel no centro"
-                        " exato de tudo."
+                        "Imaginar a Terra posicionada imóvel no centro exato"
+                        " do cosmo."
                     ),
                     (
-                        "Considerar que a luz perdia sua velocidade natural ao"
-                        " cruzar o vácuo."
+                        "Considerar perda de velocidade natural da luz no"
+                        " vácuo."
                     ),
                 ],
                 "correta": (
@@ -632,17 +629,17 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "4. De acordo com a Relatividade Geral, qual é a causa"
+                    "De acordo com a Relatividade Geral, qual é a causa"
                     " geométrica real do afastamento mútuo das galáxias?"
                 ),
                 "opcoes": [
+                    ("Ação de jatos de plasma soprados por supernovas."),
+                    ("Colisão cruzada de linhas magnéticas intergalácticas."),
                     (
                         "O estiramento métrico contínuo do próprio tecido do"
                         " espaço-tempo."
                     ),
-                    ("A ação de jatos de plasma soprados por supernovas."),
-                    ("A colisão de linhas magnéticas intergalácticas."),
-                    ("A rotação global do cosmo em torno de um eixo fixo."),
+                    ("Rotação global universal em torno de um eixo fixo."),
                 ],
                 "correta": (
                     "O estiramento métrico contínuo do próprio tecido do"
@@ -664,7 +661,7 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "5. Que proporção métrica o texto estabelece entre a"
+                    "Que proporção métrica o texto estabelece entre a"
                     " velocidade de afastamento e a posição espacial dos"
                     " aglomerados?"
                 ),
@@ -674,16 +671,16 @@ CASOS_INVESTIGACAO = [
                         " à distância que os separa."
                     ),
                     (
-                        "As galáxias mais próximas se afastam muito mais rápido"
-                        " que as distantes."
+                        "Galáxias próximas afastam-se mais rápido que as"
+                        " distantes."
                     ),
                     (
-                        "Não existe nenhuma relação matemática entre distância"
-                        " e velocidade."
+                        "Ausência total de relação matemática entre distância e"
+                        " fuga."
                     ),
                     (
-                        "A velocidade é inversamente proporcional ao brilho"
-                        " visível do núcleo."
+                        "Inversão proporcional relacionada ao brilho visível do"
+                        " núcleo."
                     ),
                 ],
                 "correta": (
@@ -706,24 +703,21 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "6. Qual artifício distorcido Death Tahim tentou aplicar"
+                    "Qual artifício distorcido Death Tahim tentou aplicar"
                     " sobre os relatórios de Hubble?"
                 ),
                 "opcoes": [
                     (
+                        "Afirmar que o desvio vermelho derivava de poluição"
+                        " gasosa."
+                    ),
+                    (
                         "Argumentar que o universo sofria um processo de"
                         " colapso retrógrado interno."
                     ),
+                    ("Ocultar a existência de vizinhanças galácticas."),
                     (
-                        "Afirmar que o desvio para o vermelho era causado por"
-                        " poluição gasosa."
-                    ),
-                    (
-                        "Ocultar a existência de qualquer aglomerado além da"
-                        " Via Láctea."
-                    ),
-                    (
-                        "Provar que o tempo passava mais devagar unicamente na"
+                        "Provar que o tempo desacelerava unicamente no planeta"
                         " Terra."
                     ),
                 ],
@@ -747,31 +741,28 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "7. Analisando profundamente a física envolvida, por que a"
+                    "Analisando profundamente a física envolvida, por que a"
                     " expansão métrica do espaço supera a visão de movimento"
                     " mecânico simples?"
                 ),
                 "opcoes": [
                     (
-                        "Porque evidencia que o palco onde a matéria habita é"
-                        " flexível e dinâmico, e não um cenário rígido."
+                        "Ganho de massa mensurável em fótons ao cruzarem o"
+                        " vácuo."
+                    ),
+                    ("Eliminação completa da gravidade intergaláctica."),
+                    (
+                        "Validação de coordenadas espaciais absolutas e"
+                        " estáticas."
                     ),
                     (
-                        "Porque prova que os fótons de luz ganham peso ao"
-                        " viajarem pelo vácuo."
-                    ),
-                    (
-                        "Porque elimina a necessidade de considerar a gravidade"
-                        " cósmica."
-                    ),
-                    (
-                        "Porque valida a existência de pontos de coordenadas"
-                        " absolutas fixas."
+                        "Evidência de que o palco da matéria é flexível e"
+                        " dinâmico, e não rígido."
                     ),
                 ],
                 "correta": (
-                    "Porque evidencia que o palco onde a matéria habita é"
-                    " flexível e dinâmico, e não um cenário rígido."
+                    "Evidência de que o palco da matéria é flexível e"
+                    " dinâmico, e não rígido."
                 ),
                 "resgate": {
                     "enunciado": (
@@ -796,15 +787,15 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "8. Em qual período temporal específico as investigações"
+                    "Em qual período temporal específico as investigações"
                     " espectroscópicas de Edwin Hubble ganharam notoriedade"
                     " mundial?"
                 ),
                 "opcoes": [
+                    ("Nos anos de 1850 durante a industrialização."),
                     ("Na década de 1920."),
-                    ("Nos anos de 1850 durante a revolução industrial."),
-                    ("No início do século XXI."),
-                    ("Na transição para o Renascimento."),
+                    ("No início do século XXI digital."),
+                    ("Durante a transição histórica renascentista."),
                 ],
                 "correta": ("Na década de 1920."),
                 "resgate": {
@@ -838,11 +829,11 @@ CASOS_INVESTIGACAO = [
             "Caso 3: O Mistério Oculto da Matéria Escura e da Energia Escura"
         ),
         "subsunsor_previo": (
-            "🧠 **Ativação de Conhecimento Prévio (Subsunçor):** Pense na"
-            " gravidade que mantém você preso ao solo e como uma mola reage"
-            " ao ser esticada ou comprimida. Na cosmologia avançada, lidamos"
-            " com componentes invisíveis que atuam como forças de coesão ou"
-            " como motores de aceleração cósmica."
+            "🧠 **Ativação de Conhecimento Prévio:** Pense na gravidade que"
+            " mantém você preso ao solo e como uma mola reage ao ser esticada"
+            " ou comprimida. Na cosmologia avançada, lidamos com componentes"
+            " invisíveis que atuam como forças de coesão ou como motores de"
+            " aceleração cósmica."
         ),
         "texto_base": (
             "📜 **Arquivo Histórico Extendido nº 03 (Relatório Científico):**"
@@ -877,25 +868,22 @@ CASOS_INVESTIGACAO = [
         "banco_questoes": [
             {
                 "enunciado": (
-                    "1. Que anomalia dinâmica os astrofísicos detectaram ao"
+                    "Que anomalia dinâmica os astrofísicos detectaram ao"
                     " examinar as curvas de rotação das estrelas nas bordas"
                     " galácticas?"
                 ),
                 "opcoes": [
+                    ("Bordas galácticas em estado de repouso absoluto."),
                     (
-                        "As estrelas periféricas giravam com velocidade muito"
-                        " acima da sustentável pela massa visível."
+                        "Velocidade estelar periférica muito acima da"
+                        " sustentável pela massa visível."
                     ),
-                    ("As bordas galácticas encontravam-se totalmente paradas."),
-                    ("O movimento estelar girava no sentido opuesto ao núcleo."),
-                    (
-                        "As estrelas das bordas emitiam unicamente raios gama"
-                        " intensos."
-                    ),
+                    ("Movimento oposto ao sentido do núcleo galáctico."),
+                    ("Emissão restrita a raios gama de alta intensidade."),
                 ],
                 "correta": (
-                    "As estrelas periféricas giravam com velocidade muito acima"
-                    " da sustentável pela massa visível."
+                    "Velocidade estelar periférica muito acima da sustentável"
+                    " pela massa visível."
                 ),
                 "resgate": {
                     "enunciado": (
@@ -916,17 +904,17 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "2. Qual entidade teórica foi proposta para explicar a"
+                    "Qual entidade teórica foi proposta para explicar a"
                     " existência da gravidade extra que impede a dispersão das"
                     " estrelas periféricas?"
                 ),
                 "opcoes": [
-                    ("A presença de um vasto halo de Matéria Escura."),
-                    ("A existência de um buraco negro maciço na borda externa."),
-                    ("A fricção gerada por ventos de plasma interestelar."),
-                    ("O reflexo da luz de galáxias vizinhas distantes."),
+                    ("Buraco negro supermassivo na borda externa."),
+                    ("Fricção gerada por ventos de plasma interestelar."),
+                    ("Vasto halo de Matéria Escura."),
+                    ("Reflexo luminescente de galáxias vizinhas."),
                 ],
-                "correta": ("A presença de um vasto halo de Matéria Escura."),
+                "correta": ("Vasto halo de Matéria Escura."),
                 "resgate": {
                     "enunciado": (
                         "⚠️ **Dica da Raquel:** Como foi batizada a massa"
@@ -944,27 +932,24 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "3. Qual é o papel funcional primordial exercido pela"
+                    "Qual é o papel funcional primordial exercido pela"
                     " Matéria Escura na arquitetura cósmica?"
                 ),
                 "opcoes": [
                     (
-                        "Atuar coesivamente através da atração gravitacional,"
-                        " unindo e estruturando as galáxias."
+                        "Atracão gravitacional coesiva que une e estrutura as"
+                        " galáxias."
                     ),
                     (
-                        "Repelir violentamente as estrelas para acelerar a"
-                        " expansão."
+                        "Repulsão violenta de estrelas para acelerar o"
+                        " afastamento."
                     ),
-                    ("Absorver toda a luz emitida pelos núcleos estelares."),
-                    (
-                        "Gerar campos magnéticos que impedem colisões entre"
-                        " astros."
-                    ),
+                    ("Absorção total de fótons emitidos por núcleos estelares."),
+                    ("Criação de campos magnéticos protetores contra choques."),
                 ],
                 "correta": (
-                    "Atuar coesivamente através da atração gravitacional,"
-                    " unindo e estruturando as galáxias."
+                    "Atracão gravitacional coesiva que une e estrutura as"
+                    " galáxias."
                 ),
                 "resgate": {
                     "enunciado": (
@@ -984,21 +969,21 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "4. O que as observações recentes de supernovas distantes"
+                    "O que as observações recentes de supernovas distantes"
                     " revelaram a respeito do ritmo da expansão cósmica?"
                 ),
                 "opcoes": [
+                    ("Colapso gravitacional total em andamento."),
+                    ("Velocidade de expansão completamente estagnada."),
                     (
-                        "Que a expansão não está freando, mas sim em contínuo"
-                        " processo de aceleração."
+                        "Aceleração contínua, desmentindo a hipótese de"
+                        " frenagem gravitacional."
                     ),
-                    ("Que o universo entrou em colapso gravitacional total."),
-                    ("Que a velocidade de expansão zerou completamente."),
-                    ("Que o cosmo oscila expandindo e contraindo anualmente."),
+                    ("Oscilação cíclica anual de expansão e contração."),
                 ],
                 "correta": (
-                    "Que a expansão não está freando, mas sim em contínuo"
-                    " processo de aceleração."
+                    "Aceleração contínua, desmentindo a hipótese de frenagem"
+                    " gravitacional."
                 ),
                 "resgate": {
                     "enunciado": (
@@ -1016,17 +1001,17 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "5. Qual componente teórico é apontado como responsável"
+                    "Qual componente teórico é apontado como responsável"
                     " por impulsionar essa aceleração repulsiva na expansão do"
                     " universo?"
                 ),
                 "opcoes": [
-                    ("A Energia Escura."),
-                    ("A Pressão de Radiação Fóssil."),
-                    ("O Campo Magnético Primordial."),
-                    ("A Entropia Térmica Absoluta."),
+                    ("Pressão de radiação fóssil primária."),
+                    ("Energia Escura."),
+                    ("Campo magnético primordial de fundo."),
+                    ("Entropia térmica absoluta."),
                 ],
-                "correta": ("A Energia Escura."),
+                "correta": ("Energia Escura."),
                 "resgate": {
                     "enunciado": (
                         "⚠️ **Dica da Raquel:** Busque no texto o nome da"
@@ -1043,31 +1028,24 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "6. De que maneira Death Tahim se valeu conceitualmente"
+                    "De que maneira Death Tahim se valeu conceitualmente"
                     " desses dois grandes enigmas da astrofísica?"
                 ),
                 "opcoes": [
                     (
-                        "Usando os véus do desconhecido para encenar o papel de"
-                        " mestre do caos e testar os limites do intelecto"
-                        " humano."
+                        "Uso dos véus do desconhecido para encenar o mestre do"
+                        " caos e testar o intelecto humano."
                     ),
                     (
-                        "Tentando transformar a matéria escura em combustível"
-                        " para espaçonaves."
+                        "Tentativa de converter matéria escura em combustível"
+                        " para frotas."
                     ),
-                    (
-                        "Escondendo-se fisicamente no interior de um halo de"
-                        " energia escura."
-                    ),
-                    (
-                        "Apagando os telescópios que mediam o brilho das"
-                        " supernovas."
-                    ),
+                    ("Refúgio físico no interior de halos de energia escura."),
+                    ("Eliminação de telescópios detectores de supernovas."),
                 ],
                 "correta": (
-                    "Usando os véus do desconhecido para encenar o papel de"
-                    " mestre do caos e testar os limites do intelecto humano."
+                    "Uso dos véus do desconhecido para encenar o mestre do"
+                    " caos e testar o intelecto humano."
                 ),
                 "resgate": {
                     "enunciado": (
@@ -1092,35 +1070,29 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "7. Sintetizando a atuação conjunta desses dois fenômenos,"
+                    "Sintetizando a atuação conjunta desses dois fenômenos,"
                     " qual é o balanço dinâmico que eles promovem na rota"
                     " evolutiva do cosmos?"
                 ),
                 "opcoes": [
                     (
-                        "Enquanto a Matéria Escura atua aglutinando e dando"
-                        " suporte estrutural através da gravidade, a Energia"
-                        " Escura atua vencendo essa coesão em grande escala para"
-                        " acelerar o afastamento espacial."
+                        "Matéria Escura aglutina e estrutura via gravidade,"
+                        " enquanto Energia Escura acelera o afastamento"
+                        " espacial."
                     ),
                     (
-                        "Ambas colaboram unicamente para colapsar o universo"
-                        " em uma única singularidade final."
+                        "Esforço conjunto direcionado estritamente ao colapso"
+                        " em singularidade final."
                     ),
                     (
-                        "A Energia Escura forma as galáxias enquanto a Matéria"
-                        " Escura empurra o espaço para fora."
+                        "Energia Escura gera galáxias e Matéria Escura expele"
+                        " o espaço exterior."
                     ),
-                    (
-                        "Nenhuma delas interfere na gravidade, pois atuam"
-                        " apenas no campo magnético estelar."
-                    ),
+                    ("Ausência de interferência na gravidade macroscópica."),
                 ],
                 "correta": (
-                    "Enquanto a Matéria Escura atua aglutinando e dando suporte"
-                    " estrutural através da gravidade, a Energia Escura atua"
-                    " vencendo essa coesão em grande escala para acelerar o"
-                    " afastamento espacial."
+                    "Matéria Escura aglutina e estrutura via gravidade,"
+                    " enquanto Energia Escura acelera o afastamento espacial."
                 ),
                 "resgate": {
                     "enunciado": (
@@ -1145,21 +1117,21 @@ CASOS_INVESTIGACAO = [
             },
             {
                 "enunciado": (
-                    "8. Que consequência direta a ausência de matéria escura"
+                    "Que consequência direta a ausência de matéria escura"
                     " traria para as estrelas periféricas nas galáxias espirais?"
                 ),
                 "opcoes": [
                     (
-                        "Elas se desprenderiam de suas órbitas e escapariam"
-                        " para o espaço intergaláctico."
+                        "Desprendimento orbital e fuga rumo ao espaço"
+                        " intergaláctico."
                     ),
-                    ("Elas colidiriam instantaneamente com o núcleo galáctico."),
-                    ("Elas duplicariam seu brilho e temperatura interna."),
-                    ("Elas se transformariam em estrelas de nêutrons."),
+                    ("Colisão instantânea contra o núcleo central estelar."),
+                    ("Duplicação rápida de brilho e temperatura térmica."),
+                    ("Transformação espontânea em estrelas de nêutrons."),
                 ],
                 "correta": (
-                    "Elas se desprenderiam de suas órbitas e escapariam para o"
-                    " espaço intergaláctico."
+                    "Desprendimento orbital e fuga rumo ao espaço"
+                    " intergaláctico."
                 ),
                 "resgate": {
                     "enunciado": (
@@ -1226,7 +1198,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 st.markdown(
-    "<p style='text-align: center; color: #aaa;'>Ative seus subsunçores,"
+    "<p style='text-align: center; color: #aaa;'>Ative seus conhecimentos,"
     " investigue textos detalhados com 7 questões sorteadas por caso e"
     " enfrente Death Tahim!</p>",
     unsafe_allow_html=True,
@@ -1241,8 +1213,8 @@ if st.session_state.modo == "menu":
   with col_m1:
     st.markdown("### 🕵️‍♂️ Área do Aluno (Agente Investigativo)")
     st.write(
-        "Inicie a investigação com banco de questões dinâmico, ancoragem de"
-        " subsunçores e o desfecho épico com Death Tahim!"
+        "Inicie a investigação com banco de questões dinâmico, análise e o"
+        " desfecho épico com Death Tahim!"
     )
     if st.button("Entrar como Agente"):
       st.session_state.modo = "aluno"
@@ -1285,7 +1257,7 @@ elif st.session_state.modo == "aluno":
   ):
     st.subheader("🎯 Credenciamento do Agente Cognitivo")
     nome_input = st.text_input("Digite seu Nome de Agente ou Apelido:")
-    if st.button("🚀 Iniciar Ancoragem e Investigação"):
+    if st.button("🚀 Iniciar Investigação"):
       if nome_input.strip() == "":
         st.warning("Por favor, digite um nome válido.")
       else:
@@ -1293,7 +1265,7 @@ elif st.session_state.modo == "aluno":
         st.rerun()
     st.stop()
 
-  # ETAPA DE INVESTIGAÇÃO COM SUBSUNÇORES E BANCO DINÂMICO
+  # ETAPA DE INVESTIGAÇÃO COM BANCO DINÂMICO
   if st.session_state.etapa_agente == "investigacao":
     idx = st.session_state.indice_caso
     total_casos = len(CASOS_INVESTIGACAO)
@@ -1325,7 +1297,7 @@ elif st.session_state.modo == "aluno":
         )
         st.progress((q_idx) / total_q)
 
-        # 1. Ativação de Conhecimento Prévio (Ausubel)
+        # 1. Ativação de Conhecimento Prévio
         st.markdown(
             f"<div class='subsunsor-box'>{caso_atual['subsunsor_previo']}</div>",
             unsafe_allow_html=True,
@@ -1387,11 +1359,11 @@ elif st.session_state.modo == "aluno":
           )
 
           st.markdown("<br>", unsafe_allow_html=True)
-          if st.button("🔒 Validar Subsunçor e Avançar"):
+          if st.button("🔒 Validar Resposta e Avançar"):
             if escolha_agente == q_ativa["correta"]:
               st.success(
-                  "✨ Conceito ancorado com sucesso! Subsunçor integrado à"
-                  " estrutura cognitiva."
+                  "✨ Conceito validado com sucesso! Integrado à sua estrutura"
+                  " de raciocínio."
               )
               st.session_state.em_resgate = False
               st.session_state.indice_questao_caso += 1
@@ -1399,9 +1371,9 @@ elif st.session_state.modo == "aluno":
             else:
               erro_info = (
                   f"**{caso_atual['titulo']} (Questão {q_idx + 1})**: Você"
-                  f" selecionou uma ancoragem equivocada"
+                  f" selecionou uma dedução equivocada"
                   f" (*'{escolha_agente[:40]}...'*), gerando conflito com o"
-                  f" subsunçor científico correto (*'{q_ativa['correta'][:40]}...'*)."
+                  f" conceito científico correto (*'{q_ativa['correta'][:40]}...'*)."
               )
               if erro_info not in st.session_state.erros_cometidos:
                 st.session_state.erros_cometidos.append(erro_info)
@@ -1410,15 +1382,15 @@ elif st.session_state.modo == "aluno":
                 st.session_state.em_resgate = True
                 st.error(
                     "❌ **Conflito Cognitivo (Erro Detectado)!** Death Tahim"
-                    " bloqueou seu acesso. Seus subsunçores antigos colidiram"
-                    " com a evidência correta. Leia a dica da Raquel e tente"
+                    " bloqueou seu acesso. Suas ideias antigas colidiram com a"
+                    " evidência correta. Leia a dica da Raquel e tente"
                     " novamente com a pista de resgate!"
                 )
                 st.rerun()
               else:
                 st.error(
                     "❌ Errado novamente! O bloqueio continua ativo. Releia o"
-                    " texto base e ajuste sua estrutura conceitual."
+                    " texto base e ajuste sua lógica conceitual."
                 )
       else:
         st.session_state.indice_caso += 1
@@ -1439,7 +1411,7 @@ elif st.session_state.modo == "aluno":
   # ETAPA 3: AVALIAÇÃO DIAGNÓSTICA DE ERROS & DESFECHO ÉPICO (DEATH TAHIM)
   elif st.session_state.etapa_agente == "avaliacao_ausubel":
     st.markdown(
-        "<h2>📊 Avaliação Diagnóstica de Erros & Conhecimento do Universo</h2>",
+        "<h2>📊 Avaliação Diagnóstica & Conhecimento do Universo</h2>",
         unsafe_allow_html=True,
     )
 
@@ -1450,7 +1422,7 @@ elif st.session_state.modo == "aluno":
             <p>Parabéns, Agente <b>{nome}</b>! Você investigou todos os 3 casos e venceu as questões dinâmicas sorteadas.</p>
             <p>As portas da câmara principal se abrem com um som metálico profundo. Das sombras surge <b>Death Tahim</b>, vestindo seu imponente traje preto estilo <i>Darth Vader</i> de <i>Star Wars</i>, com sua respiração mecânica ecoando pelo ambiente. Ao lado dele, <b>Raquel Ferreira</b> sorri orgulhosa.</p>
             <p style='color: #ffcc00; font-style: italic; font-size: 16px;'>
-            "Impressionante...", diz Death Tahim com sua voz profunda, retirando o capacete escuro e revelando um olhar de absoluto respeito. "Você enfrentou os conflitos cognitivos, superou seus erros por meio da leitura atenta e reestruturou seus subsunçores como um verdadeiro mestre. Na Teoria de David Ausubel, o erro não é o fim, mas o degrau necessário para a aprendizagem significativa."
+            "Impressionante...", diz Death Tahim com sua voz profunda, retirando o capacete escuro e revelando um olhar de absoluto respeito. "Você enfrentou os conflitos cognitivos, superou seus erros por meio da leitura atenta e reestruturou seu entendimento como um verdadeiro mestre. O erro nunca foi o fim, mas o degrau necessário para a evolução intelectual."
             </p>
             <p>Death Tahim ergue as mãos e lhe transfere formalmente o sagrado <b>Conhecimento do Universo</b>, dizendo: <i>"Eu assumi o manto e o visual do lado negro para forçar a sua mente a evoluir através da pesquisa crítica. Meus parabéns, agente. O cosmos agora está em boas mãos."</i></p>
         </div>
@@ -1461,30 +1433,29 @@ elif st.session_state.modo == "aluno":
     )
 
     st.subheader(
-        "🧠 Relatório Pedagógico: Análise dos Erros e Conflitos de Subsuncionários"
+        "🧠 Relatório Pedagógico: Análise dos Erros e Desvios Conceituais"
     )
     if len(st.session_state.erros_cometidos) == 0:
       st.success(
           "🌟 Espantoso! Você não cometeu erros conceituais significativos"
-          " durante a ancoragem de nenhum caso. Seus subsunçores estavam"
-          " perfeitamente alinhados desde o início!"
+          " durante a investigação de nenhum caso. Sua lógica estava"
+          " perfeitamente alinhada desde o início!"
       )
     else:
       st.warning(
           "⚠️ Durante a jornada investigativa, foram mapeados os seguintes"
-          " desvios conceituais e conflitos de subsunçores que fizeram você"
-          " se perder momentaneamente:"
+          " desvios conceituais que fizeram você se perder momentaneamente:"
       )
       for err in st.session_state.erros_cometidos:
         st.markdown(f"- {err}")
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.subheader("✍️ Relatório Final de Reancoragem Cognitiva")
+    st.subheader("✍️ Relatório Final de Compreensão Cognitiva")
     st.write(
-        "Para consolidar sua aprendizagem significativa, redija abaixo com suas"
-        " próprias palavras o que você entendeu sobre a evolução do universo"
-        " (Big Bang, Expansão e Matéria/Energia Escura) e como a leitura atenta"
-        " e os erros superados ajudaram na sua compreensão:"
+        "Para consolidar sua experiência, redija abaixo com suas próprias"
+        " palavras o que você entendeu sobre a evolução do universo (Big Bang,"
+        " Expansão e Matéria/Energia Escura) e como a leitura atenta e os erros"
+        " superados ajudaram na sua compreensão:"
     )
 
     conclusao_ausubel = st.text_area(
@@ -1515,8 +1486,8 @@ elif st.session_state.modo == "aluno":
   # ETAPA 4: TELA DE SUCESSO E RANKING
   elif st.session_state.etapa_agente == "fim_sucesso":
     st.success(
-        "🎉 Jornada Concluída com Honraria Máxima! Relatório de aprendizagem"
-        " significativa protocolado com bênção de Death Tahim."
+        "🎉 Jornada Concluída com Honraria Máxima! Relatório protocolado com"
+        " bênção de Death Tahim."
     )
     st.markdown(
         "### 🏆 Patente Concedida: Guardião(ã) do Conhecimento do Universo"
@@ -1536,7 +1507,7 @@ elif st.session_state.modo == "aluno":
       )
 
     st.divider()
-    if st.button("🔄 Realizar Nova Investigação Cognitiva (Questões Inéditas)"):
+    if st.button("🔄 Realizar Nova Investigação (Questões Inéditas)"):
       st.session_state.etapa_agente = "investigacao"
       st.session_state.indice_caso = 0
       st.session_state.indice_questao_caso = 0
@@ -1588,7 +1559,7 @@ elif st.session_state.modo == "gerente":
   else:
     st.success("✅ Sessão de Gerente Ativa (Felipe - Quartel-General)")
 
-    st.subheader("📊 Relatório de Agentes e Análise de Subsuncionários")
+    st.subheader("📊 Relatório de Agentes e Análise de Desvios")
     if len(st.session_state.ranking) == 0:
       st.info("Nenhum agente concluiu as investigações ainda.")
     else:
@@ -1609,4 +1580,3 @@ elif st.session_state.modo == "gerente":
         st.session_state.logado_gerente = False
         st.session_state.modo = "menu"
         st.rerun()
-       
