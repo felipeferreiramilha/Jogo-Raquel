@@ -4,7 +4,7 @@ from google import genai
 from google.genai import types
 
 # ==========================================================
-# 1. CONFIGURAÇÃO DA PÁGINA E VISUAL
+# 1. CONFIGURAÇÃO DA TELA
 # ==========================================================
 st.set_page_config(
     page_title="Astronomia para Crianças",
@@ -12,59 +12,28 @@ st.set_page_config(
     layout="centered"
 )
 
-# Estilização visual futurista e amigável para lives
-st.markdown(
-    """
-    <style>
-    .main {
-        background-color: #0b0f19;
-        color: #ffffff;
-    }
-    .stTextInput > div > div > input {
-        background-color: #161b22;
-        color: white;
-        font-size: 18px;
-        border-radius: 8px;
-        border: 1px solid #30363d;
-    }
-    .resposta-box {
-        background-color: #161b22;
-        padding: 20px;
-        border-radius: 12px;
-        border: 1px solid #30363d;
-        margin-top: 20px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+st.title("🚀 Astronomia para Crianças 🌌")
+st.markdown("### Digite qualquer dúvida sobre o espaço e receba explicações completas e mágicas!")
 
 # ==========================================================
-# 2. CONFIGURAÇÃO DA INTELIGÊNCIA ARTIFICIAL (GEMINI)
+# 2. FUNÇÃO DA INTELIGÊNCIA ARTIFICIAL
 # ==========================================================
-def obter_resposta_detalhada(pergunta):
+def obter_resposta_espacial(pergunta):
     """
-    Conecta à API do Gemini e força a IA a entregar respostas
-    profundas, divididas em 3 a 5 parágrafos ricos em detalhes.
+    Conecta ao Gemini e gera uma resposta rica e detalhada 
+    com analogias simples para crianças.
     """
     try:
-        # Inicializa o cliente do Gemini
-        # Nota: Certifique-se de configurar sua chave no terminal com: 
-        # set GEMINI_API_KEY="sua_chave" (Windows) ou export GEMINI_API_KEY="sua_chave" (Mac/Linux)
+        # Inicializa o cliente oficial do Google GenAI
         client = genai.Client()
 
-        # Instrução de Sistema rígida para garantir explicações elaboradas e infantis
+        # Regras de comportamento para a IA
         instrucao_sistema = (
-            "Você é o assistente virtual 'Astronomia para Crianças', um guia espacial divertido, "
-            "cientista e mágico que explica os maiores mistérios do universo. "
-            "Regras OBRIGATÓRIAS que você deve seguir:\n"
-            "1. Responda a QUALQUER pergunta sobre astronomia, física, buracos negros, matéria escura, "
-            "teoria das cordas, relatividade ou exoplanetas.\n"
-            "2. Cada resposta DEVE ser altamente elaborada, rica em detalhes e ter obrigatoriamente "
-            "entre **3 e 5 parágrafos** bem desenvolvidos.\n"
-            "3. Use uma linguagem mágica, acolhedora, com analogias fantásticas fáceis para crianças entenderem, "
-            "mas sem perder o rigor científico real.\n"
-            "4. Nunca dê respostas curtas ou superficiais. Explique o 'porquê' das coisas de forma fascinante."
+            "Você é o assistente 'Astronomia para Crianças', um guia espacial divertido. "
+            "Regras obrigatórias:\n"
+            "1. Responda a QUALQUER pergunta sobre espaço, planetas, física ou buracos negros.\n"
+            "2. Cada resposta DEVE ter entre **3 e 5 parágrafos** bem desenvolvidos e ricos em detalhes.\n"
+            "3. Use analogias mágicas e fáceis para crianças entenderem, sem perder o rigor científico."
         )
 
         configuracao = types.GenerateContentConfig(
@@ -81,37 +50,28 @@ def obter_resposta_detalhada(pergunta):
 
     except Exception as e:
         return (
-            "🚀 **Houston, tivemos um pequeno problema técnico!**\n\n"
-            "Parece que a chave da API do Gemini (`GEMINI_API_KEY`) não foi configurada corretamente no seu computador, "
-            "ou o foguete perdeu o sinal com a base. Verifique se a sua chave está ativa no terminal e tente novamente!\n\n"
-            f"*Detalhe técnico do erro:* `{e}`"
+            "⚠️ **Ops! O foguete perdeu o sinal com a base.**\n\n"
+            "Verifique se você configurou a sua chave de API corretamente no terminal (`GEMINI_API_KEY`).\n\n"
+            f"Erro técnico: `{e}`"
         )
 
 # ==========================================================
-# 3. INTERFACE GRÁFICA (STREAMLIT)
+# 3. INTERFACE VISUAL (STREAMLIT)
 # ==========================================================
-st.title("🚀 Astronomia para Crianças 🌌")
-st.markdown("### O super computador cósmico que responde **tudo** sobre o espaço com explicações completas e detalhadas!")
-
-# Campo de entrada da pergunta
 pergunta_usuario = st.text_input(
-    "O que você quer explorar no universo hoje?",
-    placeholder="Ex: Como funciona um buraco negro? O que é matéria escura? Me explique a relatividade de Einstein..."
+    "O que você quer descobrir no universo hoje?",
+    placeholder="Ex: Como funciona um buraco negro? O que é matéria escura?"
 )
 
-# Botão de envio
-if st.button("🌟 Decolar Pesquisa Cósmica!", type="primary"):
+if st.button("🌟 Decolar Pesquisa!", type="primary"):
     if pergunta_usuario.strip() != "":
-        # Mostra um aviso visual de carregamento enquanto a IA elabora a resposta rica
-        with st.spinner("✨ O foguete está viajando pelas galáxias e elaborando uma resposta completa para você..."):
-            resposta_gerada = obter_resposta_detalhada(pergunta_usuario)
+        with st.spinner("✨ Viajando pelas galáxias para buscar a resposta..."):
+            resposta_final = obter_resposta_espacial(pergunta_usuario)
         
-        # Exibe a resposta estruturada em um bloco visual elegante
         st.markdown("### 🔭 Resposta do Explorador Espacial:")
-        st.markdown(f'<div class="resposta-box">{resposta_gerada}</div>', unsafe_allow_html=True)
+        st.write(resposta_final)
     else:
-        st.warning("⚠️ Digite uma pergunta na caixa acima para o foguete poder decolar!")
+        st.warning("⚠️ Digite uma pergunta na caixa acima para poder pesquisar!")
 
-# Rodapé informativo para a Live / OBS
 st.markdown("---")
-st.markdown("💡 **Dica para sua Live / Stream (OBS Studio):** Abra o OBS, adicione uma fonte de **Captura de Janela** e selecione esta aba do seu navegador. Ela vai espelhar perfeitamente em tela cheia, sem telas pretas e com alta qualidade!")
+st.markdown("💡 **Dica para Live / OBS:** Abra o OBS Studio, adicione uma **Captura de Janela** selecionando esta aba do seu navegador para espelhar perfeitamente.")
