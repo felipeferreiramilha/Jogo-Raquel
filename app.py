@@ -71,7 +71,6 @@ if modo_ia == "🤖 Chat Geral & Cosmologia":
         if pergunta_usuario.strip() != "":
             st.session_state.historico_chat.append({"role": "usuario", "texto": pergunta_usuario})
             
-            # Respostas inteligentes simuladas baseadas em palavras-chave da cosmologia
             p_lower = pergunta_usuario.lower()
             resposta_ia = ""
             
@@ -84,7 +83,7 @@ if modo_ia == "🤖 Chat Geral & Cosmologia":
             elif "energia escura" in p_lower:
                 resposta_ia = "A energia escura representa cerca de 68% do cosmos. É uma propriedade inerente ao vácuo quântico que atua de forma repulsiva, sendo a principal responsável pela aceleração da expansão do universo."
             elif "hubble" in p_lower:
-                resposta_ia = "A Lei de Hubble estabelece que a velocidade de recessão das galáxias é diretamente proporcional à sua distância até nós ($v = H_0 \cdot d$), provando que o cosmos está em expansão contínua."
+                resposta_ia = "A Lei de Hubble estabelece que a velocidade de recessão das galáxias é diretamente proporcional à sua distância até nós (v = H_0 * d), provando que o cosmos está em expansão contínua."
             else:
                 resposta_ia = f"Análise concluída sobre '{pergunta_usuario}'. No contexto da cosmologia padrão (Lambda-CDM), esse fenômeno relaciona-se diretamente com a curvatura do espaço-tempo e a dinâmica de fluidos cosmológicos. Deseja aprofundar com alguma equação matemática específica?"
 
@@ -114,12 +113,16 @@ elif modo_ia == "∫ Calculadora de Derivadas e Integrais":
             st.markdown("---")
             st.markdown(f"### **Resultado do Processamento:**")
             
+            latex_expr = sp.latex(expr)
+            
             if "Derivada" in operacao:
                 resultado = sp.diff(expr, x)
-                st.latex(f"\\frac{d}{d{var_str}} \\left( {sp.latex(expr)} \\right) = {sp.latex(resultado)}")
+                latex_res = sp.latex(resultado)
+                st.latex(r"\frac{d}{d" + var_str + r"} \left( " + latex_expr + r" \right) = " + latex_res)
             else:
                 resultado = sp.integrate(expr, x)
-                st.latex(f"\\int \\left( {sp.latex(expr)} \\right) d{var_str} = {sp.latex(resultado)} + C")
+                latex_res = sp.latex(resultado)
+                st.latex(r"\int \left( " + latex_expr + r" \right) d" + var_str + r" = " + latex_res + r" + C")
                 
             st.success("Cálculo efetuado com rigor analítico pelo motor SymPy.")
         except Exception as e:
@@ -168,3 +171,4 @@ elif modo_ia == "🌌 Simulado / Dúvidas de Relatividade":
         
         *Aetheris:* Onde $a(t)$ é o fator de escala do universo, $\\rho$ é a densidade de energia, $k$ é a curvatura espacial e $\\Lambda$ é a constante cosmológica.
         """)
+       
