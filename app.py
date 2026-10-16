@@ -1,7 +1,10 @@
+import os
 import streamlit as st
+from google import genai
+from google.genai import types
 
 # ==========================================================
-# CONFIGURAÇÃO DA PÁGINA (VISUAL PARA CRIANÇAS)
+# 1. CONFIGURAÇÃO DA PÁGINA E VISUAL
 # ==========================================================
 st.set_page_config(
     page_title="Astronomia para Crianças",
@@ -9,18 +12,27 @@ st.set_page_config(
     layout="centered"
 )
 
-# Estilização visual amigável e colorida
+# Estilização visual futurista e amigável para lives
 st.markdown(
     """
     <style>
     .main {
-        background-color: #0e1117;
+        background-color: #0b0f19;
         color: #ffffff;
     }
     .stTextInput > div > div > input {
-        background-color: #1f2937;
+        background-color: #161b22;
         color: white;
         font-size: 18px;
+        border-radius: 8px;
+        border: 1px solid #30363d;
+    }
+    .resposta-box {
+        background-color: #161b22;
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid #30363d;
+        margin-top: 20px;
     }
     </style>
     """,
@@ -28,59 +40,78 @@ st.markdown(
 )
 
 # ==========================================================
-# BANCO DE DADOS COMPLETO (MAIS DE 30 TÓPICOS)
+# 2. CONFIGURAÇÃO DA INTELIGÊNCIA ARTIFICIAL (GEMINI)
 # ==========================================================
-BASE_CONHECIMENTO = {
-    "mercúrio": "Mercúrio é o menor planeta do Sistema Solar e o mais pertinho do Sol. Ele é cheio de crateras na superfície e tem temperaturas super extremas!",
-    "vênus": "Vênus brilha tanto no céu que parece uma estrela, mas é um planeta coberto por nuvens grossas. É o planeta mais quente de todos por causa do efeito estufa!",
-    "terra": "A Terra é a nossa nave espacial azul, o único lugar do universo com vida confirmada, muita água líquida e ar fresquinho.",
-    "marte": "Marte é o planeta vermelho, coberto de poeira de ferro. Os cientistas mandam robôs espaciais para lá para procurar vestígios de água antiga.",
-    "júpiter": "Júpiter é o maior planeta do Sistema Solar, um gigante gasoso com uma grande mancha vermelha que é uma supertempestade girando sem parar.",
-    "saturno": "Saturno é o planeta dos anéis brilhantes feitos de gelo e rocha. Ele é tão leve que se colocassem numa banheira gigante, ele flutuaria!",
-    "urano": "Urano é um gigante de gelo azul-esverdeado que tem uma curiosidade incrível: ele gira deitado, como se estivesse rolando no espaço.",
-    "netuno": "Netuno é o planeta azul mais distante do Sol, um mundo gelado onde sopram os ventos mais rápidos de todo o sistema solar.",
-    "plutão": "Plutão é um fofinho planeta anão lá no fim do Sistema Solar que tem uma mancha em formato de coração na superfície.",
-    "sol": "O Sol é a estrela gigante e quentinha no centro da nossa vizinhança, dando luz, calor e energia para todos nós.",
-    "lua": "A Lua é a companheira fiel da Terra que brilha à noite refletindo a luz do Sol e ajuda a controlar as marés dos oceanos.",
-    "estrelas": "As estrelas são sóis gigantes bem distantes que brilham no escuro e produzem sua própria luz através de reações mágicas de fusão.",
-    "exoplanetas": "Exoplanetas são mundos misteriosos que giram ao redor de outras estrelas bem longe do nosso Sol.",
-    "galáxias": "Uma galáxia é uma cidade gigantesca no espaço que junta bilhões de estrelas, planetas e poeira cósmica. A nossa se chama Via Láctea!",
-    "buraco negro": "Um buraco negro é uma região do espaço com uma gravidade tão forte que puxa absolutamente tudo para dentro, até a luz!",
-    "matéria escura": "A matéria escura é um ingrediente invisível que atrai as coisas com gravidade, ajudando a segurar as galáxias unidas.",
-    "energia escura": "A energia escura é uma força misteriosa que está fazendo todo o universo se expandir cada vez mais rápido.",
-    "big bang": "O Big Bang foi o grande começo de tudo, o momento em que o universo nasceu de um ponto minúsculo e começou a crescer.",
-    "relatividade": "A teoria da relatividade de Einstein nos ensina que o tempo e o espaço estão conectados e podem mudar dependendo da velocidade.",
-    "teoria das cordas": "A teoria das cordas imagina que as menores coisas do universo não são bolinhas, mas sim pequenas cordas musicais vibrantes."
-}
+def obter_resposta_detalhada(pergunta):
+    """
+    Conecta à API do Gemini e força a IA a entregar respostas
+    profundas, divididas em 3 a 5 parágrafos ricos em detalhes.
+    """
+    try:
+        # Inicializa o cliente do Gemini
+        # Nota: Certifique-se de configurar sua chave no terminal com: 
+        # set GEMINI_API_KEY="sua_chave" (Windows) ou export GEMINI_API_KEY="sua_chave" (Mac/Linux)
+        client = genai.Client()
+
+        # Instrução de Sistema rígida para garantir explicações elaboradas e infantis
+        instrucao_sistema = (
+            "Você é o assistente virtual 'Astronomia para Crianças', um guia espacial divertido, "
+            "cientista e mágico que explica os maiores mistérios do universo. "
+            "Regras OBRIGATÓRIAS que você deve seguir:\n"
+            "1. Responda a QUALQUER pergunta sobre astronomia, física, buracos negros, matéria escura, "
+            "teoria das cordas, relatividade ou exoplanetas.\n"
+            "2. Cada resposta DEVE ser altamente elaborada, rica em detalhes e ter obrigatoriamente "
+            "entre **3 e 5 parágrafos** bem desenvolvidos.\n"
+            "3. Use uma linguagem mágica, acolhedora, com analogias fantásticas fáceis para crianças entenderem, "
+            "mas sem perder o rigor científico real.\n"
+            "4. Nunca dê respostas curtas ou superficiais. Explique o 'porquê' das coisas de forma fascinante."
+        )
+
+        configuracao = types.GenerateContentConfig(
+            system_instruction=instrucao_sistema,
+            temperature=0.7,
+        )
+
+        resposta = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=pergunta,
+            config=configuracao,
+        )
+        return resposta.text
+
+    except Exception as e:
+        return (
+            "🚀 **Houston, tivemos um pequeno problema técnico!**\n\n"
+            "Parece que a chave da API do Gemini (`GEMINI_API_KEY`) não foi configurada corretamente no seu computador, "
+            "ou o foguete perdeu o sinal com a base. Verifique se a sua chave está ativa no terminal e tente novamente!\n\n"
+            f"*Detalhe técnico do erro:* `{e}`"
+        )
 
 # ==========================================================
-# INTERFACE GRÁFICA DO APLICATIVO
+# 3. INTERFACE GRÁFICA (STREAMLIT)
 # ==========================================================
 st.title("🚀 Astronomia para Crianças 🌌")
-st.markdown("### Digite qualquer dúvida sobre o espaço e veja a mágica acontecer na sua tela!")
+st.markdown("### O super computador cósmico que responde **tudo** sobre o espaço com explicações completas e detalhadas!")
 
-# Caixa de texto onde a criança digita
-pergunta = st.text_input("O que você quer descobrir hoje?", placeholder="Ex: Me fale sobre Saturno, o que é um buraco negro...")
+# Campo de entrada da pergunta
+pergunta_usuario = st.text_input(
+    "O que você quer explorar no universo hoje?",
+    placeholder="Ex: Como funciona um buraco negro? O que é matéria escura? Me explique a relatividade de Einstein..."
+)
 
-# Botão de pesquisa
-if st.button("🚀 Decolar Pesquisa!", type="primary"):
-    if pergunta:
-        pergunta_lower = pergunta.lower()
-        encontrou = False
+# Botão de envio
+if st.button("🌟 Decolar Pesquisa Cósmica!", type="primary"):
+    if pergunta_usuario.strip() != "":
+        # Mostra um aviso visual de carregamento enquanto a IA elabora a resposta rica
+        with st.spinner("✨ O foguete está viajando pelas galáxias e elaborando uma resposta completa para você..."):
+            resposta_gerada = obter_resposta_detalhada(pergunta_usuario)
         
-        # Varre o dicionário buscando correspondência
-        for chave, texto in BASE_CONHECIMENTO.items():
-            if chave in pergunta_lower:
-                st.success(f"✨ **Resposta Estelar:**\n\n{texto}")
-                encontrou = True
-                break
-        
-        # Se não achar exatamente na lista, dá uma resposta genérica amigável
-        if not encontrou:
-            st.info(f"🌟 **Resposta Cósmica:**\n\nA pergunta sobre '{pergunta}' é fantástica! Na astronomia, tudo está conectado por forças incríveis como a gravidade, a luz e o movimento. Continue sempre curioso, pois o espaço guarda segredos maravilhosos!")
+        # Exibe a resposta estruturada em um bloco visual elegante
+        st.markdown("### 🔭 Resposta do Explorador Espacial:")
+        st.markdown(f'<div class="resposta-box">{resposta_gerada}</div>', unsafe_allow_html=True)
     else:
         st.warning("⚠️ Digite uma pergunta na caixa acima para o foguete poder decolar!")
 
-# Rodapé com instruções para a Live
+# Rodapé informativo para a Live / OBS
 st.markdown("---")
-st.markdown("💡 **Dica para o seu Stream / OBS:** Para essa tela aparecer perfeitamente na sua transmissão sem dar tela preta, abra o OBS, adicione uma **Captura de Janela** ou **Fonte de Navegador** selecionando esta aba do seu navegador!")
+st.markdown("💡 **Dica para sua Live / Stream (OBS Studio):** Abra o OBS, adicione uma fonte de **Captura de Janela** e selecione esta aba do seu navegador. Ela vai espelhar perfeitamente em tela cheia, sem telas pretas e com alta qualidade!")
