@@ -3,12 +3,11 @@ import requests
 import re
 import html
 from urllib.parse import quote_plus
-from bs4 import BeautifulSoup
 from datetime import datetime
 
 
 # ============================================================
-# CONFIGURAÇÃO DA PÁGINA
+# CONFIGURAÇÃO
 # ============================================================
 
 st.set_page_config(
@@ -96,7 +95,7 @@ st.markdown("""
 
 
 # ============================================================
-# ESTADO DO SISTEMA
+# ESTADO
 # ============================================================
 
 if "historico_explicacoes" not in st.session_state:
@@ -111,8 +110,8 @@ if "ultima_pergunta" not in st.session_state:
 if "ultima_resposta" not in st.session_state:
     st.session_state.ultima_resposta = ""
 
-if "modo_sistema" not in st.session_state:
-    st.session_state.modo_sistema = "🌌 Pesquisa de Astronomia"
+if "fontes_atuais" not in st.session_state:
+    st.session_state.fontes_atuais = []
 
 
 # ============================================================
@@ -133,165 +132,21 @@ FONTES_PRIORITARIAS = [
 
 
 # ============================================================
-# FUNÇÃO PARA PESQUISAR NA WEB
-# ============================================================
-
-def pesquisar_web(pergunta, quantidade=8):
-
-    """
-    Pesquisa a pergunta utilizando o mecanismo público
-    DuckDuckGo.
-
-    Retorna uma lista de resultados contendo:
-    título
-    link
-    descrição
-    """
-
-    try:
-
-        url = "https://html.duckduckgo.com/html/"
-
-        headers = {
-            "User-Agent": (
-                "Mozilla/5.0 "
-                "(Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 "
-                "(KHTML, like Gecko) "
-                "Chrome/155.0 Safari/537.36"
-            )
-        }
-
-        resposta = requests.post(
-            url,
-            data={"q": pergunta},
-            headers=headers,
-            timeout=20
-        )
-
-        if resposta.status_code != 200:
-            return []
-
-        soup = BeautifulSoup(
-            resposta.text,
-            "html.parser"
-        )
-
-        resultados = []
-
-        blocos = soup.select(".result")
-
-        for bloco in blocos:
-
-            titulo_elemento = bloco.select_one(".result__title")
-
-            link_elemento = bloco.select_one(
-                ".result__a"
-            )
-
-            descricao_elemento = bloco.select_one(
-                ".result__snippet"
-            )
-
-            if not titulo_elemento or not link_elemento:
-                continue
-
-            titulo = titulo_elemento.get_text(
-                " ",
-                strip=True
-            )
-
-            link = link_elemento.get("href", "")
-
-            descricao = ""
-
-            if descricao_elemento:
-                descricao = descricao_elemento.get_text(
-                    " ",
-                    strip=True
-                )
-
-            if not link:
-                continue
-
-            resultados.append({
-                "titulo": titulo,
-                "link": link,
-                "descricao": descricao
-            })
-
-            if len(resultados) >= quantidade:
-                break
-
-        return resultados
-
-    except Exception:
-        return []
-
-
-# ============================================================
-# EXTRAIR DOMÍNIO
-# ============================================================
-
-def obter_dominio(url):
-
-    try:
-
-        dominio = re.findall(
-            r"https?://([^/]+)",
-            url
-        )
-
-        if dominio:
-            return dominio[0]
-
-    except Exception:
-        pass
-
-    return ""
-
-
-# ============================================================
-# ORGANIZAR RESULTADOS
-# ============================================================
-
-def organizar_resultados(resultados):
-
-    """
-
-    Coloca fontes institucionais e científicas
-    primeiro.
-    """
-
-    def pontuacao(resultado):
-
-        dominio = obter_dominio(
-            resultado["link"]
-        ).lower()
-
-        pontos = 0
-
-        for fonte in FONTES_PRIORITARIAS:
-
-            if fonte in dominio:
-                pontos += 10
-
-        return pontos
-
-    return sorted(
-        resultados,
-        key=pontuacao,
-        reverse=True
-    )
-
-
-# ============================================================
-# LIMPAR TEXTO
+# FUNÇÃO DE LIMPEZA
 # ============================================================
 
 def limpar_texto(texto):
 
+    if not texto:
+        return ""
+
     texto = html.unescape(texto)
+
+    texto = re.sub(
+        r"<[^>]+>",
+        " ",
+        texto
+    )
 
     texto = re.sub(
         r"\s+",
@@ -303,207 +158,486 @@ def limpar_texto(texto):
 
 
 # ============================================================
-# GERAR EXPLICAÇÃO DIDÁTICA
+# PESQUISA NA WEB
 # ============================================================
 
-def gerar_explicacao(pergunta, resultados):
+def pesquisar_web(pergunta):
 
-    """
-    Constrói uma explicação utilizando as informações
-    encontradas na pesquisa.
-
-    O objetivo é apresentar:
-    1. resposta direta
-    2. explicação
-    3. aprofundamento
-    4. exemplo
-    5. conclusão
-    """
-
-    if not resultados:
-
-        return (
-            "Não consegui encontrar resultados confiáveis "
-            "para essa pergunta neste momento."
-        )
-
-    pergunta_limpa = limpar_texto(pergunta)
-
-    textos = []
-
-    for resultado in resultados[:6]:
-
-        titulo = limpar_texto(
-            resultado["titulo"]
-        )
-
-        descricao = limpar_texto(
-            resultado["descricao"]
-        )
-
-        if descricao:
-
-            textos.append(
-                f"{titulo}: {descricao}"
-            )
-
-    contexto = "\n".join(textos)
-
-    # --------------------------------------------------------
-    # Tenta utilizar uma API de IA configurada pelo usuário.
-    # --------------------------------------------------------
+    resultados = []
 
     try:
 
-        api_key = st.secrets["OPENAI_API_KEY"]
+        consulta = quote_plus(
+            pergunta
+        )
 
-    except Exception:
+        # API pública do DuckDuckGo
+        url = (
+            "https://api.duckduckgo.com/"
+            f"?q={consulta}"
+            "&format=json"
+            "&no_html=1"
+            "&skip_disambig=0"
+        )
 
-        api_key = None
+        resposta = requests.get(
+            url,
+            timeout=20,
+            headers={
+                "User-Agent":
+                "Mozilla/5.0"
+            }
+        )
 
+        if resposta.status_code == 200:
 
-    if api_key:
+            dados = resposta.json()
 
-        try:
+            # ------------------------------------------------
+            # RESPOSTA PRINCIPAL
+            # ------------------------------------------------
 
-            prompt = f"""
-Você é um professor de Astronomia e Física especializado
-em divulgação científica e ensino para estudantes.
+            if dados.get("AbstractText"):
 
-O aluno fez a seguinte pergunta:
+                resultados.append({
+                    "titulo": (
+                        dados.get("Heading")
+                        or "Informação encontrada"
+                    ),
+                    "descricao": dados.get(
+                        "AbstractText",
+                        ""
+                    ),
+                    "link": dados.get(
+                        "AbstractURL",
+                        ""
+                    )
+                })
 
-{pergunta_limpa}
+            # ------------------------------------------------
+            # TÓPICOS RELACIONADOS
+            # ------------------------------------------------
 
-A pesquisa na Web encontrou estas informações:
+            def adicionar_topicos(lista):
 
-{contexto}
+                for item in lista:
 
-Escreva uma explicação científica correta, clara, fluida
-e progressiva.
+                    if len(resultados) >= 10:
+                        return
 
-REGRAS:
+                    if isinstance(item, dict):
 
-1. Responda diretamente à pergunta logo no começo.
-2. Depois explique o conceito passo a passo.
-3. Não trate o aluno como se fosse incapaz.
-4. Use linguagem simples, mas cientificamente correta.
-5. Se houver uma analogia, deixe claro que é uma analogia.
-6. Não invente dados.
-7. Não invente cientistas.
-8. Não invente fontes.
-9. Diferencie fatos científicos de hipóteses.
-10. Se houver alguma controvérsia científica, explique.
-11. Se houver matemática importante, apresente a equação
-    e explique o significado das grandezas.
-12. Relacione o fenômeno com Astronomia sempre que possível.
-13. Termine com uma pequena conclusão.
-14. Não diga que pesquisou algo que não esteja no contexto.
+                        texto = item.get(
+                            "Text",
+                            ""
+                        )
 
-Organize a resposta com:
+                        primeiro_url = item.get(
+                            "FirstURL",
+                            ""
+                        )
 
-## Resposta rápida
+                        if texto:
 
-## Entendendo melhor
+                            resultados.append({
+                                "titulo": texto.split(
+                                    " - "
+                                )[0],
+                                "descricao": texto,
+                                "link": primeiro_url
+                            })
 
-## Como isso acontece
+                        if item.get(
+                            "Topics"
+                        ):
 
-## Um exemplo
-
-## O que a ciência sabe atualmente
-
-## Conclusão
-
-Escreva de maneira natural, como um professor explicando
-o assunto para um estudante.
-"""
-
-            resposta = requests.post(
-                "https://api.openai.com/v1/chat/completions",
-                headers={
-                    "Authorization": f"Bearer {api_key}",
-                    "Content-Type": "application/json"
-                },
-                json={
-                    "model": "gpt-4o-mini",
-                    "messages": [
-                        {
-                            "role": "system",
-                            "content": (
-                                "Você é um professor de "
-                                "Astronomia e Física."
+                            adicionar_topicos(
+                                item["Topics"]
                             )
-                        },
-                        {
-                            "role": "user",
-                            "content": prompt
-                        }
-                    ],
-                    "temperature": 0.3
-                },
-                timeout=60
+
+            adicionar_topicos(
+                dados.get(
+                    "RelatedTopics",
+                    []
+                )
             )
 
-            if resposta.status_code == 200:
-
-                dados = resposta.json()
-
-                return dados["choices"][0]["message"]["content"]
-
-        except Exception:
-            pass
+    except Exception:
+        pass
 
 
-    # --------------------------------------------------------
-    # MODO SEM API DE IA
-    # --------------------------------------------------------
+    # ========================================================
+    # PESQUISA DIRETA EM FONTES CIENTÍFICAS
+    # ========================================================
 
-    explicacao = f"""
-## Resposta rápida
+    fontes_busca = [
+        (
+            "NASA",
+            "https://www.google.com/search?q="
+            + quote_plus(
+                "site:nasa.gov "
+                + pergunta
+            )
+        ),
+        (
+            "ESA",
+            "https://www.google.com/search?q="
+            + quote_plus(
+                "site:esa.int "
+                + pergunta
+            )
+        ),
+        (
+            "INPE",
+            "https://www.google.com/search?q="
+            + quote_plus(
+                "site:inpe.br "
+                + pergunta
+            )
+        ),
+        (
+            "Observatório Nacional",
+            "https://www.google.com/search?q="
+            + quote_plus(
+                "site:gov.br/on "
+                + pergunta
+            )
+        )
+    ]
 
-A pergunta pesquisada foi:
 
-**{pergunta_limpa}**
+    # Adiciona páginas de pesquisa como fontes
+    # para consulta direta do aluno.
 
-A pesquisa encontrou informações em diferentes páginas
-relacionadas ao tema.
+    for nome, link in fontes_busca:
 
-## O que encontramos
+        resultados.append({
+            "titulo": (
+                f"Pesquisar sobre '{pergunta}' "
+                f"em {nome}"
+            ),
+            "descricao": (
+                f"Pesquisa direcionada para encontrar "
+                f"informações sobre {pergunta} "
+                f"em fontes relacionadas a {nome}."
+            ),
+            "link": link
+        })
+
+
+    return organizar_resultados(
+        resultados
+    )
+
+
+# ============================================================
+# ORGANIZAR RESULTADOS
+# ============================================================
+
+def obter_dominio(url):
+
+    try:
+
+        resultado = re.search(
+            r"https?://([^/]+)",
+            url
+        )
+
+        if resultado:
+            return resultado.group(1)
+
+    except Exception:
+        pass
+
+    return ""
+
+
+def pontuar_fonte(resultado):
+
+    dominio = obter_dominio(
+        resultado.get("link", "")
+    ).lower()
+
+    pontos = 0
+
+    for fonte in FONTES_PRIORITARIAS:
+
+        if fonte in dominio:
+            pontos += 10
+
+    return pontos
+
+
+def organizar_resultados(resultados):
+
+    resultados = sorted(
+        resultados,
+        key=pontuar_fonte,
+        reverse=True
+    )
+
+    # Remove resultados duplicados
+
+    finais = []
+
+    links_vistos = set()
+
+    for resultado in resultados:
+
+        link = resultado.get(
+            "link",
+            ""
+        )
+
+        if link in links_vistos:
+            continue
+
+        links_vistos.add(link)
+
+        finais.append(
+            resultado
+        )
+
+    return finais[:10]
+
+
+# ============================================================
+# GERADOR DE RESPOSTA
+# ============================================================
+
+def gerar_resposta_sem_IA(
+    pergunta,
+    resultados
+):
+
+    pergunta = limpar_texto(
+        pergunta
+    )
+
+    resposta = f"""
+## 🔭 Resposta à pergunta
+
+**{pergunta}**
+
+A pesquisa encontrou informações relacionadas ao tema.
+Abaixo estão os principais resultados encontrados.
+
+## 🌌 O que encontramos
 
 """
 
-    for resultado in resultados[:5]:
+    resultados_reais = 0
+
+    for resultado in resultados:
 
         titulo = limpar_texto(
-            resultado["titulo"]
+            resultado.get(
+                "titulo",
+                ""
+            )
         )
 
         descricao = limpar_texto(
-            resultado["descricao"]
+            resultado.get(
+                "descricao",
+                ""
+            )
+        )
+
+        if not titulo:
+            continue
+
+        if not descricao:
+            continue
+
+        resultados_reais += 1
+
+        resposta += f"""
+### {titulo}
+
+{descricao}
+
+"""
+
+        if resultados_reais >= 5:
+            break
+
+
+    if resultados_reais == 0:
+
+        resposta += """
+Não foi possível obter uma explicação detalhada
+diretamente dos resultados da pesquisa.
+
+Use as fontes indicadas abaixo para continuar
+a investigação.
+"""
+
+
+    resposta += """
+
+## 🧠 Como interpretar a pesquisa
+
+É importante lembrar que uma pesquisa científica
+não deve depender de uma única página.
+
+Quando estudamos Astronomia, devemos comparar
+informações, observar quem produziu o conteúdo e,
+sempre que possível, dar preferência a instituições
+científicas, universidades, observatórios e agências
+espaciais.
+
+## 📚 Conclusão
+
+A pergunta foi pesquisada utilizando resultados
+disponíveis na Web. As fontes apresentadas abaixo
+podem ser abertas pelo aluno para aprofundar
+o estudo.
+"""
+
+    return resposta
+
+
+# ============================================================
+# GERADOR COM INTELIGÊNCIA ARTIFICIAL
+# ============================================================
+
+def gerar_resposta_com_ia(
+    pergunta,
+    resultados
+):
+
+    try:
+
+        api_key = st.secrets[
+            "OPENAI_API_KEY"
+        ]
+
+    except Exception:
+
+        return None
+
+
+    contexto = ""
+
+    for resultado in resultados[:8]:
+
+        titulo = limpar_texto(
+            resultado.get(
+                "titulo",
+                ""
+            )
+        )
+
+        descricao = limpar_texto(
+            resultado.get(
+                "descricao",
+                ""
+            )
         )
 
         if descricao:
 
-            explicacao += (
-                f"### {titulo}\n\n"
-                f"{descricao}\n\n"
+            contexto += (
+                f"\nFonte: {titulo}\n"
+                f"Informação: {descricao}\n"
             )
 
-    explicacao += """
-## Entendendo melhor
 
-As informações acima foram obtidas a partir dos resultados
-encontrados na pesquisa. Para uma explicação mais profunda,
-o professor pode configurar uma API de Inteligência
-Artificial no aplicativo.
+    prompt = f"""
+Você é um professor de Astronomia e Física.
+
+Um estudante fez esta pergunta:
+
+{pergunta}
+
+A pesquisa encontrou as seguintes informações:
+
+{contexto}
+
+Produza uma explicação científica, detalhada,
+fluida e didática.
+
+A resposta deve:
+
+1. Responder diretamente à pergunta.
+2. Começar pelo conceito mais simples.
+3. Desenvolver a explicação passo a passo.
+4. Explicar os termos científicos importantes.
+5. Utilizar analogias somente quando ajudarem.
+6. Não inventar informações.
+7. Não inventar cientistas.
+8. Não inventar resultados científicos.
+9. Não apresentar hipótese como fato.
+10. Informar quando algo ainda é objeto de pesquisa.
+11. Usar equações quando forem importantes.
+12. Explicar cada variável de uma equação.
+13. Relacionar o fenômeno com Astronomia.
+14. Ser adequada para estudantes.
+15. Não infantilizar excessivamente a explicação.
+
+Organize assim:
+
+## Resposta rápida
+
+## Entendendo o fenômeno
+
+## Explicação passo a passo
+
+## Exemplo
+
+## O que os cientistas sabem
 
 ## Conclusão
-
-A resposta apresentada foi construída a partir das fontes
-encontradas na pesquisa. Consulte as fontes abaixo para
-aprofundar o estudo.
 """
 
-    return explicacao
+    try:
+
+        resposta = requests.post(
+            "https://api.openai.com/v1/chat/completions",
+            headers={
+                "Authorization":
+                    f"Bearer {api_key}",
+                "Content-Type":
+                    "application/json"
+            },
+            json={
+                "model": "gpt-4o-mini",
+                "messages": [
+                    {
+                        "role": "system",
+                        "content":
+                        "Você é um professor de Astronomia."
+                    },
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ],
+                "temperature": 0.3
+            },
+            timeout=60
+        )
+
+        if resposta.status_code == 200:
+
+            dados = resposta.json()
+
+            return (
+                dados[
+                    "choices"
+                ][0][
+                    "message"
+                ][
+                    "content"
+                ]
+            )
+
+    except Exception:
+
+        return None
+
+    return None
 
 
 # ============================================================
@@ -513,39 +647,47 @@ aprofundar o estudo.
 def realizar_pesquisa(pergunta):
 
     with st.spinner(
-        "🔭 Pesquisando fontes científicas na Web..."
+        "🔭 Pesquisando na Web..."
     ):
 
         resultados = pesquisar_web(
-            pergunta,
-            quantidade=10
+            pergunta
         )
 
     if not resultados:
 
         st.error(
-            "Não consegui encontrar resultados. "
-            "Tente reformular a pergunta."
+            "Não consegui encontrar resultados "
+            "para essa pergunta."
         )
 
         return
 
-    resultados = organizar_resultados(
-        resultados
-    )
 
     with st.spinner(
-        "🧠 Organizando as informações..."
+        "🧠 Organizando a explicação..."
     ):
 
-        explicacao = gerar_explicacao(
+        resposta = gerar_resposta_com_ia(
             pergunta,
             resultados
         )
 
+    # Se não existir API, utiliza modo básico.
+
+    if not resposta:
+
+        resposta = gerar_resposta_sem_IA(
+            pergunta,
+            resultados
+        )
+
+
     st.session_state.ultima_pergunta = pergunta
 
-    st.session_state.ultima_resposta = explicacao
+    st.session_state.ultima_resposta = resposta
+
+    st.session_state.fontes_atuais = resultados
 
     st.session_state.pesquisas_realizadas += 1
 
@@ -553,7 +695,7 @@ def realizar_pesquisa(pergunta):
         0,
         {
             "pergunta": pergunta,
-            "resposta": explicacao,
+            "resposta": resposta,
             "fontes": resultados,
             "data": datetime.now().strftime(
                 "%d/%m/%Y %H:%M"
@@ -563,40 +705,36 @@ def realizar_pesquisa(pergunta):
 
 
 # ============================================================
-# CABEÇALHO
+# TÍTULO
 # ============================================================
 
 st.markdown(
-    '<div class="titulo">🌌 Explorador de Astronomia</div>',
+    '<div class="titulo">'
+    '🌌 Explorador de Astronomia'
+    '</div>',
     unsafe_allow_html=True
 )
 
 st.markdown(
     '<div class="subtitulo">'
-    'Faça uma pergunta sobre o Universo e investigue o assunto '
-    'com ajuda de fontes científicas.'
+    'Pergunte sobre o Universo, pesquise e aprenda.'
     '</div>',
     unsafe_allow_html=True
 )
 
 
 # ============================================================
-# MENU LATERAL
+# SIDEBAR
 # ============================================================
 
-st.sidebar.title("🔭 Painel")
-
-st.sidebar.markdown(
-    "### 🌌 Pesquisa de Astronomia"
+st.sidebar.title(
+    "🔭 Painel do Explorador"
 )
 
 st.sidebar.info(
-    "O aluno pode escrever uma pergunta livremente. "
-    "O sistema pesquisa a Web e organiza as informações "
-    "de maneira didática."
+    "O aluno pode escrever livremente "
+    "qualquer pergunta relacionada à Astronomia."
 )
-
-st.sidebar.markdown("---")
 
 st.sidebar.metric(
     "Pesquisas realizadas",
@@ -604,11 +742,6 @@ st.sidebar.metric(
 )
 
 st.sidebar.markdown("---")
-
-
-# ============================================================
-# BOTÃO LIMPAR HISTÓRICO
-# ============================================================
 
 if st.sidebar.button(
     "🧹 Limpar histórico"
@@ -620,11 +753,13 @@ if st.sidebar.button(
 
     st.session_state.ultima_resposta = ""
 
+    st.session_state.fontes_atuais = []
+
     st.rerun()
 
 
 # ============================================================
-# ÁREA PRINCIPAL
+# PERGUNTA
 # ============================================================
 
 st.markdown(
@@ -632,26 +767,28 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown(
-    "### 🔎 Faça sua pergunta"
+st.subheader(
+    "🔎 O que você quer saber?"
 )
 
 st.write(
-    "Você não precisa escolher um tema pronto. "
-    "Escreva exatamente aquilo que deseja saber."
+    "Escreva a pergunta exatamente como você faria "
+    "para um professor."
 )
 
 pergunta = st.text_area(
     "Pergunta do aluno",
     placeholder=(
-        "Exemplo: Por que a Lua não cai na Terra?\n\n"
-        "Ou: Como sabemos que existem buracos negros?\n\n"
-        "Ou: Como nascem as estrelas?"
+        "Exemplo:\n\n"
+        "Por que a Lua não cai na Terra?\n\n"
+        "Como nasce uma estrela?\n\n"
+        "Como sabemos que existem buracos negros?\n\n"
+        "Por que Plutão não é mais considerado planeta?"
     ),
-    height=130
+    height=160
 )
 
-pesquisar = st.button(
+botao = st.button(
     "🔭 Pesquisar e explicar",
     type="primary"
 )
@@ -663,21 +800,21 @@ st.markdown(
 
 
 # ============================================================
-# EXECUTAR PESQUISA
+# PESQUISAR
 # ============================================================
 
-if pesquisar:
+if botao:
 
     if not pergunta.strip():
 
         st.warning(
-            "Digite uma pergunta antes de pesquisar."
+            "Digite uma pergunta primeiro."
         )
 
     elif len(pergunta.strip()) < 5:
 
         st.warning(
-            "Digite uma pergunta um pouco mais completa."
+            "Faça uma pergunta um pouco mais completa."
         )
 
     else:
@@ -688,7 +825,7 @@ if pesquisar:
 
 
 # ============================================================
-# MOSTRAR ÚLTIMA RESPOSTA
+# RESPOSTA
 # ============================================================
 
 if st.session_state.ultima_resposta:
@@ -700,11 +837,11 @@ if st.session_state.ultima_resposta:
         unsafe_allow_html=True
     )
 
-    st.markdown(
-        "### 👨‍🎓 Pergunta do aluno"
+    st.subheader(
+        "👨‍🎓 Pergunta do aluno"
     )
 
-    st.markdown(
+    st.write(
         st.session_state.ultima_pergunta
     )
 
@@ -712,6 +849,7 @@ if st.session_state.ultima_resposta:
         '</div>',
         unsafe_allow_html=True
     )
+
 
     st.markdown(
         '<div class="card">',
@@ -729,52 +867,62 @@ if st.session_state.ultima_resposta:
 
 
 # ============================================================
-# FONTES DA ÚLTIMA PESQUISA
+# FONTES
 # ============================================================
 
-if st.session_state.historico_explicacoes:
-
-    ultima = (
-        st.session_state.historico_explicacoes[0]
-    )
+if st.session_state.fontes_atuais:
 
     st.markdown("---")
 
     st.subheader(
-        "📚 Fontes utilizadas na pesquisa"
+        "📚 Fontes da pesquisa"
     )
 
     st.write(
-        "As páginas abaixo são apresentadas para que "
-        "o aluno e o professor possam consultar "
-        "diretamente as informações."
+        "Estas são as páginas encontradas durante "
+        "a pesquisa. O aluno pode abrir as fontes "
+        "para verificar e aprofundar as informações."
     )
 
-    for i, fonte in enumerate(
-        ultima["fontes"][:8],
+
+    for numero, fonte in enumerate(
+        st.session_state.fontes_atuais,
         1
     ):
 
-        titulo = html.escape(
-            fonte["titulo"]
+        titulo = limpar_texto(
+            fonte.get(
+                "titulo",
+                "Fonte"
+            )
         )
 
-        link = html.escape(
-            fonte["link"],
-            quote=True
+        descricao = limpar_texto(
+            fonte.get(
+                "descricao",
+                ""
+            )
+        )
+
+        link = fonte.get(
+            "link",
+            ""
         )
 
         dominio = obter_dominio(
-            fonte["link"]
+            link
         )
+
 
         st.markdown(
             f"""
             <div class="fonte">
 
-            <strong>{i}. {titulo}</strong>
+            <strong>
+            {numero}. {html.escape(titulo)}
+            </strong>
 
-            <br>
+            <br><br>
 
             <small>
             🌐 {html.escape(dominio)}
@@ -782,8 +930,13 @@ if st.session_state.historico_explicacoes:
 
             <br><br>
 
-            <a href="{link}" target="_blank">
-            🔗 Abrir fonte original
+            {html.escape(descricao)}
+
+            <br><br>
+
+            <a href="{html.escape(link, quote=True)}"
+               target="_blank">
+            🔗 Abrir fonte
             </a>
 
             </div>
@@ -803,16 +956,15 @@ if len(
     st.markdown("---")
 
     st.subheader(
-        "🕘 Histórico de perguntas"
+        "🕘 Histórico de pesquisas"
     )
 
-    for i, item in enumerate(
-        st.session_state.historico_explicacoes[1:],
-        1
+    for item in (
+        st.session_state.historico_explicacoes[1:]
     ):
 
         with st.expander(
-            f"🔭 {item['pergunta']}"
+            "🔭 " + item["pergunta"]
         ):
 
             st.markdown(
@@ -820,41 +972,38 @@ if len(
             )
 
             st.caption(
-                f"Pesquisa realizada em "
-                f"{item['data']}"
+                "Pesquisado em "
+                + item["data"]
             )
 
 
 # ============================================================
-# ÁREA PEDAGÓGICA
+# ORIENTAÇÃO PEDAGÓGICA
 # ============================================================
 
 st.markdown("---")
 
 st.markdown(
     """
-### 👨‍🏫 Como utilizar
+### 👨‍🏫 Sugestão para investigação
 
-O aluno pode começar com uma pergunta simples e,
-depois, continuar investigando.
+O aluno pode fazer uma sequência de perguntas.
 
 Por exemplo:
 
-**Pergunta 1:**  
-Por que o céu é azul?
+**1.** Como nasce uma estrela?
 
-**Pergunta 2:**  
-O que acontece com a luz quando entra na atmosfera?
+**2.** O que acontece dentro dela?
 
-**Pergunta 3:**  
-Por que o céu de Marte é diferente?
+**3.** Por que ela começa a produzir energia?
 
-**Pergunta 4:**  
-Como sabemos disso?
+**4.** O que acontece quando o combustível acaba?
 
-Dessa maneira, a ferramenta pode ser utilizada como
-um ponto de partida para uma investigação de Astronomia,
-em vez de simplesmente entregar uma resposta pronta.
+**5.** Todas as estrelas terminam da mesma maneira?
+
+Assim, a ferramenta pode ser utilizada para construir
+uma investigação de Astronomia, e não apenas para
+receber uma resposta isolada.
 """
 )
 
@@ -866,6 +1015,5 @@ em vez de simplesmente entregar uma resposta pronta.
 st.markdown("---")
 
 st.caption(
-    "🌌 Explorador de Astronomia — ferramenta educacional "
-    "para pesquisa e aprendizagem."
+    "🌌 Explorador de Astronomia — ferramenta educacional"
 )
