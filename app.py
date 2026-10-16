@@ -1,13 +1,13 @@
 import streamlit as st
 import random
-import math
 import urllib.request
 import json
 import urllib.parse
+import html
 
 # Configuração da página
 st.set_page_config(
-    page_title="Santuário da Cosmologia & Aetheris Web", 
+    page_title="Santuário da Cosmologia & Aetheris Web Pro", 
     page_icon="🌌", 
     layout="centered"
 )
@@ -21,6 +21,10 @@ st.markdown("""
         border-radius: 8px; font-weight: bold; border: 1px solid #00b4d8;
     }
     .stButton>button:hover { background-color: #00b4d8; color: black; }
+    .card-resultado {
+        background-color: #16213e; padding: 20px; border-radius: 10px;
+        border: 1px solid #0f3460; margin-bottom: 15px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -47,15 +51,17 @@ def obter_nome_casa(num_casa):
     idx = min(num_casa, len(CASAS_SANTUARIO) - 1)
     return CASAS_SANTUARIO[idx]
 
-# Função para buscar dados abertos na web (Wikipedia API integrada)
-def pesquisar_na_web(termo):
+# ==========================================
+# MOTOR DE PESQUISA WEB E CÁLCULOS COSMOLÓGICOS
+# ==========================================
+def pesquisar_na_web_avancado(termo):
     try:
         query_codificada = urllib.parse.quote(termo)
-        url = f"https://pt.wikipedia.org/w/api.php?action=query&list=search&srsearch={query_codificada}&format=json"
+        url = f"https://pt.wikipedia.org/w/api.php?action=query&list=search&srsearch={query_codificada}&format=json&srlimit=5"
         
         req = urllib.request.Request(
             url, 
-            headers={'User-Agent': 'Mozilla/5.0 (AetherisAstroResearch)'}
+            headers={'User-Agent': 'Mozilla/5.0 (AetherisAstroResearchPro)'}
         )
         
         with urllib.request.urlopen(req) as response:
@@ -63,17 +69,49 @@ def pesquisar_na_web(termo):
             search_results = data.get('query', {}).get('search', [])
             
             if search_results:
-                resultados_formatados = []
-                for item in search_results[:3]: # Pega os 3 melhores resultados
+                artigos = []
+                for item in search_results:
                     titulo = item['title']
-                    # Remove tags HTML simples do trecho da Wikipedia
-                    snippet = item['snippet'].replace('<span class="searchmatch">', '').replace('</span>', '')
-                    resultados_formatados.append(f"**📌 {titulo}**\n> {snippet}...\n")
-                return "\n".join(resultados_formatados)
+                    snippet = html.unescape(item['snippet'].replace('<span class="searchmatch">', '').replace('</span>', ''))
+                    artigos.append({"titulo": titulo, "resumo": f"{snippet}..."})
+                return artigos
             else:
-                return "Nenhum registro acadêmico/público encontrado diretamente para este termo exato na base consultada."
+                return []
     except Exception as e:
-        return f"Erro ao conectar com a rede de dados: {e}"
+        return [{"titulo": "Erro de Conexão", "resumo": f"Não foi possível conectar à rede de pesquisa: {e}"}]
+
+def obter_equacoes_e_calculos_para_termo(termo):
+    t = termo.lower()
+    if "friedmann" in t or "expansão" in t or "big bang" in t:
+        return {
+            "titulo_eq": "Equações de Friedmann (Cosmologia Padrão)",
+            "latex": r"\left(\frac{\dot{a}}{a}\right)^2 = \frac{8\pi G}{3}\rho - \frac{k}{a^2} + \frac{\Lambda}{3}",
+            "explicacao": "Descrevem a expansão métrica do espaço em um universo homogêneo e isotrópico. Relacionam a taxa de expansão (Parâmetro de Hubble $H = \dot{a}/a$) com a densidade de energia $\\rho$, curvatura $k$ e constante cosmológica $\\Lambda$."
+        }
+    elif "relatividade" in t or "einstein" in t or "espaço-tempo" in t:
+        return {
+            "titulo_eq": "Equações de Campo de Einstein",
+            "latex": r"R_{\mu\nu} - \frac{1}{2}g_{\mu\nu}R + g_{\mu\nu}\Lambda = \frac{8\pi G}{c^4} T_{\mu\nu}",
+            "explicacao": "Conectam a geometria do espaço-tempo (tensor de curvatura de Ricci $R_{\mu\nu}$ e métrica $g_{\mu\nu}$) com a distribuição de matéria, momento e energia (tensor de energia-momento $T_{\mu\nu}$)."
+        }
+    elif "schwarzschild" in t or "buraco negro" in t or "horizonte" in t:
+        return {
+            "titulo_eq": "Raio de Schwarzschild (Horizonte de Eventos)",
+            "latex": r"R_s = \frac{2GM}{c^2}",
+            "explicacao": "Define o raio crítico em torno de uma massa $M$ onde a velocidade de escape atinge a velocidade da luz no vácuo ($c$), delimitando o horizonte de eventos de um buraco negro estático."
+        }
+    elif "hubble" in t or "redshift" in t or "galáxia" in t:
+        return {
+            "titulo_eq": "Lei de Hubble-Lemaître",
+            "latex": r"v = H_0 \cdot d",
+            "explicacao": "Estabelece que a velocidade de recessão $v$ de uma galáxia é proporcional à sua distância comensurável $d$, multiplicada pela Constante de Hubble atual $H_0$."
+        }
+    else:
+        return {
+            "titulo_eq": "Relação Geral de Massa-Energia e Dinâmica",
+            "latex": r"E = mc^2 \quad \text{e} \quad ds^2 = -c^2 dt^2 + a(t)^2 d\Sigma^2",
+            "explicacao": "Equivalência fundamental entre massa inercial e energia restrita, combinada com a métrica de Friedmann-Lemaître-Robertson-Walker (FLRW) para o estudo de métricas cósmicas."
+        }
 
 # ==========================================
 # INICIALIZAÇÃO DO ESTADO GLOBAL
@@ -99,10 +137,8 @@ if "historico_professor" not in st.session_state:
     st.session_state.historico_professor = []
 if "prof_logado" not in st.session_state:
     st.session_state.prof_logado = False
-if "historico_chat" not in st.session_state:
-    st.session_state.historico_chat = [
-        {"role": "ia", "texto": "Saudações, pesquisador. Sou a Aetheris. Posso consultar artigos, debater teorias astrofísicas e calcular equações para você."}
-    ]
+if "historico_pesquisas" not in st.session_state:
+    st.session_state.historico_pesquisas = []
 
 # ==========================================
 # BANCO DE 50 QUESTÕES (EQUILIBRADO A-E)
@@ -127,7 +163,7 @@ if "banco_50" not in st.session_state:
         ("Estudos com supernovas Tipo Ia em 1998 surpreenderam a ciência.", "Saul Perlmutter", "O que provou a aceleração do universo?", ["A medição do brilho de supernovas distantes do tipo Ia.", "O cálculo da Lua.", "A colisão de Andrômeda.", "O campo magnético terrestre.", "Experimentos de laser."], "A", "Supernovas distantes comprovaram a aceleração."),
 
         # Bloco B (10 Questões)
-        ("Físicos usam a analogia da borracha de um balão sendo inflada.", "Didática de Física", "Como o balão ajuda a entender a expansão?", ["Mostra a criação de ar interno.", "Ilustra como os pontos na superfície se afastam porque o espaço da borracha se expande.", "Comprova o centro fixo.", "Indica paredes rígidas.", "Mostra que a luz viaja rápido."], "B", "O tecido do espaço que se estica."),
+        ("Físicos usam a analogia da borracha de um balão sendo inflada.", "Didática de Física", "Como o balão ajuda a entender a expansão?", ["Mostra a criação de ar interno.", "Ilustra como os pontos na superfície se afastam porque o próprio espaço da borracha se expande.", "Comprova o centro fixo.", "Indica paredes rígidas.", "Mostra que a luz viaja rápido."], "B", "O tecido do espaço que se estica."),
         ("Cerca de 380 mil anos após o Big Bang, prótons e elétrons formaram átomos.", "George Gamow", "O que foi a Era da Recombinação?", ["Buracos negros engoliram matéria.", "O período em que prótons e elétrons uniram-se em átomos neutros, libertando a luz.", "Colisão da Via Láctea.", "A gravidade cessou.", "Congelamento total."], "B", "Permitiu que a luz viajasse livremente."),
         ("Pontos de densidade extrema previstos pela relatividade.", "Stephen Hawking", "O que caracteriza uma singularidade?", ["Um planeta esférico.", "Um estado de densidade e temperatura infinitas onde as leis físicas param.", "Uma estrela hipergigante.", "O centro da órbita da Terra.", "Um cometa solitário."], "B", "Densidade infinita."),
         ("O espaço e o tempo surgiram juntos no evento inicial.", "Albert Einstein", "O que existia antes do Big Bang?", ["Um oceano de estrelas.", "O espaço e o tempo não existiam da forma atual, estando a matéria comprimida em singularidade.", "Um vácuo estático.", "Um buraco negro colossal.", "Matéria escura gasosa."], "B", "O tempo e o espaço iniciaram no Big Bang."),
@@ -204,7 +240,7 @@ def reiniciar_jogo():
 st.sidebar.header("🧭 Painel de Controle")
 st.session_state.modo_sistema = st.sidebar.radio(
     "Escolha o Ambiente:",
-    ["⚔️ Jogo: CDZ & Cosmologia", "✨ Aetheris: IA Cosmologia & Web Search"]
+    ["⚔️ Jogo: CDZ & Cosmologia", "✨ Aetheris: IA Cosmologia & Web Pro"]
 )
 
 st.sidebar.markdown("---")
@@ -367,55 +403,64 @@ if st.session_state.modo_sistema == "⚔️ Jogo: CDZ & Cosmologia":
         st.info(f"💡 **Justificativa Pedagógica:**\n\n{fb['por_que']}")
 
 # ==========================================
-# MODO 2: IA AETHERIS COM PESQUISA WEB
+# MODO 2: IA AETHERIS COM WEB SEARCH PRO & EQUAÇÕES
 # ==========================================
-elif st.session_state.modo_sistema == "✨ Aetheris: IA Cosmologia & Web Search":
-    st.title("✨ Aetheris: IA de Cosmologia & Web Search")
-    st.markdown("### *Assistente conectada a bases científicas abertas e web search para pesquisas avançadas.*")
+elif st.session_state.modo_sistema == "✨ Aetheris: IA Cosmologia & Web Pro":
+    st.title("✨ Aetheris: Web Search Pro & Equações Físicas")
+    st.markdown("### *Mecanismo de busca acadêmica avançada com extração automática de equações e cálculos.*")
     st.markdown("---")
 
-    aba_ia = st.sidebar.selectbox("Módulo da IA:", ["🤖 Chat Especialista", "🌐 Pesquisador Web (Web Search)"])
+    col_b1, col_b2 = st.columns([3, 1])
+    with col_b1:
+        termo_pesquisa = st.text_input("Pesquisar na Web por conceitos, cientistas ou teorias (ex: Friedmann equations, Dark Matter, James Webb):", placeholder="Digite o tema da pesquisa...")
+    with col_b2:
+        st.markdown("<br>", unsafe_allow_html=True)
+        btn_buscar = st.button("🔍 Pesquisar na Web")
 
-    if aba_ia == "🤖 Chat Especialista":
-        st.subheader("💬 Diálogo com Aetheris")
-        for msg in st.session_state.historico_chat:
-            prefixo = "**🧑‍💻 Você:**" if msg["role"] == "usuario" else "**✨ Aetheris:**"
-            st.markdown(f"{prefixo} {msg['texto']}\n")
+    if btn_buscar and termo_pesquisa.strip():
+        with st.spinner("Varrendo bases públicas e estruturando equações..."):
+            artigos_encontrados = pesquisar_na_web_avancado(termo_pesquisa)
+            dados_mat = obter_equacoes_e_calculos_para_termo(termo_pesquisa)
+            
+            # Salva no histórico de pesquisas da sessão
+            st.session_state.historico_pesquisas.insert(0, {
+                "termo": termo_pesquisa,
+                "artigos": artigos_encontrados,
+                "matematica": dados_mat
+            })
 
-        pergunta = st.text_input("Consulte a IA sobre física, relatividade, buracos negros ou cosmologia:")
-        if st.button("Enviar Consulta"):
-            if pergunta.strip():
-                st.session_state.historico_chat.append({"role": "usuario", "texto": pergunta})
-                p_l = pergunta.lower()
+    # Botão para limpar o histórico de pesquisas
+    if st.session_state.historico_pesquisas:
+        if st.button("🗑️ Limpar Histórico de Pesquisas"):
+            st.session_state.historico_pesquisas = []
+            st.rerun()
+
+    st.markdown("---")
+
+    # Exibe as páginas de resultados organizadas
+    if st.session_state.historico_pesquisas:
+        st.markdown("## 📑 Páginas de Resultados da Pesquisa Web")
+        
+        for idx, pesquisa in enumerate(st.session_state.historico_pesquisas):
+            with st.container():
+                st.markdown(f"""
+                <div class="card-resultado">
+                    <h3>🔍 Pesquisa #{len(st.session_state.historico_pesquisas) - idx}: <em>{pesquisa['termo']}</em></h3>
+                </div>
+                """, unsafe_allow_html=True)
                 
-                if "big bang" in p_l:
-                    resp = "O Big Bang descreve a expansão métrica do espaço a partir de uma singularidade inicial, há aproximadamente 13,8 bilhões de anos."
-                elif "relatividade" in p_l or "einstein" in p_l:
-                    resp = "A Relatividade Geral postula que o espaço-tempo é dinâmico e curvado por massa e energia."
-                elif "matéria escura" in p_l or "materia escura" in p_l:
-                    resp = "A matéria escura compõe cerca de 27% do universo, agindo como uma cola gravitacional invisível para as galáxias."
-                elif "energia escura" in p_l:
-                    resp = "A energia escura compõe cerca de 68% do cosmos, sendo responsável pela aceleração da expansão universal."
-                else:
-                    resp = f"Análise teórica sobre '{pergunta}': No contexto da física moderna, esse fenômeno relaciona-se diretamente com as equações de campo de Einstein e os modelos de expansão padrão (Lambda-CDM)."
-
-                st.session_state.historico_chat.append({"role": "ia", "texto": resp})
-                st.rerun()
-
-    else:
-        st.subheader("🌐 Motor de Pesquisa Acadêmica na Web")
-        st.markdown("Digite um termo, conceito, cientista ou telescópio para buscar referências e dados públicos atualizados na internet:")
-
-        termo_busca = st.text_input("Termo de pesquisa (ex: James Webb Telescope, Friedmann equations, Vera Rubin):", value="James Webb Space Telescope")
-
-        if st.button("🔍 Realizar Varredura na Web"):
-            if termo_busca.strip():
-                with st.spinner("Conectando aos servidores de dados e rastreando fontes..."):
-                    resultado_pesquisa = pesquisar_na_web(termo_busca)
+                # Bloco de Equações e Cálculos Físicos Extraídos
+                st.markdown("#### 📐 Equações Fundamentais e Cálculos Associados:")
+                eq = pesquisa['matematica']
+                st.markdown(f"**{eq['titulo_eq']}**")
+                st.latex(eq['latex'])
+                st.markdown(f"*Análise Física:* {eq['explicacao']}")
                 
                 st.markdown("---")
-                st.markdown(f"### 📑 Resultados da Pesquisa para: *{termo_busca}*")
-                st.markdown(resultado_pesquisa)
-                st.success("Busca executada com sucesso através de fontes públicas abertas.")
-            else:
-                st.warning("Insira um termo válido para realizar a busca.")
+                st.markdown("#### 🌐 Fontes e Artigos Encontrados na Varredura Web:")
+                for art in pesquisa['artigos']:
+                    st.markdown(f"* **{art['titulo']}**\n  > {art['resumo']}")
+                
+                st.markdown("---")
+    else:
+        st.info("Nenhuma pesquisa realizada ainda. Insira um termo acima e clique em 'Pesquisar na Web'.")
