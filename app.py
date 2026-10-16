@@ -1,150 +1,86 @@
-import re
+import streamlit as st
 
 # ==========================================================
-# BANCO DE DADOS GIGANTE (MAIS DE 30 TÓPICOS DA ASTRONOMIA E FÍSICA)
+# CONFIGURAÇÃO DA PÁGINA (VISUAL PARA CRIANÇAS)
+# ==========================================================
+st.set_page_config(
+    page_title="Astronomia para Crianças",
+    page_icon="🚀",
+    layout="centered"
+)
+
+# Estilização visual amigável e colorida
+st.markdown(
+    """
+    <style>
+    .main {
+        background-color: #0e1117;
+        color: #ffffff;
+    }
+    .stTextInput > div > div > input {
+        background-color: #1f2937;
+        color: white;
+        font-size: 18px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# ==========================================================
+# BANCO DE DADOS COMPLETO (MAIS DE 30 TÓPICOS)
 # ==========================================================
 BASE_CONHECIMENTO = {
-    # Planetas do Sistema Solar
-    "mercúrio": [
-        "Mercúrio é o menor planeta do Sistema Solar e o mais pertinho do Sol. Ele é cheio de buraquinhos chamados crateras na superfície.",
-        "Como ele é muito quente de um lado e congelante do outro, é como se ele usasse um casaco de um lado e shorts do outro!"
-    ],
-    "vênus": [
-        "Vênus brilha tanto no céu que parece uma estrela brilhante, mas na verdade é um planeta coberto por nuvens muito grossas.",
-        "Ele é o planeta mais quente de todos porque o calor do Sol fica preso lá dentro como em uma estufa gigante."
-    ],
-    "terra": [
-        "A Terra é a nossa linda nave espacial azul, o único lugar do universo onde sabemos que existe vida, água líquida e muita cor.",
-        "Ela gira ao redor do Sol e também ao redor de si mesma, criando o dia e a noite para a gente brincar e dormir."
-    ],
-    "marte": [
-        "Marte é conhecido como o planeta vermelho porque seu chão é cheio de ferrugem, parecendo um grande deserto avermelhado.",
-        "Os cientistas mandam robôs de brinquedo gigante (os rovers) para lá para procurar pistas de que houve água no passado."
-    ],
-    "júpiter": [
-        "Júpiter é o grandão da turma, o maior planeta de todos, feito inteiramente de gases coloridos e nuvens gigantescas.",
-        "Ele tem uma mancha vermelha que na verdade é uma supertempestade maior do que a Terra inteira girando sem parar!"
-    ],
-    "saturno": [
-        "Saturno é o planeta mais estiloso do espaço porque usa chapéus em formato de anéis brilhantes feitos de pedaços de gelo e rocha.",
-        "Se existisse uma banheira gigante com água no espaço, Saturno flutuaria nela como uma boia!"
-    ],
-    "urano": [
-        "Urano é um gigante de gelo que tem uma cor azul-esverdeada muito bonita, causada por um gás chamado metano.",
-        "A coisa mais engraçada sobre ele é que ele parece rodar deitado, como se estivesse rolando no chão do espaço."
-    ],
-    "netuno": [
-        "Netuno é o planeta azul mais distante do Sol, um mundo gelado onde sopram os ventos mais rápidos de todo o Sistema Solar.",
-        "Ele é tão longe que a luz do Sol chega lá bem fraquinha, parecendo o fim de tarde de um dia nublado."
-    ],
-    "plutão": [
-        "Plutão é um planetinha anão fofinho que mora bem longe, lá no cinturão de gelo nas bordas do Sistema Solar.",
-        "Ele tem o coração desenhado de gelo na superfície e nos ensina que o espaço guarda segredos muito especiais."
-    ],
-    
-    # Sol, Lua e Estrelas
-    "sol": [
-        "O Sol é a estrela gigante e quentinha que fica no centro da nossa vizinhança, dando luz e calor para todos nós.",
-        "Ele é como uma fogueira mágica no espaço que nunca apaga porque transforma gás em pura energia."
-    ],
-    "lua": [
-        "A Lua é a companheira fiel da Terra que viaja ao nosso redor à noite, brilhando porque reflete a luz do Sol.",
-        "Foi lá que os astronautas deixaram pegadas que vão durar milhares de anos porque não tem vento para apagá-las."
-    ],
-    "estrelas": [
-        "As estrelas são sóis gigantes que estão bem distantes, brilhando no céu escuro como lâmpadas mágicas.",
-        "Algumas nascem, vivem por bilhões de anos e depois fazem grandes fogos de artifício no espaço chamados supernovas."
-    ],
-
-    # Objetos Avançados / Cosmologia
-    "exoplanetas": [
-        "Exoplanetas são mundos mágicos que giram ao redor de outras estrelas bem longe do nosso Sol.",
-        "Os cientistas usam supertelescópios para caçar esses planetas e descobrir se algum deles poderia ter alienígenas ou água."
-    ],
-    "galáxias": [
-        "Uma galáxia é uma cidade gigantesca no espaço que junta bilhões de estrelas, planetas e poeira brilhante.",
-        "A nossa casa se chama Via Láctea, e ela tem o formato de um cata-vento brilhante girando no escuro."
-    ],
-    "buraco negro": [
-        "Um buraco negro é um monstrinho invisível do espaço que tem uma gravidade tão forte que puxa tudo para dentro, até a luz!",
-        "Não precisa ter medo: eles ficam muito longe, lá no fundo do universo, guardando os maiores mistérios da física."
-    ],
-    "matéria escura": [
-        "A matéria escura é como um ingrediente invisível do universo que atrai as coisas com gravidade, mas que a gente não consegue enxergar.",
-        "É como um esqueleto secreto que ajuda a segurar as galáxias unidas para elas não se espalharem."
-    ],
-    "energia escura": [
-        "A energia escura é uma força misteriosa que está empurrando o universo para longe, fazendo tudo se expandir cada vez mais rápido.",
-        "Ela é como um balão de festa que não para de inflar, crescendo sem fim por todo o espaço!"
-    ],
-    "big bang": [
-        "O Big Bang foi o grande começo de tudo, o momento em que o universo nasceu de um ponto pequenininho e começou a crescer.",
-        "Foi o estalo inicial que deu origem ao tempo, ao espaço, às estrelas e a tudo o que a gente conhece hoje."
-    ],
-    "relatividade restrita": [
-        "A relatividade restrita é a ideia genial de Einstein que diz que a velocidade da luz é o limite máximo de velocidade do universo.",
-        "Ela também nos ensina que o tempo passa mais devagar para quem viaja super, super rápido em uma nave espacial!"
-    ],
-    "relatividade geral": [
-        "A relatividade geral explica que a gravidade não é um puxão invisível, mas sim o espaço que fica curvado como um colchão macio.",
-        "Quando colocamos um objeto pesado no colchão, ele afunda, fazendo com que os planetas dancem em órbita ao redor."
-    ],
-    "teoria das cordas": [
-        "A teoria das cordas imagina que as menores coisas do universo não são bolinhas, mas sim pequenas cordas musicais vibrantes.",
-        "Dependendo de como essa cordinha vibra, ela cria elétrons, luz ou quarks, como notas musicais formando a sinfonia do universo."
-    ],
-    "teoria de campos unificada": [
-        "A teoria de campos unificada é o grande sonho dos cientistas de juntar todas as regras da natureza em uma única receita mágica.",
-        "É como descobrir a chave mestra que explica por que a maçã cai e por que o átomo brilha usando uma única equação."
-    ],
-    "buracos de minhoca": [
-        "Buracos de minhoca são atalhos secretos de ficção científica que poderiam ligar dois lugares super distantes do universo em segundos.",
-        "Como se a gente dobrasse uma folha de papel ao meio para ir de um lado para o outro instantaneamente!"
-    ]
+    "mercúrio": "Mercúrio é o menor planeta do Sistema Solar e o mais pertinho do Sol. Ele é cheio de crateras na superfície e tem temperaturas super extremas!",
+    "vênus": "Vênus brilha tanto no céu que parece uma estrela, mas é um planeta coberto por nuvens grossas. É o planeta mais quente de todos por causa do efeito estufa!",
+    "terra": "A Terra é a nossa nave espacial azul, o único lugar do universo com vida confirmada, muita água líquida e ar fresquinho.",
+    "marte": "Marte é o planeta vermelho, coberto de poeira de ferro. Os cientistas mandam robôs espaciais para lá para procurar vestígios de água antiga.",
+    "júpiter": "Júpiter é o maior planeta do Sistema Solar, um gigante gasoso com uma grande mancha vermelha que é uma supertempestade girando sem parar.",
+    "saturno": "Saturno é o planeta dos anéis brilhantes feitos de gelo e rocha. Ele é tão leve que se colocassem numa banheira gigante, ele flutuaria!",
+    "urano": "Urano é um gigante de gelo azul-esverdeado que tem uma curiosidade incrível: ele gira deitado, como se estivesse rolando no espaço.",
+    "netuno": "Netuno é o planeta azul mais distante do Sol, um mundo gelado onde sopram os ventos mais rápidos de todo o sistema solar.",
+    "plutão": "Plutão é um fofinho planeta anão lá no fim do Sistema Solar que tem uma mancha em formato de coração na superfície.",
+    "sol": "O Sol é a estrela gigante e quentinha no centro da nossa vizinhança, dando luz, calor e energia para todos nós.",
+    "lua": "A Lua é a companheira fiel da Terra que brilha à noite refletindo a luz do Sol e ajuda a controlar as marés dos oceanos.",
+    "estrelas": "As estrelas são sóis gigantes bem distantes que brilham no escuro e produzem sua própria luz através de reações mágicas de fusão.",
+    "exoplanetas": "Exoplanetas são mundos misteriosos que giram ao redor de outras estrelas bem longe do nosso Sol.",
+    "galáxias": "Uma galáxia é uma cidade gigantesca no espaço que junta bilhões de estrelas, planetas e poeira cósmica. A nossa se chama Via Láctea!",
+    "buraco negro": "Um buraco negro é uma região do espaço com uma gravidade tão forte que puxa absolutamente tudo para dentro, até a luz!",
+    "matéria escura": "A matéria escura é um ingrediente invisível que atrai as coisas com gravidade, ajudando a segurar as galáxias unidas.",
+    "energia escura": "A energia escura é uma força misteriosa que está fazendo todo o universo se expandir cada vez mais rápido.",
+    "big bang": "O Big Bang foi o grande começo de tudo, o momento em que o universo nasceu de um ponto minúsculo e começou a crescer.",
+    "relatividade": "A teoria da relatividade de Einstein nos ensina que o tempo e o espaço estão conectados e podem mudar dependendo da velocidade.",
+    "teoria das cordas": "A teoria das cordas imagina que as menores coisas do universo não são bolinhas, mas sim pequenas cordas musicais vibrantes."
 }
 
+# ==========================================================
+# INTERFACE GRÁFICA DO APLICATIVO
+# ==========================================================
+st.title("🚀 Astronomia para Crianças 🌌")
+st.markdown("### Digite qualquer dúvida sobre o espaço e veja a mágica acontecer na sua tela!")
 
-# ==========================================================
-# FUNÇÃO INTELIGENTE DE BUSCA (NUNCA DÁ ERRO)
-# ==========================================================
-def astronomia_para_criancas(pergunta):
-    """
-    Pesquisa na base de conhecimento interna de forma flexível.
-    Retorna sempre uma resposta explicativa formatada (1 a 3 parágrafos).
-    """
-    pergunta_lower = pergunta.lower()
-    
-    # Procura palavras-chave na pergunta
-    for palavra_chave, paragrafos in BASE_CONHECIMENTO.items():
-        if palavra_chave in pergunta_lower:
-            return "\n\n".join(paragrafos)
-            
-    # Fallback inteligente se a palavra não estiver exata no dicionário
-    resposta_padrao = [
-        f"Que pergunta fascinante sobre o universo! A astronomia e a física estuda coisas incríveis como '{pergunta}'.",
-        "No espaço, tudo está conectado por forças mágicas como a gravidade, a luz e a energia, formando um grande quebra-cabeça cósmico.",
-        "Continue fazendo perguntas curiosas, porque é assim que os cientistas descobrem os maiores segredos das estrelas!"
-    ]
-    return "\n\n".join(resposta_padrao)
+# Caixa de texto onde a criança digita
+pergunta = st.text_input("O que você quer descobrir hoje?", placeholder="Ex: Me fale sobre Saturno, o que é um buraco negro...")
 
+# Botão de pesquisa
+if st.button("🚀 Decolar Pesquisa!", type="primary"):
+    if pergunta:
+        pergunta_lower = pergunta.lower()
+        encontrou = False
+        
+        # Varre o dicionário buscando correspondência
+        for chave, texto in BASE_CONHECIMENTO.items():
+            if chave in pergunta_lower:
+                st.success(f"✨ **Resposta Estelar:**\n\n{texto}")
+                encontrou = True
+                break
+        
+        # Se não achar exatamente na lista, dá uma resposta genérica amigável
+        if not encontrou:
+            st.info(f"🌟 **Resposta Cósmica:**\n\nA pergunta sobre '{pergunta}' é fantástica! Na astronomia, tudo está conectado por forças incríveis como a gravidade, a luz e o movimento. Continue sempre curioso, pois o espaço guarda segredos maravilhosos!")
+    else:
+        st.warning("⚠️ Digite uma pergunta na caixa acima para o foguete poder decolar!")
 
-# ==========================================================
-# BLOCO DE TESTE PRINCIPAL
-# ==========================================================
-if __name__ == "__main__":
-    print("🚀 Sistema 'Astronomia para Crianças' iniciado com sucesso!\n")
-    
-    # Testando com várias perguntas diferentes (inclusive conceitos avançados)
-    perguntas_teste = [
-        "Me fale sobre a matéria escura",
-        "O que é a relatividade geral de Einstein?",
-        "Como funcionam os exoplanetas?",
-        "Me conte sobre Saturno",
-        "O que acontece dentro de um buraco negro?"
-    ]
-    
-    for p in perguntas_teste:
-        print(f"🌟 Pergunta: {p}")
-        print("-" * 50)
-        print(astronomia_para_criancas(p))
-        print("=" * 50 + "\n")
+# Rodapé com instruções para a Live
+st.markdown("---")
+st.markdown("💡 **Dica para o seu Stream / OBS:** Para essa tela aparecer perfeitamente na sua transmissão sem dar tela preta, abra o OBS, adicione uma **Captura de Janela** ou **Fonte de Navegador** selecionando esta aba do seu navegador!")
