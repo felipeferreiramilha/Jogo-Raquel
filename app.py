@@ -1,3 +1,5 @@
+streamlit
+google-genai
 import os
 import streamlit as st
 from google import genai
@@ -16,7 +18,20 @@ st.title("🚀 Astronomia para Crianças 🌌")
 st.markdown("### Digite qualquer dúvida sobre o espaço e receba explicações completas e mágicas!")
 
 # ==========================================================
-# 2. FUNÇÃO DA INTELIGÊNCIA ARTIFICIAL
+# 2. CONFIGURAÇÃO DA CHAVE DE API (SEGURANÇA DO STREAMLIT)
+# ==========================================================
+api_key = None
+try:
+    if "GEMINI_API_KEY" in st.secrets:
+        api_key = st.secrets["GEMINI_API_KEY"]
+except Exception:
+    pass
+
+if not api_key:
+    api_key = os.environ.get("GEMINI_API_KEY")
+
+# ==========================================================
+# 3. FUNÇÃO DA INTELIGÊNCIA ARTIFICIAL
 # ==========================================================
 def obter_resposta_espacial(pergunta):
     """
@@ -24,8 +39,8 @@ def obter_resposta_espacial(pergunta):
     com analogias simples para crianças.
     """
     try:
-        # Inicializa o cliente oficial do Google GenAI
-        client = genai.Client()
+        # Inicializa o cliente com a chave encontrada
+        client = genai.Client(api_key=api_key) if api_key else genai.Client()
 
         # Regras de comportamento para a IA
         instrucao_sistema = (
@@ -51,12 +66,12 @@ def obter_resposta_espacial(pergunta):
     except Exception as e:
         return (
             "⚠️ **Ops! O foguete perdeu o sinal com a base.**\n\n"
-            "Verifique se você configurou a sua chave de API corretamente no terminal (`GEMINI_API_KEY`).\n\n"
-            f"Erro técnico: `{e}`"
+            "Isso geralmente acontece porque a chave `GEMINI_API_KEY` não foi configurada nos **Secrets** do Streamlit Cloud.\n\n"
+            f"Detalhe do erro: `{e}`"
         )
 
 # ==========================================================
-# 3. INTERFACE VISUAL (STREAMLIT)
+# 4. INTERFACE VISUAL (STREAMLIT)
 # ==========================================================
 pergunta_usuario = st.text_input(
     "O que você quer descobrir no universo hoje?",
@@ -74,4 +89,4 @@ if st.button("🌟 Decolar Pesquisa!", type="primary"):
         st.warning("⚠️ Digite uma pergunta na caixa acima para poder pesquisar!")
 
 st.markdown("---")
-st.markdown("💡 **Dica para Live / OBS:** Abra o OBS Studio, adicione uma **Captura de Janela** selecionando esta aba do seu navegador para espelhar perfeitamente.")
+st.markdown("💡 **Dica:** Certifique-se de adicionar sua chave do Gemini em **Settings -> Secrets** no painel do Streamlit Cloud usando o formato: `GEMINI_API_KEY = \"sua_chave_aqui\"`")
