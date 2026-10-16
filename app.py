@@ -1,12 +1,7 @@
-streamlit
-google-genai
-import os
 import streamlit as st
-from google import genai
-from google.genai import types
 
 # ==========================================================
-# 1. CONFIGURAÇÃO DA TELA
+# 1. CONFIGURAÇÃO DA PÁGINA
 # ==========================================================
 st.set_page_config(
     page_title="Astronomia para Crianças",
@@ -14,80 +9,44 @@ st.set_page_config(
     layout="centered"
 )
 
-st.title("🚀 Astronomia para Crianças 🌌")
-st.markdown("### Digite qualquer dúvida sobre o espaço e receba explicações completas e mágicas!")
-
-# ==========================================================
-# 2. CONFIGURAÇÃO DA CHAVE DE API (SEGURANÇA DO STREAMLIT)
-# ==========================================================
-api_key = None
-try:
-    if "GEMINI_API_KEY" in st.secrets:
-        api_key = st.secrets["GEMINI_API_KEY"]
-except Exception:
-    pass
-
-if not api_key:
-    api_key = os.environ.get("GEMINI_API_KEY")
-
-# ==========================================================
-# 3. FUNÇÃO DA INTELIGÊNCIA ARTIFICIAL
-# ==========================================================
-def obter_resposta_espacial(pergunta):
+# Estilização visual amigável e limpa
+st.markdown(
     """
-    Conecta ao Gemini e gera uma resposta rica e detalhada 
-    com analogias simples para crianças.
-    """
-    try:
-        # Inicializa o cliente com a chave encontrada
-        client = genai.Client(api_key=api_key) if api_key else genai.Client()
-
-        # Regras de comportamento para a IA
-        instrucao_sistema = (
-            "Você é o assistente 'Astronomia para Crianças', um guia espacial divertido. "
-            "Regras obrigatórias:\n"
-            "1. Responda a QUALQUER pergunta sobre espaço, planetas, física ou buracos negros.\n"
-            "2. Cada resposta DEVE ter entre **3 e 5 parágrafos** bem desenvolvidos e ricos em detalhes.\n"
-            "3. Use analogias mágicas e fáceis para crianças entenderem, sem perder o rigor científico."
-        )
-
-        configuracao = types.GenerateContentConfig(
-            system_instruction=instrucao_sistema,
-            temperature=0.7,
-        )
-
-        resposta = client.models.generate_content(
-            model='gemini-2.5-flash',
-            contents=pergunta,
-            config=configuracao,
-        )
-        return resposta.text
-
-    except Exception as e:
-        return (
-            "⚠️ **Ops! O foguete perdeu o sinal com a base.**\n\n"
-            "Isso geralmente acontece porque a chave `GEMINI_API_KEY` não foi configurada nos **Secrets** do Streamlit Cloud.\n\n"
-            f"Detalhe do erro: `{e}`"
-        )
-
-# ==========================================================
-# 4. INTERFACE VISUAL (STREAMLIT)
-# ==========================================================
-pergunta_usuario = st.text_input(
-    "O que você quer descobrir no universo hoje?",
-    placeholder="Ex: Como funciona um buraco negro? O que é matéria escura?"
+    <style>
+    .main {
+        background-color: #0b0f19;
+        color: #ffffff;
+    }
+    .stTextInput > div > div > input {
+        background-color: #161b22;
+        color: white;
+        font-size: 18px;
+        border-radius: 8px;
+        border: 1px solid #30363d;
+    }
+    .resposta-box {
+        background-color: #161b22;
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid #30363d;
+        margin-top: 20px;
+        font-size: 16px;
+        line-height: 1.6;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
 )
 
-if st.button("🌟 Decolar Pesquisa!", type="primary"):
-    if pergunta_usuario.strip() != "":
-        with st.spinner("✨ Viajando pelas galáxias para buscar a resposta..."):
-            resposta_final = obter_resposta_espacial(pergunta_usuario)
-        
-        st.markdown("### 🔭 Resposta do Explorador Espacial:")
-        st.write(resposta_final)
-    else:
-        st.warning("⚠️ Digite uma pergunta na caixa acima para poder pesquisar!")
+st.title("🚀 Astronomia para Crianças 🌌")
+st.markdown("### Digite qualquer tema sobre o espaço para ver explicações claras e divertidas!")
 
-st.markdown("---")
-st.markdown("💡 **Dica:** Certifique-se de adicionar sua chave do Gemini em **Settings -> Secrets** no painel do Streamlit Cloud usando o formato: `GEMINI_API_KEY = \"sua_chave_aqui\"`")
-GEMINI_API_KEY = "sua_chave_real_do_gemini_aqui"
+# ==========================================================
+# 2. BANCO DE CONHECIMENTO (RESPOSTAS PRONTAS E REVISADAS)
+# ==========================================================
+BASE_CONHECIMENTO = {
+    "mercúrio": (
+        "Mercúrio é o planeta mais próximo do Sol e também o menorzinho de todos os oito planetas do Sistema Solar. "
+        "Como ele fica bem colado ao Sol, a parte dele que fica virada para a luz é tããão quente que poderia derreter metais, "
+        "enquanto o outro lado é super congelante!\n\n"
+        "Ele é um planeta rochoso, cheio de buraquinhos na superfície chamados crateras
