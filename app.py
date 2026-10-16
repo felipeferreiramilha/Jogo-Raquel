@@ -1,6 +1,6 @@
 def montar_explicacao_astronomia(pergunta, resultados):
     """
-    Gera uma resposta com EXATAMENTE 3 PARÁGRAFOS.
+    Gera uma resposta com EXATAMENTE 3 PARÁGRAFOS retornados como uma única string.
     A resposta é adaptada para crianças e usa os resultados
     encontrados na pesquisa para complementar a explicação.
     """
@@ -77,7 +77,7 @@ def montar_explicacao_astronomia(pergunta, resultados):
             aspectos.append(tema)
 
     # ==========================================================
-    # BANCO DE EXPLICAÇÕES
+    # BANCO DE EXPLICAÇÕES (BIBLIOTECA)
     # ==========================================================
 
     respostas = {
@@ -179,7 +179,7 @@ def montar_explicacao_astronomia(pergunta, resultados):
         ],
 
         "Buracos negros": [
-            "Um buraco negro é uma região do espaço onde a gravidade é extremamente forte. Ele pode se formar, por exemplo, quando uma estrela muito massiva chega ao final de sua vida e seu núcleo sofre um colapso gravitacional. A região central fica extremamente compacta.",
+            "Um buraco negro é uma região do espaço onde a gravidade é extremamente forte. Ele pode se formar, por exemplo, quando uma estrela muito massiva chega ao final de suas vida e seu núcleo sofre um colapso gravitacional. A região central fica extremamente compacta.",
             
             "Existe uma região chamada horizonte de eventos. Depois que algo ultrapassa esse limite, não consegue voltar para fora do buraco negro. Isso acontece porque a gravidade nessa região é tão intensa que nem mesmo a luz consegue escapar.",
             
@@ -313,10 +313,8 @@ def montar_explicacao_astronomia(pergunta, resultados):
 
     if aspectos:
         tema_principal = aspectos[0]
-
         if tema_principal in respostas:
-            paragrafos = respostas[tema_principal]
-            return "\n\n".join(paragrafos[:3])
+            return "\n\n".join(respostas[tema_principal][:3])
 
     # ==========================================================
     # RESPOSTA PARA PERGUNTAS SOBRE CURIOSIDADES
@@ -346,19 +344,18 @@ def montar_explicacao_astronomia(pergunta, resultados):
     # ==========================================================
 
     textos_pesquisa = []
-
-    for fonte in resultados:
-        texto = fonte.get("texto", "").strip()
-        if texto:
-            textos_pesquisa.append(texto)
+    if resultados:
+        for fonte in resultados:
+            texto = fonte.get("texto", "").strip()
+            if texto:
+                textos_pesquisa.append(texto)
 
     if textos_pesquisa:
         base = " ".join(textos_pesquisa[:3])
-
         paragrafos_pesquisa = [
-            f"A pergunta está relacionada à Astronomia e envolve um fenômeno ou objeto que pode ser estudado cientificamente. A Astronomia utiliza observações feitas por telescópios, sondas espaciais e outros instrumentos para descobrir como os corpos celestes se comportam. A pesquisa realizada encontrou informações relacionadas ao tema perguntado.",
+            "A pergunta está relacionada à Astronomia e envolve um fenômeno ou objeto que pode ser estudado cientificamente. A Astronomia utiliza observações feitas por telescópios, sondas espaciais e outros instrumentos para descobrir como os corpos celestes se comportam. A pesquisa realizada encontrou informações relacionadas ao tema perguntado.",
             
-            f"De maneira simples, podemos entender esse assunto observando como os objetos do Universo interagem entre si. A gravidade, a luz, o movimento e as características físicas dos corpos celestes ajudam os cientistas a explicar muitos dos fenômenos que observamos no céu. As informações encontradas na pesquisa também ajudam a complementar essa explicação.",
+            "De maneira simples, podemos entender esse assunto observando como os objetos do Universo interagem entre si. A gravidade, a luz, o movimento e as características físicas dos corpos celestes ajudam os cientistas a explicar muitos dos fenômenos que observamos no céu. As informações encontradas na pesquisa também ajudam a complementar essa explicação.",
             
             f"Uma coisa muito interessante é que ainda existem muitas perguntas sem resposta na Astronomia. {base[:500]}"
         ]
