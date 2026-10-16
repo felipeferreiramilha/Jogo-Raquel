@@ -1,39 +1,34 @@
 import streamlit as st
 import random
-import urllib.request
-import json
-import urllib.parse
-import html
 
 # Configuração da página
 st.set_page_config(
-    page_title="IA Pesquisa Brasileira de Astronomia & Cosmologia", 
-    page_icon="🇧🇷", 
+    page_title="IA Pesquisa Brasileira de Astronomia - Explicações para Crianças", 
+    page_icon="🌟", 
     layout="centered"
 )
 
-# Estilo visual científico / escuro
+# Estilo visual amigável, lúdico e escuro (estilo observatório infantil)
 st.markdown("""
     <style>
-    .main { background-color: #060913; color: #f0f6fc; }
+    .main { background-color: #0b132b; color: #ffffff; }
     .stButton>button {
-        width: 100%; background-color: #1b2a4a; color: white;
-        border-radius: 8px; font-weight: bold; border: 1px solid #00b4d8;
+        width: 100%; background-color: #4361ee; color: white;
+        border-radius: 10px; font-weight: bold; border: 2px solid #4cc9f0;
+        font-size: 16px; padding: 10px;
     }
-    .stButton>button:hover { background-color: #00b4d8; color: black; }
-    .card-recente {
-        background-color: #0d1b2a; padding: 18px; border-radius: 10px;
-        border-left: 6px solid #00b4d8; margin-bottom: 15px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    .stButton>button:hover { background-color: #4cc9f0; color: #0b132b; }
+    .card-explicacao {
+        background-color: #1c2541; padding: 22px; border-radius: 15px;
+        border: 2px solid #4361ee; margin-bottom: 20px;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.4);
     }
-    .card-antigo {
-        background-color: #1b132d; padding: 18px; border-radius: 10px;
-        border-left: 6px solid #9d4edd; margin-bottom: 15px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    .card-autor {
+        background-color: #2a2d43; padding: 16px; border-radius: 12px;
+        border-left: 6px solid #f72585; margin-bottom: 15px;
     }
-    .secao-titulo {
-        padding: 10px; border-radius: 6px; margin-top: 20px; margin-bottom: 15px;
-        font-weight: bold; text-align: center;
+    .titulo-crianca {
+        color: #4cc9f0; font-size: 24px; font-weight: bold; margin-bottom: 10px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -62,75 +57,62 @@ def obter_nome_casa(num_casa):
     return CASAS_SANTUARIO[idx]
 
 # ==========================================
-# MOTOR DE BUSCA EM REVISTAS CIENTÍFICAS BRASILEIRAS (SCIELO / RBEF / ON)
+# GERADOR DE CONTEÚDO DIDÁTICO PARA CRIANÇAS (AUTORES BRASILEIROS)
 # ==========================================
-def buscar_pesquisas_brasileiras_em_massa(termo):
-    # Base de dados focada exclusivamente em periódicos brasileiros de física e astronomia
-    # Como Revista Brasileira de Ensino de Física (RBEF), SciELO Brasil, Observatório Nacional e INPE.
-    termo_limpo = termo.strip().capitalize()
-    
-    recentes = []
-    antigos = []
-    
-    # Gerador estruturado de artigos baseados em publicações científicas reais do Brasil
-    instituicoes = ["Universidade de São Paulo (USP)", "Observatório Nacional (ON)", "Instituto Nacional de Pesquisas Espaciais (INPE)", "Universidade Federal do Rio de Janeiro (UFRJ)", "Universidade Estadual do Ceará (UECE)", "Universidade Federal de Minas Gerais (UFMG)"]
-    revistas = ["Revista Brasileira de Ensino de Física (RBEF)", "Revista Brasileira de Astronomia", "Boletin da Sociedade Astronômica Brasileira", "SciELO Física e Astronomia"]
-
-    for i in range(1, 26): # Gera lote robusto de 25 referências científicas brasileiras
-        is_recente = i <= 13
-        ano = 2024 + (i % 3) if is_recente else 1985 + (i * 2) % 30
-        inst = instituicoes[i % len(instituicoes)]
-        rev = revistas[i % len(revistas)]
-        
-        titulo = f"Investigação de {termo_limpo}: Abordagem Observacional e Teórica em {inst} (Lote #{i})"
-        resumo = f"Estudo conduzido por pesquisadores vinculados ao(à) {inst} publicado na {rev}. Análise aprofundada sobre {termo_limpo}, contemplando métodos espectroscópicos, modelagem numérica e dados de instrumentação nacional."
-        
-        # Links direcionados para periódicos científicos brasileiros e arquivos PDF diretos em SciELO / RBEF
-        link_site = f"https://www.scielo.br/j/rbef/a/artigo-{i}-brasil/?lang=pt"
-        link_pdf = f"https://www.scielo.br/j/rbef/a/artigo-{i}-brasil/pdf/?lang=pt"
-        
-        item_pesquisa = {
-            "titulo": titulo,
-            "resumo": resumo,
-            "ano": f"Ano: {ano} | Instituição: {inst}",
-            "link_site": link_site,
-            "link_pdf": link_pdf,
-            "revista": rev
-        }
-        
-        if is_recente:
-            recentes.append(item_pesquisa)
-        else:
-            antigos.append(item_pesquisa)
-            
-    return recentes, antigos
-
-def obter_equacoes_detalhadas(termo):
+def gerar_explicacao_infantil(termo):
     t = termo.lower()
-    if "friedmann" in t or "expansão" in t or "big bang" in t or "cosmologia" in t:
-        return {
-            "titulo": "Equações de Friedmann & Dinâmica Métrica FLRW",
-            "latex": r"\left(\frac{\dot{a}}{a}\right)^2 = \frac{8\pi G}{3}\rho - \frac{k}{a^2} + \frac{\Lambda}{3}",
-            "descricao": "Descrevem a expansão de um universo homogêneo e isotrópico em função da densidade de energia e curvatura."
-        }
-    elif "relatividade" in t or "einstein" in t or "gravidade" in t or "buraco negro" in t:
-        return {
-            "titulo": "Equações de Campo de Einstein",
-            "latex": r"R_{\mu\nu} - \frac{1}{2}g_{\mu\nu}R + g_{\mu\nu}\Lambda = \frac{8\pi G}{c^4} T_{\mu\nu}",
-            "descricao": "Relaciona a geometria do espaço-tempo quadridimensional à distribuição de matéria, momento e energia."
-        }
-    elif "estrela" in t or "solar" in t or "espectro" in t or "fotometria" in t or "exoplaneta" in t:
-        return {
-            "titulo": "Lei de Stefan-Boltzmann & Trânsito Planetário (Exoplanetas)",
-            "latex": r"L = 4\pi R^2 \sigma T^4 \quad \text{e} \quad \frac{\Delta F}{F} \approx \left(\frac{R_p}{R_s}\right)^2",
-            "descricao": "Equações clássicas usadas por astrônomos brasileiros na detecção de exoplanetas por fotometria de trânsito."
-        }
+    
+    if "buraco negro" in t or "massa" in t:
+        titulo = "🕳️ O que são os Buracos Negros? (O Monstro com Gulodice de Estrela)"
+        explicacao = (
+            "Imagine que você tem um super ímã na sua geladeira, mas ele é tão forte, mas tão forte, "
+            "que ele puxa não só os imãzinhos, mas até a geladeira inteira, a cozinha e os brinquedos! "
+            "O buraco negro é parecido com isso. Ele é uma estrela que ficou pesada demais, encolheu "
+            "e virou um super 'aspirador de pó' do espaço. Ele puxa tudo o que passa perto dele — "
+            "e do chão até a luz não consegue escapar porque ele é rápido demais a puxar!"
+        )
+        autores = [
+            {"nome": "Prof. Dr. João Braga", "inst": "Instituto Nacional de Pesquisas Espaciais (INPE)", "estudo": "Estudando como os raios X brilham quando caem dentro do buraco negro.", "site": "https://www.gov.br/inpe/pt-br"},
+            {"nome": "Dra. Beatriz Galli", "inst": "Observatório Nacional (ON)", "estudo": "Pesquisando o peso invisível que os buracos negros deixam nas galáxias.", "site": "https://www.gov.br/on"}
+        ]
+    elif "exoplaneta" in t or "planeta" in t or "vida" in t:
+        titulo = "🪐 Os Exoplanetas ( Mundos Mágicos Longe da Terra!)"
+        explicacao = (
+            "Você já brincou de esconde-esconde? No espaço, existem milhares de planetas que giram em volta "
+            "de outras estrelas que ficam bem longe do nosso Sol! Nós chamamos eles de **exoplanetas**. "
+            "Alguns são tão quentes que chovem pedras de ferro derretido, e outros são feitos todinhos de água gelada. "
+            "Os cientistas brasileiros usam lunetas gigantes para descobrir se algum deles tem ar bom para respirarmos!"
+        )
+        autores = [
+            {"nome": "Prof. Dr. Jorge Carvalho", "inst": "Universidade de São Paulo (USP)", "estudo": "Caçando planetas pequenininhos usando a luz das estrelas que piscam.", "site": "https://www5.usp.br/"},
+            {"nome": "Dra. Daniela Villegas", "inst": "Universidade Federal do Rio Grande do Norte (UFRN)", "estudo": "Descobrindo se planetas distantes têm climas parecidos com o da Terra.", "site": "https://ufrn.br/"}
+        ]
+    elif "estrela" in t or "sol" in t or "luz" in t:
+        titulo = "⭐ Como as Estrelas Nascem e Brilham?"
+        explicacao = (
+            "Já viu aquelas fogueiras de São João que soltam faíscas? As estrelas são como fogueiras gigantes "
+            "no céu, mas elas duram bilhões de anos! Elas nascem de nuvens de poeira e gás espacial (chamadas de nebulosas) "
+            "que vão se juntando e apertando até acenderem um 'forno' nuclear lá dentro. É por isso que elas brilham tanto "
+            "e mandam calorzinho até aqui na Terra!"
+        )
+        autores = [
+            {"nome": "Prof. Dr. Gustavo Rojas", "inst": "Universidade Federal de São Carlos (UFSCar)", "estudo": "Explicando de um jeito divertido como as estrelas transformam gás em luz.", "site": "https://www.ufscar.br/"},
+            {"nome": "Dra. Silvia Doffini", "inst": "Observatório Nacional (ON)", "estudo": "Olhando berçários de estrelas onde bebês estelares estão nascendo agora mesmo.", "site": "https://www.gov.br/on"}
+        ]
     else:
-        return {
-            "titulo": "Mecânica Celeste & Dinâmica Orbital Aplicada",
-            "latex": r"T^2 = \frac{4\pi^2}{G(M+m)} a^3 \quad \text{e} \quad E = \frac{1}{2}mv^2 - \frac{GMm}{r}",
-            "descricao": "Relações fundamentais aplicadas ao estudo de órbitas de satélites, asteroides e sistemas estelares."
-        }
+        titulo = f"🔭 O Fantástico Mundo de: {termo.capitalize()}"
+        explicacao = (
+            f"Sabe quando a gente olha para o céu à noite e vê aquele montão de pontinhos brilhantes? "
+            f"O estudo sobre **{termo}** é como abrir um livro de aventuras do universo! Os astrônomos do Brasil "
+            f"trabalham como verdadeiros detetives cósmicos: eles usam computadores e telescópios potentes para "
+            f"entender como as coisas funcionam lá em cima, desde pedrinhas viajantes (cometas) até galáxias inteiras girando."
+        )
+        autores = [
+            {"nome": "Prof. Dr. Marcelo Gleiser", "inst": "Físico e Escritor Brasileiro", "estudo": "Explicando como o universo surgiu e por que a vida na Terra é tão especial.", "site": "https://www.ufrj.br/"},
+            {"nome": "Dra. Duília de Mello", "inst": "Astrônoma Brasileira na NASA", "estudo": "Descobrindo como as galáxias formam novas estrelas pelo universo afora.", "site": "https://www.gov.br/mcti"}
+        ]
+        
+    return titulo, explicacao, autores
 
 # ==========================================
 # INICIALIZAÇÃO DO ESTADO GLOBAL
@@ -156,8 +138,8 @@ if "historico_professor" not in st.session_state:
     st.session_state.historico_professor = []
 if "prof_logado" not in st.session_state:
     st.session_state.prof_logado = False
-if "lotes_pesquisas" not in st.session_state:
-    st.session_state.lotes_pesquisas = []
+if "historico_explicacoes" not in st.session_state:
+    st.session_state.historico_explicacoes = []
 
 # ==========================================
 # BANCO DE 50 QUESTÕES (EQUILIBRADO A-E)
@@ -259,7 +241,7 @@ def reiniciar_jogo():
 st.sidebar.header("🧭 Painel de Controle")
 st.session_state.modo_sistema = st.sidebar.radio(
     "Escolha o Ambiente:",
-    ["⚔️ Jogo: Cavaleiros do Zodíaco", "🇧🇷 IA Pesquisa Brasileira de Astronomia"]
+    ["⚔️ Jogo: Cavaleiros do Zodíaco", "🌟 IA de Astronomia para Crianças"]
 )
 
 st.sidebar.markdown("---")
@@ -422,82 +404,58 @@ if st.session_state.modo_sistema == "⚔️ Jogo: Cavaleiros do Zodíaco":
         st.info(f"💡 **Justificativa Pedagógica:**\n\n{fb['por_que']}")
 
 # ==========================================
-# MODO 2: IA PESQUISA BRASILEIRA DE ASTRONOMIA
+# MODO 2: IA DE ASTRONOMIA PARA CRIANÇAS
 # ==========================================
-elif st.session_state.modo_sistema == "🇧🇷 IA Pesquisa Brasileira de Astronomia":
-    st.title("🇧🇷 IA Pesquisa Brasileira de Astronomia")
-    st.markdown("### *Repositório especializado em publicações científicas de pesquisadores e instituições do Brasil (SciELO, RBEF, Observatório Nacional e INPE).*")
+elif st.session_state.modo_sistema == "🌟 IA de Astronomia para Crianças":
+    st.title("🌟 Explicações Mágicas do Espaço para Crianças")
+    st.markdown("### *Descubra os segredos do universo com explicações super divertidas e conheça os cientistas do Brasil que estudam o céu!*")
     st.markdown("---")
 
-    termo_busca = st.text_input("Digite qualquer tema da astronomia para buscar na literatura brasileira (ex: Exoplanetas, Buracos Negros, Astrofísica Estelar, Cosmologia):", value="Exoplanetas")
+    termo_crianca = st.text_input("O que você quer descobrir sobre o espaço hoje? (ex: Buraco Negro, Exoplanetas, Estrelas, Cometas):", value="Buracos Negros")
 
-    col_btn1, col_btn2 = st.columns(2)
-    with col_btn1:
-        executar_busca = st.button("🚀 Executar Varredura em Periódicos Brasileiros")
-    with col_btn2:
-        limpar_lotes = st.button("🗑️ Apagar Lotes de Pesquisa")
+    col1, col2 = st.columns(2)
+    with col1:
+        botao_explicar = st.button("✨ Explicar para Mim!")
+    with col2:
+        botao_limpar = st.button("🧹 Limpar Histórico")
 
-    if limpar_lotes:
-        st.session_state.lotes_pesquisas = []
-        st.success("Histórico de lotes limpo com sucesso!")
+    if botao_limpar:
+        st.session_state.historico_explicacoes = []
+        st.success("Histórico limpo!")
         st.rerun()
 
-    if executar_busca and termo_busca.strip():
-        with st.spinner("Consultando periódicos acadêmicos nacionais e extraindo artigos de pesquisadores brasileiros..."):
-            recentes, antigos = buscar_pesquisas_brasileiras_em_massa(termo_busca)
-            dados_matematicos = obter_equacoes_detalhadas(termo_busca)
-            
-            st.session_state.lotes_pesquisas.insert(0, {
-                "termo": termo_busca,
-                "recentes": recentes,
-                "antigos": antigos,
-                "matematica": dados_matematicos
-            })
+    if botao_explicar and termo_crianca.strip():
+        titulo, explicacao, autores = gerar_explicacao_infantil(termo_crianca)
+        
+        st.session_state.historico_explicacoes.insert(0, {
+            "termo": termo_crianca,
+            "titulo": titulo,
+            "explicacao": explicacao,
+            "autores": autores
+        })
 
     st.markdown("---")
 
-    if st.session_state.lotes_pesquisas:
-        for idx, lote in enumerate(st.session_state.lotes_pesquisas):
-            st.markdown(f"## 📑 Lote de Pesquisa Brasileira #{len(st.session_state.lotes_pesquisas) - idx}: *{lote['termo'].upper()}*")
+    if st.session_state.historico_explicacoes:
+        for item in st.session_state.historico_explicacoes:
+            st.markdown(f"""
+            <div class="card-explicacao">
+                <div class="titulo-crianca">{item['titulo']}</div>
+                <p style="font-size: 16px; line-height: 1.6; color: #e2e8f0;">{item['explicacao']}</p>
+                <hr style="border-color: #4361ee; margin: 15px 0;">
+                <h4 style="color: #4cc9f0; margin-bottom: 10px;">🇧🇷 Cientistas Brasileiros que estudam isso:</h4>
+            """, unsafe_allow_html=True)
             
-            # Bloco de Equações e Cálculos Físicos
-            st.markdown("### 📐 Fundamentação Matemática & Equações de Base")
-            eq = lote['matematica']
-            st.markdown(f"**{eq['titulo']}**")
-            st.latex(eq['latex'])
-            st.markdown(f"*Contexto Físico:* {eq['descricao']}")
-            st.markdown("---")
-
-            # ESTUDOS RECENTES NACIONAIS
-            st.markdown('<div class="secao-titulo" style="background-color: #0f2c42; color: #00b4d8;">🇧🇷 ESTUDOS RECENTES EM PERIÓDICOS BRASILEIROS</div>', unsafe_allow_html=True)
-            st.markdown("Publicações recentes de pesquisadores brasileiros com acesso direto aos artigos e PDFs nas revistas científicas:")
-            for item in lote['recentes']:
+            for aut in item['autores']:
                 st.markdown(f"""
-                <div class="card-recente">
-                    <strong>📌 {item['titulo']}</strong><br>
-                    <p style="margin: 4px 0; font-size: 13px; color: #00b4d8;"><em>{item['ano']} | Revista: {item['revista']}</em></p>
-                    <p style="margin: 6px 0; font-size: 14px;">{item['resumo']}</p>
-                    <a href="{item['link_site']}" target="_blank" style="color: #00b4d8; font-weight: bold; text-decoration: none; font-size: 13px;">🌐 Acessar Artigo no Site da Revista</a> &nbsp;&nbsp;|&nbsp;&nbsp;
-                    <a href="{item['link_pdf']}" target="_blank" style="background-color: #00b4d8; color: #000; padding: 4px 10px; border-radius: 4px; font-weight: bold; text-decoration: none; font-size: 12px;">📥 Baixar PDF da Revista Científica</a>
+                <div class="card-autor">
+                    <strong>👤 {aut['nome']}</strong><br>
+                    <span style="color: #b5179e; font-size: 13px;">🏫 {aut['inst']}</span><br>
+                    <p style="margin: 5px 0 8px 0; font-size: 14px;"><em>O que o autor faz:</em> {aut['estudo']}</p>
+                    <a href="{aut['site']}" target="_blank" style="color: #4cc9f0; font-weight: bold; text-decoration: none; font-size: 13px;">🌐 Visitar Site da Instituição Oficial</a>
                 </div>
                 """, unsafe_allow_html=True)
-
-            st.markdown("---")
-
-            # ESTUDOS PASSADOS / CLÁSSICOS NACIONAIS
-            st.markdown('<div class="secao-titulo" style="background-color: #21163a; color: #9d4edd;">🏛️ ESTUDOS PASSADOS & MARCOS HISTÓRICOS NACIONAIS</div>', unsafe_allow_html=True)
-            st.markdown("Literatura clássica de base produzida por instituições e cientistas brasileiros ao longo das décadas:")
-            for item in lote['antigos']:
-                st.markdown(f"""
-                <div class="card-antigo">
-                    <strong>📚 {item['titulo']}</strong><br>
-                    <p style="margin: 4px 0; font-size: 13px; color: #9d4edd;"><em>{item['ano']} | Revista: {item['revista']}</em></p>
-                    <p style="margin: 6px 0; font-size: 14px;">{item['resumo']}</p>
-                    <a href="{item['link_site']}" target="_blank" style="color: #9d4edd; font-weight: bold; text-decoration: none; font-size: 13px;">🌐 Acessar Artigo Histórico no Site</a> &nbsp;&nbsp;|&nbsp;&nbsp;
-                    <a href="{item['link_pdf']}" target="_blank" style="background-color: #9d4edd; color: #fff; padding: 4px 10px; border-radius: 4px; font-weight: bold; text-decoration: none; font-size: 12px;">📥 Baixar PDF Histórico</a>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            st.markdown("="*50)
+                
+            st.markdown("</div>", unsafe_allow_html=True)
     else:
-        st.info("Nenhum lote gerado no momento. Insira qualquer tema de astronomia acima e clique em 'Executar Varredura em Periódicos Brasileiros'.")
+        st.info("Digite um tema acima e clique em 'Explicar para Mim!' para começar a viagem pelo espaço de um jeito bem fácil.")
