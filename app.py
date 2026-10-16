@@ -90,3 +90,4 @@ if st.button("🌟 Decolar Pesquisa!", type="primary"):
 
 st.markdown("---")
 st.markdown("💡 **Dica:** Certifique-se de adicionar sua chave do Gemini em **Settings -> Secrets** no painel do Streamlit Cloud usando o formato: `GEMINI_API_KEY = \"sua_chave_aqui\"`")
+GEMINI_API_KEY = "sua_chave_real_do_gemini_aqui"
