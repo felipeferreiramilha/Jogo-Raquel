@@ -1,3 +1,5 @@
+import json
+
 def montar_explicacao_astronomia(pergunta, resultados):
     """
     Gera uma resposta com EXATAMENTE 3 PARÁGRAFOS retornados como uma única string.
@@ -179,7 +181,7 @@ def montar_explicacao_astronomia(pergunta, resultados):
         ],
 
         "Buracos negros": [
-            "Um buraco negro é uma região do espaço onde a gravidade é extremamente forte. Ele pode se formar, por exemplo, quando uma estrela muito massiva chega ao final de suas vida e seu núcleo sofre um colapso gravitacional. A região central fica extremamente compacta.",
+            "Um buraco negro é uma região do espaço onde a gravidade é extremamente forte. Ele pode se formar, por exemplo, quando uma estrela muito massiva chega ao final de sua vida e seu núcleo sofre um colapso gravitacional. A região central fica extremamente compacta.",
             
             "Existe uma região chamada horizonte de eventos. Depois que algo ultrapassa esse limite, não consegue voltar para fora do buraco negro. Isso acontece porque a gravidade nessa região é tão intensa que nem mesmo a luz consegue escapar.",
             
@@ -373,3 +375,14 @@ def montar_explicacao_astronomia(pergunta, resultados):
         "A Astronomia ainda possui muitos mistérios. Por isso, algumas perguntas já possuem respostas bastante conhecidas, enquanto outras continuam sendo investigadas pelos cientistas. É justamente isso que torna o estudo do Universo tão interessante."
     ]
     return "\n\n".join(paragrafos_fallback)
+
+
+# ==========================================================
+# EXEMPLO DE USO DA FUNÇÃO
+# ==========================================================
+if __name__ == "__main__":
+    pergunta_teste = "Me conte sobre Marte"
+    resultados_teste = []
+    
+    resposta_final = montar_explicacao_astronomia(pergunta_teste, resultados_teste)
+    print(resposta_final)
