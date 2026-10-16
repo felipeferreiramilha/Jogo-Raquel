@@ -24,7 +24,6 @@ def montar_explicacao_astronomia(pergunta, resultados):
         "saturno": "Saturno",
         "urano": "Urano",
         "netuno": "Netuno",
-        "netuno": "Netuno",
         "plutão": "Plutão",
         "plutao": "Plutão",
         "lua": "Lua",
@@ -317,8 +316,6 @@ def montar_explicacao_astronomia(pergunta, resultados):
 
         if tema_principal in respostas:
             paragrafos = respostas[tema_principal]
-
-            # Garante EXATAMENTE 3 PARÁGRAFOS
             return "\n\n".join(paragrafos[:3])
 
     # ==========================================================
@@ -335,13 +332,14 @@ def montar_explicacao_astronomia(pergunta, resultados):
             "sabia que"
         ]
     ):
-        return (
+        paragrafos_curiosidade = [
             "O Universo é cheio de coisas surpreendentes. Existem planetas com temperaturas extremas, estrelas muito maiores que o Sol, galáxias contendo bilhões de estrelas e objetos tão densos que possuem gravidade extremamente forte. A Astronomia estuda justamente esses objetos e fenômenos para tentar entender como o Universo funciona.",
             
             "Uma das coisas mais legais da Astronomia é que podemos estudar objetos que estão muito longe da Terra. Os telescópios conseguem captar a luz desses objetos e, analisando essa luz, os cientistas conseguem descobrir informações sobre temperatura, composição química, movimento, distância e até sobre a história desses objetos.",
             
             "E existe uma curiosidade ainda maior: quando olhamos para objetos muito distantes, estamos olhando para o passado. A luz demora para viajar pelo espaço, então uma galáxia localizada a milhões de anos-luz pode ser observada como ela era há milhões de anos. Dessa forma, os telescópios também funcionam como uma espécie de máquina do tempo astronômica."
-        )
+        ]
+        return "\n\n".join(paragrafos_curiosidade)
 
     # ==========================================================
     # RESPOSTA GENÉRICA COM BASE NA PESQUISA
@@ -351,29 +349,30 @@ def montar_explicacao_astronomia(pergunta, resultados):
 
     for fonte in resultados:
         texto = fonte.get("texto", "").strip()
-
         if texto:
             textos_pesquisa.append(texto)
 
     if textos_pesquisa:
         base = " ".join(textos_pesquisa[:3])
 
-        return (
+        paragrafos_pesquisa = [
             f"A pergunta está relacionada à Astronomia e envolve um fenômeno ou objeto que pode ser estudado cientificamente. A Astronomia utiliza observações feitas por telescópios, sondas espaciais e outros instrumentos para descobrir como os corpos celestes se comportam. A pesquisa realizada encontrou informações relacionadas ao tema perguntado.",
             
             f"De maneira simples, podemos entender esse assunto observando como os objetos do Universo interagem entre si. A gravidade, a luz, o movimento e as características físicas dos corpos celestes ajudam os cientistas a explicar muitos dos fenômenos que observamos no céu. As informações encontradas na pesquisa também ajudam a complementar essa explicação.",
             
             f"Uma coisa muito interessante é que ainda existem muitas perguntas sem resposta na Astronomia. {base[:500]}"
-        )
+        ]
+        return "\n\n".join(paragrafos_pesquisa)
 
     # ==========================================================
     # FALLBACK
     # ==========================================================
 
-    return (
+    paragrafos_fallback = [
         "Essa é uma pergunta interessante sobre o Universo. A Astronomia estuda planetas, estrelas, luas, galáxias, buracos negros e muitos outros objetos e fenômenos que existem no espaço. Para responder perguntas como essa, os cientistas usam observações, telescópios, sondas espaciais e modelos matemáticos.",
         
         "Mesmo quando um objeto está muito distante da Terra, podemos aprender sobre ele analisando a luz que chega até nossos telescópios. Essa luz carrega informações importantes sobre temperatura, composição, movimento e outras características do objeto observado.",
         
         "A Astronomia ainda possui muitos mistérios. Por isso, algumas perguntas já possuem respostas bastante conhecidas, enquanto outras continuam sendo investigadas pelos cientistas. É justamente isso que torna o estudo do Universo tão interessante."
-    )
+    ]
+    return "\n\n".join(paragrafos_fallback)
