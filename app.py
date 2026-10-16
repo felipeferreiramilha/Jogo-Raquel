@@ -1,10 +1,13 @@
 import streamlit as st
 import random
 import math
+import urllib.request
+import json
+import urllib.parse
 
 # Configuração da página
 st.set_page_config(
-    page_title="Santuário da Cosmologia & IA Aetheris", 
+    page_title="Santuário da Cosmologia & Aetheris Web", 
     page_icon="🌌", 
     layout="centered"
 )
@@ -44,6 +47,34 @@ def obter_nome_casa(num_casa):
     idx = min(num_casa, len(CASAS_SANTUARIO) - 1)
     return CASAS_SANTUARIO[idx]
 
+# Função para buscar dados abertos na web (Wikipedia API integrada)
+def pesquisar_na_web(termo):
+    try:
+        query_codificada = urllib.parse.quote(termo)
+        url = f"https://pt.wikipedia.org/w/api.php?action=query&list=search&srsearch={query_codificada}&format=json"
+        
+        req = urllib.request.Request(
+            url, 
+            headers={'User-Agent': 'Mozilla/5.0 (AetherisAstroResearch)'}
+        )
+        
+        with urllib.request.urlopen(req) as response:
+            data = json.loads(response.read().decode('utf-8'))
+            search_results = data.get('query', {}).get('search', [])
+            
+            if search_results:
+                resultados_formatados = []
+                for item in search_results[:3]: # Pega os 3 melhores resultados
+                    titulo = item['title']
+                    # Remove tags HTML simples do trecho da Wikipedia
+                    snippet = item['snippet'].replace('<span class="searchmatch">', '').replace('</span>', '')
+                    resultados_formatados.append(f"**📌 {titulo}**\n> {snippet}...\n")
+                return "\n".join(resultados_formatados)
+            else:
+                return "Nenhum registro acadêmico/público encontrado diretamente para este termo exato na base consultada."
+    except Exception as e:
+        return f"Erro ao conectar com a rede de dados: {e}"
+
 # ==========================================
 # INICIALIZAÇÃO DO ESTADO GLOBAL
 # ==========================================
@@ -70,7 +101,7 @@ if "prof_logado" not in st.session_state:
     st.session_state.prof_logado = False
 if "historico_chat" not in st.session_state:
     st.session_state.historico_chat = [
-        {"role": "ia", "texto": "Saudações, pesquisador. Sou a Aetheris, sua IA especialista em cosmologia e cálculos avançados. Como posso auxiliar nos seus estudos hoje?"}
+        {"role": "ia", "texto": "Saudações, pesquisador. Sou a Aetheris. Posso consultar artigos, debater teorias astrofísicas e calcular equações para você."}
     ]
 
 # ==========================================
@@ -122,7 +153,7 @@ if "banco_50" not in st.session_state:
         # Bloco D (10 Questões)
         ("Grandes massas curvam a luz de objetos ao fundo.", "Fritz Zwicky", "O que é a Lente Gravitacional?", ["Óculos astronômicos.", "Lupa de quartzo.", "Luz de Saturno.", "A curvatura e amplificação da luz estelar provocada por massas gigantescas.", "Brilho binário."], "D", "Desvio da luz por massa extrema."),
         ("Soluções das equações de Einstein sugerem atalhos cósmicos.", "Nathan Rosen", "O que são Buracos de Minhoca?", ["Túneis de insetos.", "Interior de anãs brancas.", "Partículas subatômicas.", "Atalhos hipotéticos conectando pontos distantes do espaço-tempo.", "Fumaça de supernova."], "D", "Pontes hipotéticas no espaço-tempo."),
-        ("Estrelas de nêutrons magnetizadas em rotação.", "Jocelyn Bell", "O que são Pulsares?", ["Planetas que piscam.", "Galáxias oscilantes.", "Cometas caóticos.", "Estrelas de nêutrons em rotação rápida emitindo feixes regulares de radiação.", "Aglomerados."], "D", "Faróis cósmicos naturais."),
+        ("Estrelas de nêutrons magnetizadas em rotação.", "Jocelyn Bell", "O que são Pulsares?", ["Planetas que piscam.", "Galáxias oscilantes.", "Cometas caóticos.", "Estrelas de nêutrons em rotação rápida emitindo feixes regulares de radiação.", "Aglomerados."], "D", "Faróis cosmológicos naturais."),
         ("O termo original para manter o universo estático.", "Albert Einstein", "O que é a Constante Cosmológica?", ["Velocidade da luz.", "Peso do hidrogênio.", "Rotação solar.", "Termo matemático associado à energia do vácuo que impulsiona a expansão.", "Distância a Andrômeda."], "D", "Densidade de energia do vácuo."),
         ("A matéria distribui-se em uma grande rede tridimensional.", "Simulações N-Corpos", "Qual o papel dos Filamentos Cósmicos?", ["Conectar computadores.", "Conduzir raios solares.", "Trilhos de cometas.", "Formar pontes densas de matéria cercando vazios cósmicos.", "Emitir luz branca."], "D", "Estruturas que compõem a teia cósmica."),
         ("Regiões entre filamentos com baixíssima densidade.", "Mapeamento Profundo", "O que são os Vazios Cósmicos?", ["Lugares onde o tempo para.", "Centro de buracos negros.", "Espaço atômico.", "Enormes regiões com baixíssima densidade de galáxias.", "Regiões sem matéria escura."], "D", "Regiões de baixa densidade galáctica."),
@@ -138,7 +169,7 @@ if "banco_50" not in st.session_state:
         ("Curvas de rotação espiral provam halos invisíveis.", "Vera Rubin", "O que revelaram as curvas de rotação?", ["Massa no núcleo.", "Galáxias paradas.", "Gravidade zero nas bordas.", "Buracos negros gêmeos.", "Estrelas periféricas giram rápido demais, indicando halo invisível."], "E", "Exigência de massa invisível periférica."),
         ("A matéria escura não interage com o eletromagnetismo.", "Fritz Zwicky", "Por que a Matéria Escura é 'escura'?", ["Bloqueia luz como tinta.", "Existe na sombra.", "Cor escura dos planetas.", "Descoberta à noite.", "Não emite, absorve ou reflete radiação eletromagnética."], "E", "Ausência de interação eletromagnética."),
         ("Aglomerados reúnem milhares de galáxias.", "Fritz Zwicky", "O que são Aglomerados de Galáxias?", ["Estrelas solitárias.", "Anéis de poeira.", "Nuvens de gás frio.", "Sistemas planetários caóticos.", "Vastas estruturas de centenas ou milhares de galáxias mantidas pela gravidade."], "E", "Maiores estruturas unidas pela gravidade."),
-        ("O espaço reage ativamente à presença de massa.", "Albert Einstein", "O que significa o espaço ser dinâmico?", ["Muda de cor.", "Possui correntes de ar.", "Move-se de leste a oeste.", "Possui fricção mecânica.", "É um meio flexível que se curva, vibra e expande."], "E", "O espaço-tempo molda-se à matéria."),
+        ("O espaço reage ativamente à presença de massa.", "Albert Einstein", "O que significa o espaço ser dinâmico?", ["Muda de cor.", "Possui correntes de ar.", "Move-se de leste para oeste.", "Possui fricção mecânica.", "É um meio flexível que se curva, vibra e expande."], "E", "O espaço-tempo molda-se à matéria."),
         ("A luz não escapa do horizonte de eventos.", "Karl Schwarzschild", "Por que a luz não escapa de um buraco negro?", ["A luz desliga.", "Campo magnético repulsivo.", "Luz muito pesada.", "Vácuo absorve cor.", "A curvatura do espaço-tempo é tão extrema que todos os caminhos levam ao centro."], "E", "Geometria direcionada para a singularidade."),
         ("A expansão ultrarrápida inicial resolveu dilemas.", "Alan Guth", "Qual problema foi resolvido pela Inflação?", ["Cor de Marte.", "Face da Lua.", "Marés oceânicas.", "Oxigênio espacial.", "Problema do horizonte e da planura, explicando a homogeneidade da CMB."], "E", "Explicação da uniformidade térmica."),
         ("A cosmologia integra física, relatividade e astronomia.", "Georges Lemaître", "Qual a importância do estudo cosmológico?", ["Apenas memorizar fórmulas.", "Substituir ciência por mito.", "Provar que a Terra é o centro.", "Demonstrar que a física falha.", "Compreender a origem, evolução e leis fundamentais do espaço-tempo."], "E", "Compreensão ampla da história cósmica.")
@@ -173,7 +204,7 @@ def reiniciar_jogo():
 st.sidebar.header("🧭 Painel de Controle")
 st.session_state.modo_sistema = st.sidebar.radio(
     "Escolha o Ambiente:",
-    ["⚔️ Jogo: CDZ & Cosmologia", "✨ Aetheris: IA Cosmologia & Cálculo"]
+    ["⚔️ Jogo: CDZ & Cosmologia", "✨ Aetheris: IA Cosmologia & Web Search"]
 )
 
 st.sidebar.markdown("---")
@@ -226,7 +257,6 @@ if st.session_state.modo_sistema == "⚔️ Jogo: CDZ & Cosmologia":
     st.markdown("### *Treinamento das Equipes: Domine o Cosmo, a Relatividade e o Big Bang!*")
     st.markdown("---")
 
-    # Sidebar: Placar
     st.sidebar.markdown("---")
     st.sidebar.header("📊 Posição no Santuário (Meta: 12 Casas)")
     
@@ -258,7 +288,6 @@ if st.session_state.modo_sistema == "⚔️ Jogo: CDZ & Cosmologia":
             st.rerun()
         st.stop()
 
-    # Verificação de Vitória
     vencedor = None
     if st.session_state.casas_alfa >= 12: vencedor = "Equipe Alfa"
     elif st.session_state.casas_beta >= 12: vencedor = "Equipe Beta"
@@ -277,7 +306,6 @@ if st.session_state.modo_sistema == "⚔️ Jogo: CDZ & Cosmologia":
             st.rerun()
         st.stop()
 
-    # Fluxo Rodada do Jogo
     lista_equipes = ["Equipe Alfa", "Equipe Beta", "Equipe Gama"]
     idx_p = st.session_state.indice_pergunta
     e_idx = st.session_state.equipe_sub_idx
@@ -339,16 +367,16 @@ if st.session_state.modo_sistema == "⚔️ Jogo: CDZ & Cosmologia":
         st.info(f"💡 **Justificativa Pedagógica:**\n\n{fb['por_que']}")
 
 # ==========================================
-# MODO 2: IA AETHERIS (COSMOLOGIA & CÁLCULOS)
+# MODO 2: IA AETHERIS COM PESQUISA WEB
 # ==========================================
-elif st.session_state.modo_sistema == "✨ Aetheris: IA Cosmologia & Cálculo":
-    st.title("✨ Aetheris: IA de Cosmologia & Cálculo Avançado")
-    st.markdown("### *Assistente especializada em relatividade, astrofísica e processamento matemático.*")
+elif st.session_state.modo_sistema == "✨ Aetheris: IA Cosmologia & Web Search":
+    st.title("✨ Aetheris: IA de Cosmologia & Web Search")
+    st.markdown("### *Assistente conectada a bases científicas abertas e web search para pesquisas avançadas.*")
     st.markdown("---")
 
-    sub_modo = st.sidebar.selectbox("Módulo da IA:", ["🤖 Chat Especialista", "∫ Calculadora Básica de Derivadas/Funções"])
+    aba_ia = st.sidebar.selectbox("Módulo da IA:", ["🤖 Chat Especialista", "🌐 Pesquisador Web (Web Search)"])
 
-    if sub_modo == "🤖 Chat Especialista":
+    if aba_ia == "🤖 Chat Especialista":
         st.subheader("💬 Diálogo com Aetheris")
         for msg in st.session_state.historico_chat:
             prefixo = "**🧑‍💻 Você:**" if msg["role"] == "usuario" else "**✨ Aetheris:**"
@@ -375,27 +403,19 @@ elif st.session_state.modo_sistema == "✨ Aetheris: IA Cosmologia & Cálculo":
                 st.rerun()
 
     else:
-        st.subheader("📐 Laboratório de Análise Matemática")
-        st.markdown("Insira uma função em termos de `x` (ex: `x**3`, `sin(x)`, `exp(x)`, `x**2 + 3*x`) para estimar derivadas numéricas e taxas de variação.")
-        
-        func_txt = st.text_input("Função f(x):", value="x**2 + 2*x")
-        ponto_x = st.number_input("Avaliar no ponto x =", value=2.0)
+        st.subheader("🌐 Motor de Pesquisa Acadêmica na Web")
+        st.markdown("Digite um termo, conceito, cientista ou telescópio para buscar referências e dados públicos atualizados na internet:")
 
-        if st.button("Calcular Taxa de Variação (Derivada Numérica)"):
-            try:
-                # Função segura usando eval com math
-                def f(x):
-                    return eval(func_txt, {"x": x, "sin": math.sin, "cos": math.cos, "exp": math.exp, "log": math.log, "sqrt": math.sqrt, "pi": math.pi, "e": math.e})
+        termo_busca = st.text_input("Termo de pesquisa (ex: James Webb Telescope, Friedmann equations, Vera Rubin):", value="James Webb Space Telescope")
 
-                # Derivada por diferenças finitas centrais
-                h = 1e-5
-                derivada_aprox = (f(ponto_x + h) - f(ponto_x - h)) / (2 * h)
-                valor_func = f(ponto_x)
-
+        if st.button("🔍 Realizar Varredura na Web"):
+            if termo_busca.strip():
+                with st.spinner("Conectando aos servidores de dados e rastreando fontes..."):
+                    resultado_pesquisa = pesquisar_na_web(termo_busca)
+                
                 st.markdown("---")
-                st.markdown(f"### **Resultados para f(x) = {func_txt}:**")
-                st.markdown(f"- **Valor da função em x = {ponto_x}:** {valor_func:.4f}")
-                st.markdown(f"- **Derivada estimada f'(x) em x = {ponto_x}:** {derivada_aprox:.4f}")
-                st.success("Cálculo numérico efetuado com sucesso.")
-            except Exception as e:
-                st.error(f"Erro ao calcular. Verifique a sintaxe da função. Detalhe: {e}")
+                st.markdown(f"### 📑 Resultados da Pesquisa para: *{termo_busca}*")
+                st.markdown(resultado_pesquisa)
+                st.success("Busca executada com sucesso através de fontes públicas abertas.")
+            else:
+                st.warning("Insira um termo válido para realizar a busca.")
